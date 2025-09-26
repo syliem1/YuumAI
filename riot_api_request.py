@@ -1,6 +1,7 @@
 from dotenv import load_dotenv
 import requests
 import os
+import json
 
 load_dotenv()
 API_KEY = os.getenv('RIOT_API_KEY')
@@ -26,4 +27,5 @@ if __name__ == "__main__":
     match_ids = get_match_history(puuid, 0, 20)
     match_list = []
     for i in range(len(match_ids)):
-     match_list.append(get_match_data(match_ids[i]))
+       match_list.append(get_match_data(match_ids[i]))
+    print(json.dumps(match_list[0], indent=4))
