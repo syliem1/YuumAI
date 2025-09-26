@@ -28,4 +28,3 @@ if __name__ == "__main__":
     match_list = []
     for i in range(len(match_ids)):
        match_list.append(get_match_data(match_ids[i]))
-    print(json.dumps(match_list[0], indent=4))
