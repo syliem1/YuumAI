@@ -97,7 +97,31 @@ def extract_stats(match_data, puuid):
     return dataframe
 
 def extract_stats_at_time(match_data, puuid, stat, time):
-    return 0
+    metadata = match_data['metadata']
+    info = match_data['info']
+    players = info['participants']
+    participants = metadata['participants']
+    match_id = metadata['matchId']
+    frame_interval = info['frameInterval']
+    frames = info['frames']
+    frame = frames[time/frame_interval]
+    timestamp = frame['timestamp']
+    participantFrames = frame['participantFrames']
+    playerFrame = participantFrames[participants.index(puuid)]
+    try:
+        playerStat = playerFrame[{stat}]
+    except:
+        try:
+            playerStat=playerFrame['championStats'][{stat}]
+        except:
+            try: 
+                playerStat = playerFrame['position'][{stat}]
+            except:
+                try:
+                    playerStat = playerFrame['damageStats'][{stat}]
+                except:
+                    return "error"
+    return playerStat
 
 def extract_games(match_list, puuid):
     return 0

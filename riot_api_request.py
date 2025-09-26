@@ -21,6 +21,9 @@ def get_match_history(puuid, start, count):
 def get_match_data(match_id):
      return make_requests(f"https://americas.api.riotgames.com/lol/match/v5/matches/{match_id}")
 
+def get_match_timeline(match_id):
+     return make_requests(f"https://americas.api.riotgames.com/lol/match/v5/matches/{match_id}/timeline")
+
 if __name__ == "__main__":
     player_account = get_puuid_by_id("cheesmuncher", "moggd")
     puuid = player_account.get("puuid")
