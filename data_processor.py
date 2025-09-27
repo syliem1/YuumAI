@@ -1,5 +1,6 @@
 import riot_api_request as riotreq
 import pandas
+import json
 
 
 def extract_stats(match_data, puuid):
@@ -104,21 +105,23 @@ def extract_stats_at_time(match_data, puuid, stat, time):
     match_id = metadata['matchId']
     frame_interval = info['frameInterval']
     frames = info['frames']
-    frame = frames[time/frame_interval]
+    for fr in frames:
+        if fr['timestamp'] == time:
+            frame = fr
     timestamp = frame['timestamp']
     participantFrames = frame['participantFrames']
-    playerFrame = participantFrames[participants.index(puuid)]
+    playerFrame = participantFrames[str(participants.index(puuid) + 1)] #for some reason the names for each participant are only numbered 1-9, no 0, which is kinda odd bc there are 10 players
     try:
-        playerStat = playerFrame[{stat}]
+        playerStat = playerFrame[str(stat)]
     except:
         try:
-            playerStat=playerFrame['championStats'][{stat}]
+            playerStat=playerFrame['championStats'][str(stat)]
         except:
             try: 
-                playerStat = playerFrame['position'][{stat}]
+                playerStat = playerFrame['position'][str(stat)]
             except:
                 try:
-                    playerStat = playerFrame['damageStats'][{stat}]
+                    playerStat = playerFrame['damageStats'][str(stat)]
                 except:
                     return "error"
     return playerStat
@@ -127,9 +130,13 @@ def extract_games(match_list, puuid):
     return 0
 
 if __name__ == "__main__":
-    player_account = riotreq.get_puuid_by_id("cheesmuncher", "moggd")
+    player_account = riotreq.get_puuid_by_id("Kron1s", "aster")
     puuid = player_account.get("puuid")
-    match_ids = riotreq.get_match_history(puuid, 0, 1)
+    match_ids = riotreq.get_match_history(puuid, 0, 2)
+    print(match_ids)
     match_data = riotreq.get_match_data(match_ids[0])
+    timeline = riotreq.get_match_timeline(match_ids[1])
     dataframe = extract_stats(match_data, puuid)
     print(dataframe)
+    playerstat = extract_stats_at_time(timeline, puuid, 'attackDamage', 0)
+    print(playerstat)
