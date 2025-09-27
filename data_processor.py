@@ -127,12 +127,47 @@ def extract_stats_at_time(match_data, puuid, stat, time):
     return playerStat
 
 def extract_games(match_list, puuid):
-    return 0
+    multi_match_dataframe = pandas.DataFrame()
+    for match in match_list:
+        match_dataframe = extract_stats(match, puuid)
+        multi_match_dataframe = pandas.concat([multi_match_dataframe, match_dataframe])
+    avg_duration = multi_match_dataframe['game_duration'].mean()
+    wins = 0
+    for match in multi_match_dataframe['win']:
+        if match == True:
+            wins += 1
+    winrate = wins / len(match_list)
+    champs = []
+    for champ in multi_match_dataframe['champ_name']:
+        champs.append(champ)
+    avg_champ_level = multi_match_dataframe['champ_level'].mean()
+    avg_kills = multi_match_dataframe['kills'].mean()
+    avg_assists = multi_match_dataframe['assists'].mean()
+    avg_deaths = multi_match_dataframe['deaths'].mean()
+    avg_gold_earned = multi_match_dataframe['gold_earned'].mean()
+    avg_vision_score = multi_match_dataframe['vision_score'].mean()
+    avg_minions_killed = multi_match_dataframe['total_minions_killed'].mean()
+    summary_dataframe = pandas.DataFrame({
+        'avg_duration': [avg_duration],
+        'winrate': [winrate],
+        'champions_played': [champs],
+        'avg_champ_level': [avg_champ_level],
+        'avg_kills': [avg_kills],
+        'avg_assits': [avg_assists],
+        'avg_deaths': [avg_deaths],
+        'avg_gold_earned': [avg_gold_earned],
+        'avg_vision_score': [avg_vision_score],
+        'avg_minions_killed': [avg_minions_killed]
+    })
+    return summary_dataframe
 
 if __name__ == "__main__":
     player_account = riotreq.get_puuid_by_id("Kron1s", "aster")
     puuid = player_account.get("puuid")
-    match_ids = riotreq.get_match_history(puuid, 0, 2)
+    match_ids = riotreq.get_match_history(puuid, 0, 10)
+    match_list = []
+    for i in range(len(match_ids)):
+       match_list.append(riotreq.get_match_data(match_ids[i]))
     print(match_ids)
     match_data = riotreq.get_match_data(match_ids[0])
     timeline = riotreq.get_match_timeline(match_ids[1])
@@ -140,3 +175,5 @@ if __name__ == "__main__":
     print(dataframe)
     playerstat = extract_stats_at_time(timeline, puuid, 'attackDamage', 0)
     print(playerstat)
+    summary = extract_games(match_list, puuid)
+    print(summary)
