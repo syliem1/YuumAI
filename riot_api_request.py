@@ -12,16 +12,42 @@ def make_requests(url):
      return requests.get(url, headers=headers).json()
 
 def get_puuid_by_id(game_name, tag_line):
-     return make_requests(f"https://americas.api.riotgames.com/riot/account/v1/accounts/by-riot-id/{game_name}/{tag_line}")
+     try:
+          res = make_requests(f"https://americas.api.riotgames.com/riot/account/v1/accounts/by-riot-id/{game_name}/{tag_line}")
+     except Exception as e:
+          print(f"error occured: {e}")
+          res = "error:" + e
+     finally:
+          return res
+
 
 def get_match_history(puuid, start, count):
-     return make_requests(f"https://americas.api.riotgames.com/lol/match/v5/matches/by-puuid/{puuid}/ids?start={start}&count={count}")
+     try:
+          res = make_requests(f"https://americas.api.riotgames.com/lol/match/v5/matches/by-puuid/{puuid}/ids?start={start}&count={count}")
+     except Exception as e:
+          print(f"error occured: {e}")
+          res = "error:" + e
+     finally:
+          return res
+     
 
 def get_match_data(match_id):
-     return make_requests(f"https://americas.api.riotgames.com/lol/match/v5/matches/{match_id}")
+     try:
+          res = make_requests(f"https://americas.api.riotgames.com/lol/match/v5/matches/{match_id}")
+     except Exception as e:
+          print(f"error occured: {e}")
+          res = "error:" + e
+     finally:
+          return res
 
 def get_match_timeline(match_id):
-     return make_requests(f"https://americas.api.riotgames.com/lol/match/v5/matches/{match_id}/timeline")
+     try:
+          res = make_requests(f"https://americas.api.riotgames.com/lol/match/v5/matches/{match_id}/timeline")
+     except Exception as e:
+          print(f"error occured: {e}")
+          res = "error:" + e
+     finally:
+          return res
 
 if __name__ == "__main__":
     player_account = get_puuid_by_id("cheesmuncher", "moggd")
