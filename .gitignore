@@ -1,3 +1,81 @@
+# ========================================
+# 🌍 General
+# ========================================
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+*.bak
+*.old
+*.orig
+*.swp
+*.swo
+
+# ========================================
+# 🔒 Environment & Virtual Envs
+# ========================================
 .env
 .venv/
-Testing
+.env.local
+.env.*.local
+
+# ========================================
+# 🧠 Python Backend
+# ========================================
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg
+*.egg-info/
+*.manifest
+*.spec
+.pytest_cache/
+.mypy_cache/
+.tox/
+.coverage
+coverage/
+htmlcov/
+
+# ========================================
+# 🧰 Node / Frontend (scoped)
+# ========================================
+# Only ignore frontend build and node_modules within frontend/
+front-end/node_modules/
+front-end/.next/
+front-end/out/
+front-end/dist/
+front-end/build/
+front-end/.vercel/
+front-end/.vercel_build_output/
+
+# ========================================
+# 🧪 Testing / Data
+# ========================================
+Testing/
+
+# ========================================
+# 💻 IDE / Editor Settings
+# ========================================
+.vscode/
+.idea/
+*.iml
+*.sublime-workspace
+*.sublime-project
+
+# ========================================
+# 🚀 Package lock files (optional)
+# ========================================
+# Uncomment if you prefer not to commit lock files
+# frontend/package-lock.json
+# frontend/yarn.lock
+
+# ========================================
+# 🧩 Miscellaneous
+# ========================================
+*.manifest
+*.pid
+*.seed
+*.csv~
+*.tsv~
+*.tmp
