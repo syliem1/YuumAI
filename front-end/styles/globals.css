@@ -2,7 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --color-primary: #78BCB0;
+  --color-accent: #B99758;
+  --color-background: #F4EAEA;
+  --color-dark: #56374E;
+}
+
 body {
-  @apply bg-gray-50 text-gray-800;
-  font-family: 'Inter', sans-serif;
+  background-color: var(--color-background);
+  color: var(--color-dark);
 }
