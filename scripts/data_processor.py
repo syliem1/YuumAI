@@ -1,4 +1,4 @@
-import riot_api_request as riotreq
+import scripts.riot_api_request as riotreq
 import pandas
 import json
 
