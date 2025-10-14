@@ -1,10 +1,11 @@
 import "@/styles/globals.css";
-import Navbar from "@/components/Navbar";
+import "@/styles/SplitBackground.css";
+import "@/styles/button.css";
+import "@/styles/book.css"
 
 export default function App({ Component, pageProps }) {
   return (
     <>
-      <Navbar />
       <main className="p-8">
         <Component {...pageProps} />
       </main>
