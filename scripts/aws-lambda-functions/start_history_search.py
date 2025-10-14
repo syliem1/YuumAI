@@ -34,7 +34,7 @@ def lambda_handler(event, context):
 
         return {
             'statusCode': 202,
-            'body': json.dumps({'message': f'Request for puuid {puuid} has been queued.'})
+            'body': json.dumps({'message': f'Request for puuid {puuid} has been queued to {SQS_QUEUE_URL}.'})
         }
     except Exception as e:
         print(f"Error: {e}")
