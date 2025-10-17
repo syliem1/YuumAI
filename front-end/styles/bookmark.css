@@ -1,0 +1,11 @@
+.bookmark {
+  width: 300px;
+  height: 100px;
+  margin: 80px auto;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  clip-path: polygon(0 0, 85% 0, 100% 50%, 85% 100%, 0 100%);
+}
+.bookmark:hover {
+  transform: translateX(10px);
+  box-shadow: 0 8px 15px rgba(0,0,0,0.3);
+}
