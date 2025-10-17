@@ -12,19 +12,15 @@ def lambda_handler(event, context):
             raise ValueError('SQS_FIFO_QUEUE_URL environment variable not set')
 
         body = json.loads(event.get('body', '{}'))
-        username = body.get('username')
-        tag = body.get('tag')
-        print(f"Received user: {username}#{tag}")
-        if not username:
-            return {'statusCode': 400, 'body': json.dumps({'error': 'Missing username'})}
-        if not tag:
-            return {'statusCode': 400, 'body': json.dumps({'error': 'Missing tag'})}
+        puuid = body.get('puuid')
+        print(f"Received puuid: {puuid}")
+        if not puuid:
+            return {'statusCode': 400, 'body': json.dumps({'error': 'Missing puuid'})}
 
         start_time = int(time.time()) - (365 * 24 * 60 * 60)
 
         message_body = {
-            'username': username,
-            'tag': tag,
+            'puuid': puuid,
             'start_time': start_time
         }
 
@@ -38,7 +34,7 @@ def lambda_handler(event, context):
 
         return {
             'statusCode': 202,
-            'body': json.dumps({'message': f'Request for user {username}#{tag} has been queued to {SQS_QUEUE_URL}.'})
+            'body': json.dumps({'message': f'Request for puuid {puuid} has been queued to {SQS_QUEUE_URL}.'})
         }
     except Exception as e:
         print(f"Error: {e}")
