@@ -1,4 +1,4 @@
-import scripts.riot_api_request as riotreq
+import scripts.defunct.riot_api_request as riotreq
 import pandas
 import json
 
@@ -134,7 +134,7 @@ def extract_games(match_list, puuid):
     avg_duration = multi_match_dataframe['game_duration'].mean()
     wins = 0
     for match in multi_match_dataframe['win']:
-        if match == True:
+        if match:
             wins += 1
     winrate = wins / len(match_list)
     champs = []

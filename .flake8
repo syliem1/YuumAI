@@ -1,0 +1,4 @@
+[flake8]
+ignore = E,W
+
+exclude = front-end, __pycache__, build, dist, .venv, scripts/defunct

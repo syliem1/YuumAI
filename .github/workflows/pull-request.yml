@@ -1,0 +1,63 @@
+name: yuumAI
+
+run-name: PR checker
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  frontend-lint:
+    name: Lint Frontend
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "22.14.0"
+
+      - name: Install dependencies
+        working-directory: front-end
+        run: npm ci
+
+      - name: lint frontend
+        working-directory: front-end
+        run: npm run lint
+  frontend-build:
+    name: build Frontend
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "22.14.0"
+
+      - name: Install dependencies
+        working-directory: front-end
+        run: npm ci
+
+      - name: lint frontend
+        working-directory: front-end
+        run: npm run build
+
+  python-lint:
+    name: Lint Python
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: install dependencies
+        run: pip install -r requirements.txt
+
+      - name: lint python
+        run: flake8 .

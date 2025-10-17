@@ -16,7 +16,6 @@ SQS_QUEUE_URL = os.environ['SQS_QUEUE_URL']
 DYNAMODB_TABLE_NAME = os.environ['DYNAMODB_TABLE_NAME']
 dynamo_table = dynamodb.Table(DYNAMODB_TABLE_NAME)
 TIME_PER_REQUEST = 1.5
-MAX_MATCHES_PER_LAMBDA = 500    
 
 def fetch_and_process_match(match_id, puuid):
     ''' Gets a single match from a player and saves it to s3 '''
@@ -93,7 +92,6 @@ def lambda_handler(event, context):
     # fetch match history for this single puuid
     year_in_seconds = (365 * 24 * 60 * 60)
     start_time = int(time.time()) - year_in_seconds
-    start_index = 0
     new_puuids_to_queue = set()
 
     # continue while this specific individual player match id queue is full
@@ -114,7 +112,7 @@ def lambda_handler(event, context):
             time.sleep(TIME_PER_REQUEST)
 
         # 
-        if len(match_ids) == MAX_MATCHES_PER_LAMBDA:
+        if len(match_ids) == 100:
             next_index = start_index + 100
             print(f"Re-queueing job for {puuid} at next index {next_index}")
             sqs_client.send_message(
