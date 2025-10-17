@@ -62,6 +62,29 @@ export default function BookPage() {
         <span className="page">Chat</span>
         <span className="cover turn">Hello</span>
       </div>
+      
+        <div class="bookmark">
+          <svg viewBox="0 0 300 100" preserveAspectRatio="none">
+            <defs>
+              <mask id="cutout">
+               <polygon points="0,0 260,0 300,50 260,100 0,100" fill="white"/>
+              <polygon points="10,10 255,10 290,50 255,90 10,90" fill="black"/>
+              </mask>
+            </defs>
+            <polygon 
+              points="0,0 260,0 300,50 260,100 0,100" 
+              fill="#77425f" 
+              stroke="#5a2f49" 
+              stroke-width="1" />
+            <polygon 
+              points="5,5 255,5 296,50 254,95 5,95" 
+              fill="none" 
+              stroke="white" 
+              stroke-width="2" 
+              stroke-dasharray="8,6" />
+            <text x="150" y="58" text-anchor="middle" fill="white" font-weight="bold" font-family="sans-serif">Bookmark</text>
+          </svg>
+        </div>
 
       {/* Other components that appear after fullscreen */}
       <div
