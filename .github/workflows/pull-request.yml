@@ -8,29 +8,58 @@ on:
       - main
 
 jobs:
-  lint:
-    name: linting
+  frontend-lint:
+    name: Lint Frontend
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Use Node.js
+
+      - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: "22.14.0"
-      - run: cd front-end
-      - run: npm ci
-      - run: npm run lint
-  build:
+
+      - name: Install dependencies
+        working-directory: front-end
+        run: npm ci
+
+      - name: lint frontend
+        working-directory: front-end
+        run: npm run lint
+  frontend-build:
+    name: Lint Frontend
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Node.js setup
+
+      - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: "22.14.0"
-          cache: "npm"
-      - run: cd front-end
-      - run: npm ci
-      - run: npm run build
-  
-  
+
+      - name: Install dependencies
+        working-directory: front-end
+        run: npm ci
+
+      - name: lint frontend
+        working-directory: front-end
+        run: npm run build
+
+  python-lint:
+    name: Lint Python
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: install dependencies
+        working-directory: scripts
+        run: pip install -r requirements.txt
+
+      - name: lint python
+        working-directory: scripts
+        run: flake8 . --exclude=front-end
