@@ -59,7 +59,7 @@ export default function BookPage() {
         <span className="page">Page 4</span>
         <span className="page">Page 3</span>
         <span className="page">Page 2</span>
-        <span className="page">Chat</span>
+        <span className="page">What if we have a </span>
         <span className="cover turn">Hello</span>
       </div>
       
