@@ -8,7 +8,6 @@
   font-optical-sizing: auto;
   line-height: 1.5;
   font-weight: 400;
-  font-size: clamp(8px, 0.8vw, 22px);
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
@@ -21,6 +20,7 @@
   overflow: hidden;
 }
 .book {
+  font-size: 1em;
   position: absolute;
   transform: translate(0%, -50%);
   left: 50%;
@@ -70,7 +70,7 @@
 }
 
 .page {
-    box-shadow: -5px 0 15px rgba(0,0,0,0.3);
+  box-shadow: -5px 0 15px rgba(0,0,0,0.3);
   margin-top: 1.25%;
   width: 46.5%;
   height: 95%;
