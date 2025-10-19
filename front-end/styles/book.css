@@ -19,20 +19,24 @@
   -moz-osx-font-smoothing: grayscale;
   overflow: hidden;
 }
+.book-scene{
+  position: relative;
+}
 .book {
   font-size: 1em;
+  z-index: 1;
   position: absolute;
   transform: translate(0%, -50%);
   left: 50%;
   top: 50%;
-  width: 20.5rem; /* twice your current 10.25rem */
+  width: 20.5rem;
   height: 13.9rem;
-  perspective: 70rem;
+  perspective: 1300px;
 }
 .book.fullscreen {
   left: 50%;
   top: 50%;
-  width: 90vw;
+  width: 80vw;
   height: 90vh;
   transform: translate(0%, -50%);
 }
@@ -40,19 +44,17 @@
   opacity: 0;
   transition: opacity 0.3s;
 }
-
 .book.fullscreen .page * {
   opacity: 1;
   transition: opacity 0.8s ease 0.5s;
 }
-/* all child pages/covers fill the book */
 .page,
 .cover {
   border-radius: 30px;
   left: 50%;
   transform-origin: center left;
   position: absolute;
-  inset: 0; /* replaces top/left/width/height */
+  inset: 0;
   box-sizing: border-box;
   padding: 1.5%;
   transform: rotateY(0deg);
@@ -62,7 +64,6 @@
     0px 0px 15px rgba(0, 0, 0, 0.1);
 }
 
-/* individual styles */
 .cover {
   width: 47.5%;
   height: 100%;
@@ -76,7 +77,7 @@
   height: 95%;
   background-color: #e9e6c4;
   text-align: right;
-  font-size: 0.8vw; /* scales with viewport */
+  font-size: 0.8vw;
   color: var(--color-dark);
   font-family: 'PixelText', serif;
   transform-style: preserve-3d;
@@ -85,14 +86,38 @@
   text-rendering: optimizeLegibility;
   transform-style: preserve-3d;
 }
+.page.invisible {
+  color: #e9e6c4;
+  transition: color 1.8s;
+  opacity: 0;
+  transition-delay: 2s;
+  pointer-events: none;
+}
+.page.visible {
+  color: var(--color-dark);
+  transition: color 1.2s;
+  opacity: 1;
+  transition-delay: 2s;
+  pointer-events: none;
+}
+.page.turn.fade{
+  color: #e9e6c4;
+  transition: color 0.8s ease;
+}
+.page.back-turn.back-fade{
+  color: var(--color-dark);
+  transition: color 2.2s ease 1s;
+}
 
 /* flipping content */
 .flipped-page-content {
   display: block;
   text-align: left;
-  transform: rotateY(180deg);
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
+  transform: rotateY(-180deg);
+  transform-style: preserve-3d;
+}
+.page-text{
+  font-size: 0.8vw;
 }
 
 /* dashed line layout */
@@ -108,8 +133,15 @@
 .cover.turn {
   animation: bookCover 3s forwards;
 }
+.cover.close {
+  animation: bookClose 3s forwards;
+}
 .page.turn {
   animation: bookOpen 3s forwards;
+}
+.page.back-turn {
+  color: #e9e6c4;
+  animation: bookBackTurn 3s forwards;
 }
 .page:nth-of-type(1) { animation-delay: 0.05s; }
 .page:nth-of-type(2) { animation-delay: 0.33s; }
@@ -118,6 +150,7 @@
   animation: bookOpen150deg 3s forwards;
   animation-delay: 0.99s;
 }
+
 
 /* keyframes unchanged */
 @keyframes bookOpen {
@@ -130,18 +163,28 @@
   100% { transform: rotateY(-180deg); z-index: 1; }
 }
 
+@keyframes bookClose {
+  30% { z-index: 999 }
+  100% { transform: rotateY(0deg); z-index: 999; }
+}
+
 @keyframes bookOpen150deg {
   30% { z-index: 999 }
   100% { transform: rotateY(-210deg); z-index: 999; }
 }
 
-@keyframes bookOpen55deg {
-  30% { z-index: 999 }
-  100% {  transform: rotateY(-125deg);
-    z-index: 999;}
+@keyframes bookBackTurn {
+  0%   { transform: rotateY(-180deg); z-index: 999; }
+  100% { transform: rotateY(0deg); z-index: 999; }
 }
-@keyframes bookOpen30deg {
-  50% { z-index: 999 }
-  100% {  transform: rotateY(-30deg);
-    z-index: 999;}
+
+.bookmark-container {
+  z-index: 2;
+  position: absolute;
+  transform: translateX(200px);
+}
+.bookmark-inner {
+  transform: rotateY(0deg);
+  transform-style: preserve-3d;
+  transition: transform 0.8s ease;
 }
