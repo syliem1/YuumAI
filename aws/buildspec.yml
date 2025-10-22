@@ -5,7 +5,8 @@ phases:
     runtime-versions:
       python: 3.13
     commands:
-      - pip install -r aws/requirements.txt -t aws/
+      - pip install -r aws/requirements.txt -t aws/lambda-functions/populate_match_data_v2
+      - pip install -r aws/requirements.txt -t aws/lambda-functions/start_history_search_v2
   build:
     commands:
       - zip -r populate_match_data.zip aws/lambda-functions/populate_match_data_v2
