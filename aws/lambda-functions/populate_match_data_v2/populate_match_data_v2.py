@@ -10,6 +10,8 @@ sqs_client = boto3.client('sqs')
 dynamodb = boto3.resource('dynamodb')
 session = requests.Session()
 
+# test comment
+
 # .env variables
 RIOT_API_KEY = os.environ['RIOT_API_KEY']
 S3_BUCKET_NAME = os.environ['S3_BUCKET_NAME']
@@ -19,6 +21,27 @@ dynamo_table = dynamodb.Table(DYNAMODB_TABLE_NAME)
 
 TIME_PER_REQUEST = 1.3
 RETRY_TIMER = 15
+
+
+def delete_sqs_message(receipt_handle, riot_id_key):
+    """Delete message from SQS queue"""
+    try:
+        sqs_client.delete_message(
+            QueueUrl=SQS_QUEUE_URL,
+            ReceiptHandle=receipt_handle
+        )
+        print(f"Deleted message for {riot_id_key} from queue.")
+    except Exception as e:
+        print(f"Error deleting message for {riot_id_key}: {e}")
+
+
+def unmark_player_as_processed(riot_id_key):
+    """Remove player from DynamoDB to allow reprocessing"""
+    try:
+        dynamo_table.delete_item(Key={'riotId': riot_id_key})
+        print(f"Unmarked {riot_id_key} as processed due to API error.")
+    except Exception as e:
+        print(f"Error unmarking player {riot_id_key}: {e}")
 
 
 def get_puuid_by_riot_id(game_name, tag_line):
@@ -37,6 +60,9 @@ def get_puuid_by_riot_id(game_name, tag_line):
             print(f"Rate limit hit getting puuid. Waiting {retry_after} seconds.")
             time.sleep(retry_after)
             return get_puuid_by_riot_id(game_name, tag_line)
+        elif e.response.status_code == 401:
+            print(f"401 Unauthorized error getting puuid for {game_name}#{tag_line}: {e}")
+            raise 
         print(f"HTTP Error getting puuid for {game_name}#{tag_line}: {e}")
         return None
 
@@ -62,6 +88,9 @@ def get_account_details_by_puuid(puuid):
             print(f"Rate limit hit getting account details. Waiting {retry_after} seconds.")
             time.sleep(retry_after)
             return get_account_details_by_puuid(puuid)
+        elif e.response.status_code == 401:
+            print(f"401 Unauthorized error getting account for {puuid}: {e}")
+            raise 
         print(f"HTTP Error getting account for {puuid}: {e}")
         return None, None
 
@@ -116,6 +145,9 @@ def fetch_and_process_match(match_id, s3_folder_key):
             print(f"Rate limit hit fetching match details. Waiting for {retry_after} seconds.")
             time.sleep(retry_after)
             return fetch_and_process_match(match_id, s3_folder_key)
+        elif e.response.status_code == 401:
+            print(f"401 Unauthorized error fetching match {match_id}: {e}")
+            raise  
         else:
             print(f"HTTP Error fetching match {match_id}: {e}")
             return None
@@ -129,6 +161,8 @@ def lambda_handler(event, context):
     ''' processes one player from SQS, fetches history, finds new players, and requeues jobs '''
 
     record = event['Records'][0]
+    receipt_handle = record['receiptHandle']
+    
     payload = json.loads(record['body'])
     game_name = payload['gameName']
     tag_line = payload['tagLine']
@@ -149,20 +183,24 @@ def lambda_handler(event, context):
         except ClientError as e:
             if e.response['Error']['Code'] == 'ConditionalCheckFailedException':
                 print(f"Skipping already processed or in-progress player: {riot_id_key}")
+                # Delete message since we're skipping this player
+                delete_sqs_message(receipt_handle, riot_id_key)
                 return {'statusCode': 200}
             else:
                 print(f"DynamoDB Error marking {riot_id_key}: {e}")
-                raise e # Fail the lambda to retry later
+                raise e 
     
-    # get player puuid
-    puuid = get_puuid_by_riot_id(game_name, tag_line)
-    if not puuid:
-        print(f"Could not retrieve PUUID for {riot_id_key}. Aborting.")
-        return {'statusCode': 404}
-    time.sleep(TIME_PER_REQUEST)
-
-    # fetch match history
     try:
+        # get player puuid
+        puuid = get_puuid_by_riot_id(game_name, tag_line)
+        if not puuid:
+            print(f"Could not retrieve PUUID for {riot_id_key}. Aborting.")
+            # Delete message for unrecoverable errors
+            delete_sqs_message(receipt_handle, riot_id_key)
+            return {'statusCode': 404}
+        time.sleep(TIME_PER_REQUEST)
+
+        # fetch match history
         ids_url = f"https://americas.api.riotgames.com/lol/match/v5/matches/by-puuid/{puuid}/ids"
         start_time = int(time.time()) - (365 * 24 * 60 * 60)
         params = {'startTime': start_time, 'start': start_index, 'count': 50, 'api_key': RIOT_API_KEY}
@@ -217,8 +255,21 @@ def lambda_handler(event, context):
                 MessageGroupId='riot-api-processor'
             )
 
+        print(f"Successfully completed processing batch for {riot_id_key}.")
+        delete_sqs_message(receipt_handle, riot_id_key)
+        return {'statusCode': 200}
+
+    except requests.exceptions.HTTPError as e:
+        if e.response.status_code == 401:
+            print(f"401 Unauthorized error - unmarking player {riot_id_key}")
+            unmark_player_as_processed(riot_id_key)
+            delete_sqs_message(receipt_handle, riot_id_key)
+            return {'statusCode': 401, 'body': 'API authentication failed'}
+        else:
+            print(f"HTTP error processing {riot_id_key}: {e}")
+            raise
+
     except Exception as e:
         print(f"Error processing match list for {riot_id_key}: {e}")
-    
-    print(f"Successfully completed processing batch for {riot_id_key}.")
-    return {'statusCode': 200}
+        unmark_player_as_processed(riot_id_key)
+        raise

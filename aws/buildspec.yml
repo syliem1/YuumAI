@@ -5,7 +5,7 @@ phases:
     runtime-versions:
       python: 3.13
     commands:
-      - pip install -r lambda/requirements.txt -t lambda/
+      - pip install -r aws/requirements.txt -t aws/
   build:
     commands:
       - zip -r populate_match_data.zip aws/lambda-functions/populate_match_data_v2
