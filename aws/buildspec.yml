@@ -3,8 +3,8 @@ version: 0.2
 phases:
   build:
     commands:
-      - zip -r populate_match_data.zip aws/lambda-functions/populate_match_data_v2
-      - zip -r start_history_search.zip aws/lambda-functions/start_history_search_v2
+      - cd aws/lambda-functions/populate_match_data_v2 && zip -qr ../../../../populate_match_data.zip . && cd -
+      - cd aws/lambda-functions/start_history_search_v2 && zip -qr ../../../../start_history_search.zip . && cd -
   post_build:
     commands:
       - aws lambda update-function-code --function-name PopulateMatchDataV1 --zip-file fileb://populate_match_data.zip
