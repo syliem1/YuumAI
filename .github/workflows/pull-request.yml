@@ -57,7 +57,9 @@ jobs:
           python-version: "3.11"
 
       - name: install dependencies
+        working-directory: aws
         run: pip install -r requirements.txt
 
       - name: lint python
+        working-directory: aws
         run: flake8 .
