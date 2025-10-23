@@ -11,8 +11,8 @@ const Classroom = () => {
       <Image src={classroombackground} className="animate-blur-delay w-full" />
       <motion.div
         initial={{ x: -100, opacity: 0 }}
-        animate={{ x: 0, opacity: 1 }}
-        tansition={{ delay: 2.5 }}
+      animate={{ x: 0, opacity: 1 }}
+      transition={{ delay: 2.5 }}
         className="absolute inset-y-1/3 left-10 z-10 w-1/5"
       >
         <Image src={yuumiPlaceholder} className="object-contain" />
