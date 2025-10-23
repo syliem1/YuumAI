@@ -2,17 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
-@keyframes blurDelay {
-  from {
-    filter: blur(0);
-  }
-  to {
-    filter: blur(8px);
-  }
-}
 
 @layer utilities {
+  @keyframes blur-delay {
+    0%, 60% { filter: blur(0); }
+    100% { filter: blur(8px); }
+  }
   .animate-blur-delay {
-    animation: blurDelay 3s forwards;
+    animation: blur-delay 3s forwards;
   }
 }

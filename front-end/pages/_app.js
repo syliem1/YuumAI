@@ -8,7 +8,7 @@ import "@/styles/classroom.css"
 export default function App({ Component, pageProps }) {
   return (
     <>
-      <main className="">
+      <main className="w-screen min-h-screen">
         <Component {...pageProps} />
       </main>
     </>
