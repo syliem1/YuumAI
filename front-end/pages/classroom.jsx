@@ -8,14 +8,18 @@ import { motion } from "motion/react";
 const Classroom = () => {
   return (
     <div className="relative h-screen w-screen overflow-hidden bg-accent">
-      <Image src={classroombackground} className="animate-blur-delay w-full" />
+      <Image
+        src={classroombackground}
+        className="animate-blur-delay w-full"
+        alt="background image"
+      />
       <motion.div
         initial={{ x: -100, opacity: 0 }}
-      animate={{ x: 0, opacity: 1 }}
-      transition={{ delay: 2.5 }}
+        animate={{ x: 0, opacity: 1 }}
+        transition={{ delay: 2.5 }}
         className="absolute inset-y-1/3 left-10 z-10 w-1/5"
       >
-        <Image src={yuumiPlaceholder} className="object-contain" />
+        <Image src={yuumiPlaceholder} className="object-contain" alt="yuumi" />
       </motion.div>
 
       <div className="absolute bottom-10 z-10 flex w-full flex-col items-center">

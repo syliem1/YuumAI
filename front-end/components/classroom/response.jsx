@@ -17,14 +17,11 @@ const Response = ({ questionType, choices, question }) => {
             <p> Choose One</p>
 
             {choices.map((item, index) => (
-              <div className="flex items-center justify-start gap-2">
-                <input
-                  key={index}
-                  type="radio"
-                  id={item}
-                  value={item}
-                  name={question}
-                />{" "}
+              <div
+                key={index}
+                className="flex items-center justify-start gap-2"
+              >
+                <input type="radio" id={item} value={item} name={question} />{" "}
                 <label for={item} className="text-start">
                   {item}
                 </label>
@@ -42,14 +39,11 @@ const Response = ({ questionType, choices, question }) => {
             <p> Select all that apply</p>
 
             {choices.map((item, index) => (
-              <div className="flex items-center justify-start gap-2">
-                <input
-                  key={index}
-                  type="checkbox"
-                  id={item}
-                  value={item}
-                  name={question}
-                />{" "}
+              <div
+                key={index}
+                className="flex items-center justify-start gap-2"
+              >
+                <input type="checkbox" id={item} value={item} name={question} />{" "}
                 <label for={item} className="text-start">
                   {item}
                 </label>
