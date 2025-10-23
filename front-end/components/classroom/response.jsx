@@ -1,38 +1,92 @@
 import { motion } from "motion/react";
 
-const Response = ({questionType, choices}) => {
-    const selectAll = (questionType==="selectAll")
-    const multipleChoice = (questionType==="multipleChoice")
-    const shortAnswer = (questionType==="shortAnswer")
-        return(
-            <motion.div initial={{x:100, opacity:0}} animate={{x:0, opacity:1}} transition={{delay: 2.5}} className="bg-background/90 w-1/4 flex flex-col items-center border-2 border-dark p-10 rounded-2xl text-2xl">
-                {multipleChoice && (
-                    <div>
-                        <p> Choose One
-                    </p>
-                    {choices.map((item, index) => (
-                        <div className="flex items-center justify-start gap-2">
-                        <input key={index} type="radio" className="size-5"/> <p className="text-start">{item}</p>
-                        </div>
-                    ))}
-                    </div>
-                    
-                    
-                )}
-                {selectAll && (
-                    <p>select all that apply</p>
-                )}
-                {shortAnswer && (
-                    <p>type your answer</p>
-                )
-                }
-                {!multipleChoice && !selectAll && !shortAnswer && (
-                    <p>invalid question type</p>
-                )}
-            
-        </motion.div>
-        )
-    
-}
+const Response = ({ questionType, choices, question }) => {
+  const selectAll = questionType === "selectAll";
+  const multipleChoice = questionType === "multipleChoice";
+  const shortAnswer = questionType === "shortAnswer";
+  return (
+    <motion.div
+      initial={{ x: 100, opacity: 0 }}
+      animate={{ x: 0, opacity: 1 }}
+      transition={{ delay: 2.5 }}
+      className="flex w-1/4 flex-col items-center justify-center rounded-2xl border-2 border-dark bg-background/90 p-5 text-2xl"
+    >
+      <form>
+        {multipleChoice && (
+          <div>
+            <p> Choose One</p>
+
+            {choices.map((item, index) => (
+              <div className="flex items-center justify-start gap-2">
+                <input
+                  key={index}
+                  type="radio"
+                  id={item}
+                  value={item}
+                  name={question}
+                />{" "}
+                <label for={item} className="text-start">
+                  {item}
+                </label>
+              </div>
+            ))}
+            <input
+              type="submit"
+              className="cursor-pointer"
+              value="next question"
+            />
+          </div>
+        )}
+        {selectAll && (
+          <div>
+            <p> Select all that apply</p>
+
+            {choices.map((item, index) => (
+              <div className="flex items-center justify-start gap-2">
+                <input
+                  key={index}
+                  type="checkbox"
+                  id={item}
+                  value={item}
+                  name={question}
+                />{" "}
+                <label for={item} className="text-start">
+                  {item}
+                </label>
+              </div>
+            ))}
+            <input
+              type="submit"
+              className="cursor-pointer"
+              value="next question"
+            />
+          </div>
+        )}
+        {shortAnswer && (
+          <div>
+            <p> type your answer</p>
+
+            <div className="flex flex-col items-center justify-center gap-2 py-2">
+              <input
+                type="text"
+                id={choices[0]}
+                name={question}
+                placeholder={choices[0]}
+              />
+            </div>
+            <input
+              type="submit"
+              className="cursor-pointer"
+              value="next question"
+            />
+          </div>
+        )}
+        {!multipleChoice && !selectAll && !shortAnswer && (
+          <p>invalid question type</p>
+        )}
+      </form>
+    </motion.div>
+  );
+};
 
 export default Response;

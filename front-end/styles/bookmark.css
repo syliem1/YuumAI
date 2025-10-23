@@ -2,7 +2,9 @@
   width: 300px;
   height: 100px;
   margin: 80px auto;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
   position: absolute;
   top: 50%;
   right: 1%; /* adjust based on your book’s width */
@@ -13,7 +15,7 @@
 }
 .bookmark:hover {
   transform: translateX(210px);
-  box-shadow: 0 8px 15px rgba(0,0,0,0.3);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
 }
 .bookmark:active {
   transform: translateX(212px) scale(0.95);
