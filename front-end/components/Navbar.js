@@ -2,10 +2,10 @@ import Link from "next/link";
 
 export default function Navbar() {
   return (
-    <nav className="bg-dark text-background p-4 flex justify-between items-center">
+    <nav className="flex items-center justify-between bg-dark p-4 text-background">
       <h1 className="text-xl font-semibold">####</h1>
       <Link href="/theme-preview" className="text-background hover:underline">
-        <button className="bg-primary hover:bg-accent text-dark px-4 py-2 rounded-lg">
+        <button className="rounded-lg bg-primary px-4 py-2 text-dark hover:bg-accent">
           Button
         </button>
       </Link>
