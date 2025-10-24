@@ -1,4 +1,4 @@
-/* From Uiverse.io by Subaashbala */ 
+/* From Uiverse.io by Subaashbala */
 button {
   display: flex;
   justify-content: space-around;
@@ -12,7 +12,10 @@ button {
   position: relative;
   overflow: hidden;
   z-index: 100;
-  transition: box-shadow 250ms, transform 250ms, filter 50ms;
+  transition:
+    box-shadow 250ms,
+    transform 250ms,
+    filter 50ms;
 }
 button:hover {
   transform: translate(2px, 2px);
@@ -59,7 +62,9 @@ button:hover::after {
   background-color: var(--color-primary);
   position: relative;
   overflow: hidden;
-  transition: transform 250ms, background-color 250ms;
+  transition:
+    transform 250ms,
+    background-color 250ms;
   z-index: 100;
 }
 .arrowContainer::after {

@@ -25,13 +25,15 @@ export default function ChatBox() {
   };
 
   return (
-    <div className="w-full max-w-lg mx-auto">
-      <div className="border rounded-lg p-4 h-96 overflow-y-auto bg-white shadow">
+    <div className="mx-auto w-full max-w-lg">
+      <div className="h-96 overflow-y-auto rounded-lg border bg-white p-4 shadow">
         {messages.map((msg, idx) => (
           <div
             key={idx}
             className={`my-2 ${
-              msg.sender === "user" ? "text-right text-blue-600" : "text-left text-gray-700"
+              msg.sender === "user"
+                ? "text-right text-blue-600"
+                : "text-left text-gray-700"
             }`}
           >
             <span>{msg.text}</span>
@@ -44,12 +46,12 @@ export default function ChatBox() {
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          className="flex-grow border rounded-l-lg px-3 py-2 focus:outline-none"
+          className="flex-grow rounded-l-lg border px-3 py-2 focus:outline-none"
           placeholder="Type your message..."
         />
         <button
           type="submit"
-          className="bg-blue-600 text-white px-4 py-2 rounded-r-lg hover:bg-blue-700"
+          className="rounded-r-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
         >
           Send
         </button>
