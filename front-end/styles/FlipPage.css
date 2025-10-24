@@ -1,0 +1,127 @@
+.flip-page {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  perspective: 2000px;
+  position: absolute;
+  pointer-events: none;
+  transition: transform 1s ease;
+}
+
+.flip-page.flipped .front-page {
+  transform: rotateY(-180deg);
+  pointer-events: none;
+}
+
+.flip-page.flipped .back-page {
+  transform: rotateY(0deg);
+  pointer-events: all;
+}
+
+.front-page,
+.back-page {
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+  transition-duration: 1.5s;
+}
+
+.front-page .paper,
+.back-page .paper {
+  width: calc(100% - 2%);
+  margin-top: 2%;
+  height: calc(100% - 4%);
+  padding: 5%;
+  background-color: #fdfaf7;
+  border: solid 1px #c7bebc;
+}
+
+.back-page .paper {
+  box-shadow: inset -7px 0 30px -7px #00000066, -10px 10px 15px 0px #0000001f;
+  margin-left: 2%;
+}
+
+.front-page .paper {
+  box-shadow: inset 7px 0 30px -7px #00000066, 10px 10px 15px 0px #0000001f;
+  margin-right: 2%;
+}
+
+.back-page {
+  transform-origin: right;
+  transform: rotateY(180deg);
+  pointer-events: none;
+}
+
+.front-page {
+  transform-origin: left;
+  transform: rotateY(0deg);
+  pointer-events: all;
+}
+
+/* Cover pages */
+.flip-page.cover-page .front-page,
+.flip-page.cover-page .back-page {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  border: none;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+
+.flip-page.cover-page .front-page {
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+  box-shadow: inset 0px 0 30px 0px #240a0380, 20px 0px 20px 0px #00000030;
+}
+
+.flip-page.cover-page .back-page {
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+  box-shadow: inset 0px 0 30px 0px #240a0380, 20px 9px 20px 10px #000000b3;
+}
+
+.flip-page.cover-page:not(.front) .front-page {
+  background-image: url('/images/cover-back.jpg') !important;
+}
+
+.flip-page.cover-page.front .front-page {
+  box-shadow: inset 0px 0 30px 0px #240a0380, -20px 9px 20px 10px #000000b3;
+}
+
+.flip-page.cover-page.front .back-page {
+  box-shadow: inset 0px 0 30px 0px #240a0380, -20px 0px 20px 0px #00000030;
+  background-image: url("/images/cover-back.jpg") !important;
+}
+
+/* Page positioning when first or last */
+.flip-page.first-page {
+  transform: translateX(calc(50% / -2));
+}
+
+.flip-page.last-page {
+  transform: translateX(calc(-50% / -2));
+}
+
+.bookmark {
+  width: 300px;
+  height: 100px;
+  margin: 80px auto;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: absolute;
+  top: 50%;
+  right: 1%; /* adjust based on your book’s width */
+  cursor: pointer;
+  pointer-events: auto;
+  clip-path: polygon(0 0, 85% 0, 100% 50%, 85% 100%, 0 100%);
+  backface-visibility: visible !important;
+}
+.bookmark:hover {
+  transform: translateX(210px);
+  box-shadow: 0 8px 15px rgba(0,0,0,0.3);
+}
+.bookmark:active {
+  transform: translateX(212px) scale(0.95);
+}
