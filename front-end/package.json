@@ -9,17 +9,23 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@next/eslint-plugin-next": "^15.5.6",
-    "framer-motion": "^12.23.24",
-    "next": "^14.2.33",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "@next/eslint-plugin-next": "16.0.0",
+    "framer-motion": "^12.23.24"
   },
   "devDependencies": {
+    "@eslint/css": "^0.13.0",
+    "@eslint/js": "^9.38.0",
+    "@eslint/json": "^0.13.2",
+    "@eslint/markdown": "^7.5.0",
     "autoprefixer": "^10.4.15",
-    "eslint": "8.57.1",
-    "eslint-config-next": "^15.5.6",
+    "eslint": "^9.38.0",
+    "eslint-config-next": "^16.0.0",
+    "eslint-plugin-react": "^7.37.5",
+    "globals": "^16.4.0",
+    "next": "^16.0.0",
     "postcss": "^8.4.31",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
     "tailwindcss": "^3.4.1"
   }
 }

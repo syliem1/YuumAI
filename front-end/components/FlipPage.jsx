@@ -123,4 +123,5 @@ const FlipPage = forwardRef(
   }
 );
 
+FlipPage.displayName = "FlipPage";
 export default FlipPage;
