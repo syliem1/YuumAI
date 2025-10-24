@@ -12,16 +12,16 @@ const colors = [
 export default function ThemePreview() {
   return (
     <div
-      className="min-h-screen flex flex-col items-center justify-center p-8"
+      className="flex min-h-screen flex-col items-center justify-center p-8"
       style={{ backgroundColor: "#F4EAEA", color: "#56374E" }}
     >
-      <h1 className="text-3xl font-bold mb-8">Theme Preview</h1>
+      <h1 className="mb-8 text-3xl font-bold">Theme Preview</h1>
 
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
+      <div className="grid grid-cols-2 gap-6 sm:grid-cols-4">
         {colors.map((c, i) => (
           <motion.div
             key={i}
-            className="flex flex-col items-center justify-center p-6 rounded-2xl shadow-lg cursor-pointer transition-transform"
+            className="flex cursor-pointer flex-col items-center justify-center rounded-2xl p-6 shadow-lg transition-transform"
             style={{ backgroundColor: c.hex }}
             whileHover={{
               scale: 1.15,
@@ -30,11 +30,11 @@ export default function ThemePreview() {
             }}
           >
             <div
-              className="w-20 h-20 rounded-xl border border-black/20 mb-3"
+              className="mb-3 h-20 w-20 rounded-xl border border-black/20"
               style={{ backgroundColor: c.hex }}
             />
             <p className="font-semibold text-white drop-shadow">{c.name}</p>
-            <p className="text-sm opacity-80 text-white drop-shadow">{c.hex}</p>
+            <p className="text-sm text-white opacity-80 drop-shadow">{c.hex}</p>
           </motion.div>
         ))}
       </div>

@@ -7,12 +7,14 @@ phases:
       - cd aws/lambda-functions/start_history_search_v2 && zip -qr ../../../start_history_search.zip . && cd -
   post_build:
     commands:
-      # - aws lambda update-function-code --function-name PopulateMatchDataV1 --zip-file fileb://populate_match_data.zip
-      # - aws lambda update-function-code --function-name PopulateMatchDataV2 --zip-file fileb://populate_match_data.zip
-      # - aws lambda update-function-code --function-name PopulateMatchDataV3 --zip-file fileb://populate_match_data.zip
-      # - aws lambda update-function-code --function-name PopulateMatchDataV4 --zip-file fileb://populate_match_data.zip
-      # - aws lambda update-function-code --function-name StartHistorySearch --zip-file fileb://start_history_search.zip
-      - aws lambda update-function-code --function-name test-lambda --zip-file fileb://start_history_search.zip
+      - aws lambda update-function-code --function-name PopulateMatchDataV1 --zip-file fileb://populate_match_data.zip
+      - aws lambda update-function-code --function-name PopulateMatchDataV2 --zip-file fileb://populate_match_data.zip
+      - aws lambda update-function-code --function-name PopulateMatchDataV3 --zip-file fileb://populate_match_data.zip
+      - aws lambda update-function-code --function-name PopulateMatchDataV4 --zip-file fileb://populate_match_data.zip
+      - aws lambda update-function-code --function-name StartHistorySearch --zip-file fileb://start_history_search.zip
+
+      # used for testing
+      # - aws lambda update-function-code --function-name test-lambda --zip-file fileb://start_history_search.zip 
 
 artifacts:
   files:

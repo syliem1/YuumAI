@@ -4,7 +4,7 @@
 }
 
 :root {
-  font-family: 'PixelText', serif;
+  font-family: "PixelText", serif;
   font-optical-sizing: auto;
   line-height: 1.5;
   font-weight: 400;
@@ -19,7 +19,7 @@
   -moz-osx-font-smoothing: grayscale;
   overflow: hidden;
 }
-.book-scene{
+.book-scene {
   position: relative;
 }
 .book {
@@ -71,7 +71,7 @@
 }
 
 .page {
-  box-shadow: -5px 0 15px rgba(0,0,0,0.3);
+  box-shadow: -5px 0 15px rgba(0, 0, 0, 0.3);
   margin-top: 1.25%;
   width: 46.5%;
   height: 95%;
@@ -79,7 +79,7 @@
   text-align: right;
   font-size: 0.8vw;
   color: var(--color-dark);
-  font-family: 'PixelText', serif;
+  font-family: "PixelText", serif;
   transform-style: preserve-3d;
   will-change: transform;
   -webkit-font-smoothing: antialiased;
@@ -100,11 +100,11 @@
   transition-delay: 2s;
   pointer-events: none;
 }
-.page.turn.fade{
+.page.turn.fade {
   color: #e9e6c4;
   transition: color 0.8s ease;
 }
-.page.back-turn.back-fade{
+.page.back-turn.back-fade {
   color: var(--color-dark);
   transition: color 2.2s ease 1s;
 }
@@ -116,7 +116,7 @@
   transform: rotateY(-180deg);
   transform-style: preserve-3d;
 }
-.page-text{
+.page-text {
   font-size: 0.8vw;
 }
 
@@ -143,39 +143,70 @@
   color: #e9e6c4;
   animation: bookBackTurn 3s forwards;
 }
-.page:nth-of-type(1) { animation-delay: 0.05s; }
-.page:nth-of-type(2) { animation-delay: 0.33s; }
-.page:nth-of-type(3) { animation-delay: 0.66s; }
+.page:nth-of-type(1) {
+  animation-delay: 0.05s;
+}
+.page:nth-of-type(2) {
+  animation-delay: 0.33s;
+}
+.page:nth-of-type(3) {
+  animation-delay: 0.66s;
+}
 .page:nth-of-type(4) {
   animation: bookOpen150deg 3s forwards;
   animation-delay: 0.99s;
 }
 
-
 /* keyframes unchanged */
 @keyframes bookOpen {
-  30% { z-index: 999 }
-  100% { transform: rotateY(-180deg); z-index: 999; }
+  30% {
+    z-index: 999;
+  }
+  100% {
+    transform: rotateY(-180deg);
+    z-index: 999;
+  }
 }
 
 @keyframes bookCover {
-  30% { z-index: 999 }
-  100% { transform: rotateY(-180deg); z-index: 1; }
+  30% {
+    z-index: 999;
+  }
+  100% {
+    transform: rotateY(-180deg);
+    z-index: 1;
+  }
 }
 
 @keyframes bookClose {
-  30% { z-index: 999 }
-  100% { transform: rotateY(0deg); z-index: 999; }
+  30% {
+    z-index: 999;
+  }
+  100% {
+    transform: rotateY(0deg);
+    z-index: 999;
+  }
 }
 
 @keyframes bookOpen150deg {
-  30% { z-index: 999 }
-  100% { transform: rotateY(-210deg); z-index: 999; }
+  30% {
+    z-index: 999;
+  }
+  100% {
+    transform: rotateY(-210deg);
+    z-index: 999;
+  }
 }
 
 @keyframes bookBackTurn {
-  0%   { transform: rotateY(-180deg); z-index: 999; }
-  100% { transform: rotateY(0deg); z-index: 999; }
+  0% {
+    transform: rotateY(-180deg);
+    z-index: 999;
+  }
+  100% {
+    transform: rotateY(0deg);
+    z-index: 999;
+  }
 }
 
 .bookmark-container {
