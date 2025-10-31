@@ -1,10 +1,17 @@
-import { useEffect, useState } from 'react';
+import next from "next";
+import { useEffect, useState } from "react";
 
 export default function BookPage() {
   const [bookFullscreen, setBookFullscreen] = useState(false);
   const [appFullscreen, setAppFullscreen] = useState(false);
-  const [currentPage, setCurrentPage] = useState(0);
+  const [currentPage, setCurrentPage] = useState(10);
   const [isTurning, setIsTurning] = useState(false);
+
+  const bookmarks = [
+    { y: "20%", label: "Page 1", page: 10, opposite: 11 },
+    { y: "40%", label: "Page 2", page: 9, opposite: 12 },
+    { y: "60%", label: "Page 3", page: 8, opposite: 13 },
+  ];
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -16,44 +23,87 @@ export default function BookPage() {
     return () => clearTimeout(timeout);
   }, []);
 
-  const totalPages = 4;
-
-  const turnPage = (direction) => {
+  const turnPage = (page, opposite) => {
+    if (page === currentPage) return; // no need to turn to the same page
     if (isTurning) return; // prevent double clicks
     setIsTurning(true);
 
-    // play animation
-    const book = document.querySelector('.book');
-    book.classList.add('turning');
+    const nextIndex = page;
+    console.log("Next Page is :", nextIndex);
+    if (nextIndex < currentPage) {
+      for (let i = currentPage; i > nextIndex; i--) {
+        // Determine which page(s) to turn
+        const turnPageEl = document.querySelector(`.page-${i}`);
+        if (!turnPageEl) return;
 
+        // Turn current page right to left
+        const delay = (currentPage - i) * 300;
+        setTimeout(() => {
+          turnPageEl.classList.remove("back-turn", "back-fade");
+          turnPageEl.classList.add("turn", "fade");
+        }, delay);
+      }
+    } else {
+      console.log("Backflipping to:", nextIndex);
+      for (let i = currentPage + 1; i <= nextIndex; i++) {
+        // Determine which page(s) to turn
+        const turnPageEl = document.querySelector(`.page-${i}`);
+        if (!turnPageEl) return;
+        // Turn current page left to right
+        const delay = (i - currentPage) * 300;
+        setTimeout(() => {
+          turnPageEl.classList.remove("turn", "fade");
+          turnPageEl.classList.add("back-turn", "back-fade");
+        }, delay);
+      }
+    }
+
+    for (let i = 11; i <= 13; i++) {
+      const oppositePageEl = document.querySelector(`.page-${i}`);
+      if (!oppositePageEl) return;
+
+      if (i === opposite) {
+        oppositePageEl.classList.remove("invisible");
+        oppositePageEl.classList.add("visible");
+        continue;
+      }
+      oppositePageEl.classList.remove("visible");
+      oppositePageEl.classList.add("invisible");
+    }
+
+    // Wait for animation to complete
     setTimeout(() => {
-      setCurrentPage((prev) => {
-        const next =
-          direction === 'next'
-            ? Math.min(prev + 1, totalPages - 1)
-            : Math.max(prev - 1, 0);
-        return next;
-      });
-      book.classList.remove('turning');
+      setCurrentPage(nextIndex);
+      console.log("Current page is now:", currentPage);
       setIsTurning(false);
-    }, 1000); // match animation time
+    }, 1000); // match your CSS animation duration
+  };
+
+  const handleBookmarkClick = (e, flip, opposite) => {
+    const el = e.currentTarget;
+    // Play click animation
+    el.classList.add("clicked");
+    setTimeout(() => el.classList.remove("clicked"), 400);
+    // Trigger turnPage function
+    turnPage(flip, opposite); // Testing turning to page 2
   };
 
   return (
     <section
-      className={`flex items-center justify-center h-screen transition-all duration-700 ${
-        appFullscreen ? 'bg-gray-950' : 'bg-gray-900'
+      className={`book-scene flex h-screen items-center justify-center transition-all duration-700 ${
+        appFullscreen ? "bg-gray-950" : "bg-gray-900"
       }`}
     >
-      <div className={`book transition-all duration-700 ${bookFullscreen ? 'fullscreen' : ''}`}>
-        <span className="page turn"></span>
-        <span className="page turn"></span>
-        <span className="page turn"></span>
-        <span className="page turn"></span>
-        <span className="page turn"></span>
-        <span className="page turn">
-          <span className="flipped-page-content">Hey</span>
+      <div
+        className={`book transition-all duration-700 ${bookFullscreen ? "fullscreen" : ""}`}
+      >
+        <span className="page turn page-1">:3</span>
+        <span className="page turn page-2">:3:3:3</span>
+        <span className="page turn page-3">:3:3:3:3 :3:3:3:3:3:3:3</span>
+        <span className="page turn page-4">
+          :3:3:3:3:3:3:3 :3:3:3:3:3:3:3 :3:3:3:3:3:3:3
         </span>
+        <span className="page turn page-5">:3</span>
         <span className="cover"></span>
         <span className="page">Page 5</span>
         <span className="page">Page 4</span>
@@ -63,7 +113,7 @@ export default function BookPage() {
         <span className="cover turn">Hello</span>
       </div>
       
-        <div className="bookmark">
+        <div class="bookmark">
           <svg viewBox="0 0 300 100" preserveAspectRatio="none">
             <defs>
               <mask id="cutout">
