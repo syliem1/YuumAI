@@ -25,7 +25,7 @@ export default function Home() {
             placeholder="Enter text here"
             className="flex-1 rounded-lg border p-2 text-dark"
           />
-          <Link href="/book" className="text-background hover:underline">
+          <Link href="/FlipBook" className="text-background hover:underline">
             <button className="rounded-lg bg-[#8b6f4e] px-4 py-2 text-white transition hover:bg-[#73583f]">
               Search
             </button>

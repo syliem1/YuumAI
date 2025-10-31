@@ -4,6 +4,8 @@ import "@/styles/button.css";
 import "@/styles/book.css";
 import "@/styles/bookmark.css";
 import "@/styles/classroom.css";
+import "@/styles/FlipBook.css";
+import "@/styles/FlipPage.css";
 
 export default function App({ Component, pageProps }) {
   return (
