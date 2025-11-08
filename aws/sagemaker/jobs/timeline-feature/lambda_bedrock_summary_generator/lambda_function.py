@@ -35,57 +35,57 @@ class BedrockSummaryGenerator:
         self.model_id = BEDROCK_MODEL_ID
     
     def generate_event_summary(self, event: Dict, player_context: Dict) -> str:
-    """
-    Generates concise AI summary for a critical moment
-    """
+        """
+        Generates concise AI summary for a critical moment
+        """
 
-    system_prompt = """You are an expert League of Legends coach analyzing a key moment.
-Write 2-3 sentences analyzing the event.
-Be direct, constructive, and actionable.
-Keep the entire response under 70 words."""
-    
-    prompt = self._build_event_prompt(event, player_context)
-    request_body = {
-        "messages": [
-            {
-                "role": "system",
-                "content": system_prompt
-            },
-            {
-                "role": "user",
-                "content": prompt
-            }
-        ],
-        "max_tokens": MAX_TOKENS,
-        "temperature": TEMPERATURE
-    }
-    
-    try:
-        response = self.bedrock.invoke_model(
-            modelId=self.model_id,
-            body=json.dumps(request_body),
-            contentType='application/json',
-            accept='application/json'
-        )
+        system_prompt = """You are an expert League of Legends coach analyzing a key moment.
+    Write 2-3 sentences analyzing the event.
+    Be direct, constructive, and actionable.
+    Keep the entire response under 70 words."""
         
-        response_body = json.loads(response['body'].read())
+        prompt = self._build_event_prompt(event, player_context)
+        request_body = {
+            "messages": [
+                {
+                    "role": "system",
+                    "content": system_prompt
+                },
+                {
+                    "role": "user",
+                    "content": prompt
+                }
+            ],
+            "max_tokens": MAX_TOKENS,
+            "temperature": TEMPERATURE
+        }
         
-        # Extract the content from OpenAI response format
-        if 'choices' in response_body and len(response_body['choices']) > 0:
-            summary = response_body['choices'][0]['message']['content'].strip()
-        else:
-            # Fallback if response structure is different
-            print(f"Unexpected response structure: {response_body}")
+        try:
+            response = self.bedrock.invoke_model(
+                modelId=self.model_id,
+                body=json.dumps(request_body),
+                contentType='application/json',
+                accept='application/json'
+            )
+            
+            response_body = json.loads(response['body'].read())
+            
+            # Extract the content from OpenAI response format
+            if 'choices' in response_body and len(response_body['choices']) > 0:
+                summary = response_body['choices'][0]['message']['content'].strip()
+            else:
+                # Fallback if response structure is different
+                print(f"Unexpected response structure: {response_body}")
+                return self._generate_fallback_summary(event)
+            
+            return summary
+            
+        except Exception as e:
+            print(f"Bedrock error: {str(e)}")
+            import traceback
+            traceback.print_exc()
             return self._generate_fallback_summary(event)
         
-        return summary
-        
-    except Exception as e:
-        print(f"Bedrock error: {str(e)}")
-        import traceback
-        traceback.print_exc()
-        return self._generate_fallback_summary(event)
-    
     def _build_event_prompt(self, event: Dict, player_context: Dict) -> str:
         """
         Builds optimized prompt for event analysis
