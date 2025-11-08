@@ -1,0 +1,303 @@
+{
+  "puuid": "S7a8R8u8WoETFhyjLADPtCaWb_xzvFZ-lA0KBDMmWJNoy_86du16YcTkmrSMhZ2WObWXRggwU--JhA",
+  "playstyle": {
+    "region": "Demacia",
+    "playstyle_score": 85
+  },
+  "timeline_results": [
+    {
+      "match_id": "NA1_5408949032",
+      "puuid": "S7a8R8u8WoETFhyjLADPtCaWb_xzvFZ-lA0KBDMmWJNoy_86du16YcTkmrSMhZ2WObWXRggwU--JhA",
+      "events": [
+        {
+          "event_id": "OBJECTIVE_17.0_d52e6bdb",
+          "timestamp_minutes": 17.0058,
+          "event_type": "OBJECTIVE",
+          "impact_score": 1550,
+          "game_state": "mid",
+          "event_details": {
+            "objective_type": "RIFTHERALD",
+            "securing_team": "PLAYER_TEAM",
+            "position": {
+              "x": 4608,
+              "y": 10154
+            },
+            "killer_id": 7
+          },
+          "context": {
+            "gold_difference": 10352,
+            "gold_state": "ahead"
+          },
+          "has_summary": false,
+          "summary": null
+        },
+        {
+          "event_id": "STRUCTURE_22.0_3fb8410a",
+          "timestamp_minutes": 22.00701666666667,
+          "event_type": "STRUCTURE",
+          "impact_score": 1525,
+          "game_state": "mid",
+          "event_details": {
+            "structure_type": "INHIBITOR_BUILDING",
+            "lane": "BOT_LANE",
+            "destroying_team": "ENEMY_TEAM"
+          },
+          "context": {
+            "gold_difference": 11489,
+            "gold_state": "ahead"
+          },
+          "has_summary": false,
+          "summary": null
+        },
+        {
+          "event_id": "OBJECTIVE_7.0_6513ef6c",
+          "timestamp_minutes": 7.00165,
+          "event_type": "OBJECTIVE",
+          "impact_score": 1050,
+          "game_state": "early",
+          "event_details": {
+            "objective_type": "DRAGON",
+            "securing_team": "PLAYER_TEAM",
+            "position": {
+              "x": 9836,
+              "y": 4398
+            },
+            "killer_id": 7
+          },
+          "context": {
+            "gold_difference": 1825,
+            "gold_state": "ahead"
+          },
+          "has_summary": false,
+          "summary": null
+        },
+        {
+          "event_id": "OBJECTIVE_20.0_c0875b58",
+          "timestamp_minutes": 20.00655,
+          "event_type": "OBJECTIVE",
+          "impact_score": 1050,
+          "game_state": "mid",
+          "event_details": {
+            "objective_type": "DRAGON",
+            "securing_team": "PLAYER_TEAM",
+            "position": {
+              "x": 9837,
+              "y": 4397
+            },
+            "killer_id": 8
+          },
+          "context": {
+            "gold_difference": 7999,
+            "gold_state": "ahead"
+          },
+          "has_summary": false,
+          "summary": null
+        },
+        {
+          "event_id": "OBJECTIVE_13.0_db2a2b04",
+          "timestamp_minutes": 13.003166666666667,
+          "event_type": "OBJECTIVE",
+          "impact_score": 1050,
+          "game_state": "early",
+          "event_details": {
+            "objective_type": "DRAGON",
+            "securing_team": "PLAYER_TEAM",
+            "position": {
+              "x": 9837,
+              "y": 4397
+            },
+            "killer_id": 7
+          },
+          "context": {
+            "gold_difference": 4068,
+            "gold_state": "ahead"
+          },
+          "has_summary": false,
+          "summary": null
+        },
+        {
+          "event_id": "STRUCTURE_18.0_7df718ba",
+          "timestamp_minutes": 18.005883333333333,
+          "event_type": "STRUCTURE",
+          "impact_score": 825,
+          "game_state": "mid",
+          "event_details": {
+            "structure_type": "TOWER_BUILDING",
+            "lane": "TOP_LANE",
+            "destroying_team": "ENEMY_TEAM"
+          },
+          "context": {
+            "gold_difference": 9379,
+            "gold_state": "ahead"
+          },
+          "has_summary": false,
+          "summary": null
+        },
+        {
+          "event_id": "STRUCTURE_22.0_d126c472",
+          "timestamp_minutes": 22.00701666666667,
+          "event_type": "STRUCTURE",
+          "impact_score": 825,
+          "game_state": "mid",
+          "event_details": {
+            "structure_type": "TOWER_BUILDING",
+            "lane": "MID_LANE",
+            "destroying_team": "ENEMY_TEAM"
+          },
+          "context": {
+            "gold_difference": 11489,
+            "gold_state": "ahead"
+          },
+          "has_summary": false,
+          "summary": null
+        },
+        {
+          "event_id": "STRUCTURE_14.0_7e74eaab",
+          "timestamp_minutes": 14.0036,
+          "event_type": "STRUCTURE",
+          "impact_score": 825,
+          "game_state": "early",
+          "event_details": {
+            "structure_type": "TOWER_BUILDING",
+            "lane": "BOT_LANE",
+            "destroying_team": "ENEMY_TEAM"
+          },
+          "context": {
+            "gold_difference": 5555,
+            "gold_state": "ahead"
+          },
+          "has_summary": false,
+          "summary": null
+        },
+        {
+          "event_id": "STRUCTURE_16.0_0a5c19ad",
+          "timestamp_minutes": 16.004183333333334,
+          "event_type": "STRUCTURE",
+          "impact_score": 825,
+          "game_state": "mid",
+          "event_details": {
+            "structure_type": "TOWER_BUILDING",
+            "lane": "MID_LANE",
+            "destroying_team": "ENEMY_TEAM"
+          },
+          "context": {
+            "gold_difference": 9026,
+            "gold_state": "ahead"
+          },
+          "has_summary": false,
+          "summary": null
+        },
+        {
+          "event_id": "STRUCTURE_19.0_a5a4f34c",
+          "timestamp_minutes": 19.006083333333333,
+          "event_type": "STRUCTURE",
+          "impact_score": 825,
+          "game_state": "mid",
+          "event_details": {
+            "structure_type": "TOWER_BUILDING",
+            "lane": "BOT_LANE",
+            "destroying_team": "ENEMY_TEAM"
+          },
+          "context": {
+            "gold_difference": 8754,
+            "gold_state": "ahead"
+          },
+          "has_summary": false,
+          "summary": null
+        },
+        {
+          "event_id": "STRUCTURE_17.0_cacf27c3",
+          "timestamp_minutes": 17.0058,
+          "event_type": "STRUCTURE",
+          "impact_score": 825,
+          "game_state": "mid",
+          "event_details": {
+            "structure_type": "TOWER_BUILDING",
+            "lane": "BOT_LANE",
+            "destroying_team": "ENEMY_TEAM"
+          },
+          "context": {
+            "gold_difference": 10352,
+            "gold_state": "ahead"
+          },
+          "has_summary": false,
+          "summary": null
+        },
+        {
+          "event_id": "STRUCTURE_22.0_b1ab06d2",
+          "timestamp_minutes": 22.00701666666667,
+          "event_type": "STRUCTURE",
+          "impact_score": 825,
+          "game_state": "mid",
+          "event_details": {
+            "structure_type": "TOWER_BUILDING",
+            "lane": "BOT_LANE",
+            "destroying_team": "ENEMY_TEAM"
+          },
+          "context": {
+            "gold_difference": 11489,
+            "gold_state": "ahead"
+          },
+          "has_summary": false,
+          "summary": null
+        },
+        {
+          "event_id": "STRUCTURE_22.0_924400e1",
+          "timestamp_minutes": 22.00701666666667,
+          "event_type": "STRUCTURE",
+          "impact_score": 825,
+          "game_state": "mid",
+          "event_details": {
+            "structure_type": "TOWER_BUILDING",
+            "lane": "MID_LANE",
+            "destroying_team": "ENEMY_TEAM"
+          },
+          "context": {
+            "gold_difference": 11489,
+            "gold_state": "ahead"
+          },
+          "has_summary": false,
+          "summary": null
+        },
+        {
+          "event_id": "STRUCTURE_22.0_218c57e5",
+          "timestamp_minutes": 22.00701666666667,
+          "event_type": "STRUCTURE",
+          "impact_score": 825,
+          "game_state": "mid",
+          "event_details": {
+            "structure_type": "TOWER_BUILDING",
+            "lane": "MID_LANE",
+            "destroying_team": "ENEMY_TEAM"
+          },
+          "context": {
+            "gold_difference": 11489,
+            "gold_state": "ahead"
+          },
+          "has_summary": false,
+          "summary": null
+        },
+        {
+          "event_id": "STRUCTURE_15.0_e5479135",
+          "timestamp_minutes": 15.003666666666668,
+          "event_type": "STRUCTURE",
+          "impact_score": 825,
+          "game_state": "mid",
+          "event_details": {
+            "structure_type": "TOWER_BUILDING",
+            "lane": "TOP_LANE",
+            "destroying_team": "ENEMY_TEAM"
+          },
+          "context": {
+            "gold_difference": 7069,
+            "gold_state": "ahead"
+          },
+          "has_summary": false,
+          "summary": null
+        }
+      ],
+      "total_events": 15
+    }
+  ],
+  "match_count": 1
+}
