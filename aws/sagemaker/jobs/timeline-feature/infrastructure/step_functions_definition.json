@@ -1,0 +1,218 @@
+{
+  "Comment": "Timeline Feature Batch Processing Workflow",
+  "StartAt": "ValidateInput",
+  "States": {
+    "ValidateInput": {
+      "Type": "Pass",
+      "Parameters": {
+        "match_ids.$": "$.match_ids",
+        "puuid.$": "$.puuid",
+        "batch_mode.$": "$.batch_mode"
+      },
+      "Next": "ProcessMatches"
+    },
+    "ProcessMatches": {
+      "Type": "Map",
+      "ItemsPath": "$.match_ids",
+      "MaxConcurrency": 5,
+      "Parameters": {
+        "match_id.$": "$$.Map.Item.Value",
+        "puuid.$": "$.puuid",
+        "batch_mode.$": "$.batch_mode"
+      },
+      "Iterator": {
+        "StartAt": "CheckIfProcessed",
+        "States": {
+          "CheckIfProcessed": {
+            "Type": "Task",
+            "Resource": "arn:aws:states:::dynamodb:getItem",
+            "Parameters": {
+              "TableName": "lol-player-timeline-metadata",
+              "Key": {
+                "puuid": {
+                  "S.$": "$.puuid"
+                },
+                "match_id": {
+                  "S.$": "$.match_id"
+                }
+              }
+            },
+            "ResultPath": "$.metadata_check",
+            "Next": "IsAlreadyProcessed",
+            "Catch": [
+              {
+                "ErrorEquals": ["States.ALL"],
+                "ResultPath": "$.error",
+                "Next": "TriggerEventExtraction"
+              }
+            ]
+          },
+          "IsAlreadyProcessed": {
+            "Type": "Choice",
+            "Choices": [
+              {
+                "Variable": "$.metadata_check.Item",
+                "IsPresent": true,
+                "Next": "GetExistingEvents"
+              }
+            ],
+            "Default": "TriggerEventExtraction"
+          },
+          "TriggerEventExtraction": {
+            "Type": "Task",
+            "Resource": "arn:aws:states:::lambda:invoke",
+            "Parameters": {
+              "FunctionName": "timeline-event-processor",
+              "Payload": {
+                "match_id.$": "$.match_id",
+                "puuid.$": "$.puuid",
+                "force_reprocess": false
+              }
+            },
+            "ResultPath": "$.extraction_result",
+            "Next": "WaitForExtraction",
+            "Retry": [
+              {
+                "ErrorEquals": ["States.TaskFailed"],
+                "IntervalSeconds": 2,
+                "MaxAttempts": 3,
+                "BackoffRate": 2
+              }
+            ],
+            "Catch": [
+              {
+                "ErrorEquals": ["States.ALL"],
+                "ResultPath": "$.extraction_error",
+                "Next": "LogExtractionFailure"
+              }
+            ]
+          },
+          "WaitForExtraction": {
+            "Type": "Wait",
+            "Seconds": 2,
+            "Next": "GetExistingEvents"
+          },
+          "GetExistingEvents": {
+            "Type": "Task",
+            "Resource": "arn:aws:states:::aws-sdk:dynamodb:query",
+            "Parameters": {
+              "TableName": "lol-timeline-events",
+              "IndexName": "match-impact-index",
+              "KeyConditionExpression": "match_id = :match_id",
+              "ExpressionAttributeValues": {
+                ":match_id": {
+                  "S.$": "$.match_id"
+                }
+              },
+              "ScanIndexForward": false,
+              "Limit": 5
+            },
+            "ResultPath": "$.events",
+            "Next": "GenerateSummaries",
+            "Catch": [
+              {
+                "ErrorEquals": ["States.ALL"],
+                "ResultPath": "$.query_error",
+                "Next": "LogQueryFailure"
+              }
+            ]
+          },
+          "GenerateSummaries": {
+            "Type": "Task",
+            "Resource": "arn:aws:states:::lambda:invoke",
+            "Parameters": {
+              "FunctionName": "bedrock-summary-generator",
+              "Payload": {
+                "match_id.$": "$.match_id",
+                "puuid.$": "$.puuid",
+                "batch_mode": true,
+                "events.$": "$.events.Items"
+              }
+            },
+            "ResultPath": "$.summary_result",
+            "Next": "MatchProcessingComplete",
+            "Retry": [
+              {
+                "ErrorEquals": ["States.TaskFailed"],
+                "IntervalSeconds": 3,
+                "MaxAttempts": 2,
+                "BackoffRate": 2
+              }
+            ],
+            "Catch": [
+              {
+                "ErrorEquals": ["States.ALL"],
+                "ResultPath": "$.summary_error",
+                "Next": "MatchProcessingComplete"
+              }
+            ]
+          },
+          "LogExtractionFailure": {
+            "Type": "Pass",
+            "Parameters": {
+              "match_id.$": "$.match_id",
+              "error.$": "$.extraction_error",
+              "status": "extraction_failed"
+            },
+            "Next": "MatchProcessingComplete"
+          },
+          "LogQueryFailure": {
+            "Type": "Pass",
+            "Parameters": {
+              "match_id.$": "$.match_id",
+              "error.$": "$.query_error",
+              "status": "query_failed"
+            },
+            "Next": "MatchProcessingComplete"
+          },
+          "MatchProcessingComplete": {
+            "Type": "Pass",
+            "Parameters": {
+              "match_id.$": "$.match_id",
+              "status": "completed",
+              "timestamp.$": "$$.State.EnteredTime"
+            },
+            "End": true
+          }
+        }
+      },
+      "ResultPath": "$.processing_results",
+      "Next": "AggregateResults"
+    },
+    "AggregateResults": {
+      "Type": "Pass",
+      "Parameters": {
+        "total_matches.$": "States.ArrayLength($.match_ids)",
+        "processing_results.$": "$.processing_results",
+        "puuid.$": "$.puuid",
+        "completed_at.$": "$$.State.EnteredTime"
+      },
+      "Next": "NotifyCompletion"
+    },
+    "NotifyCompletion": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::sns:publish",
+      "Parameters": {
+        "TopicArn": "arn:aws:sns:us-west-2:768394660366:timeline-processing-complete",
+        "Message": {
+          "default": "Timeline processing complete",
+          "puuid.$": "$.puuid",
+          "total_matches.$": "$.total_matches",
+          "completed_at.$": "$.completed_at"
+        }
+      },
+      "ResultPath": "$.notification_result",
+      "Next": "WorkflowComplete",
+      "Catch": [
+        {
+          "ErrorEquals": ["States.ALL"],
+          "ResultPath": "$.notification_error",
+          "Next": "WorkflowComplete"
+        }
+      ]
+    },
+    "WorkflowComplete": {
+      "Type": "Succeed"
+    }
+  }
+}

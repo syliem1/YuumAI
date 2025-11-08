@@ -1,0 +1,9 @@
+{
+  "functions": {
+    "event_processor": "arn:aws:lambda:us-west-2:768394660366:function:lol-timeline-event-processor",
+    "summary_generator": "arn:aws:lambda:us-west-2:768394660366:function:lol-timeline-summary-generator",
+    "api_handler": "arn:aws:lambda:us-west-2:768394660366:function:lol-timeline-api-handler"
+  },
+  "api_endpoint": "https://hsigypkqh1.execute-api.us-west-2.amazonaws.com",
+  "deployed_at": "{'UserId': 'AROA3FZ7EBIHE3B3URJFY:SageMaker', 'Account': '768394660366', 'Arn': 'arn:aws:sts::768394660366:assumed-role/datazone_usr_role_5i1vmxossv3f2o_b1rxf3f1mnfnv4/SageMaker', 'ResponseMetadata': {'RequestId': '8182499a-6cc9-4692-8581-8051b431b0c0', 'HTTPStatusCode': 200, 'HTTPHeaders': {'x-amzn-requestid': '8182499a-6cc9-4692-8581-8051b431b0c0', 'x-amz-sts-extended-request-id': 'MTp1cy1lYXN0LTE6MTc2MjQwMTM1MjM2MTpHOnY2dzc4NWcy', 'content-type': 'text/xml', 'content-length': '472', 'date': 'Thu, 06 Nov 2025 03:55:52 GMT'}, 'RetryAttempts': 0}}"
+}
