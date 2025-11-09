@@ -6,6 +6,7 @@ import "@/styles/bookmark.css";
 import "@/styles/classroom.css";
 import "@/styles/FlipBook.css";
 import "@/styles/FlipPage.css";
+import "@/styles/Summary.css";
 
 export default function App({ Component, pageProps }) {
   return (

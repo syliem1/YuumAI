@@ -1,47 +1,41 @@
 .bookmark {
-  width: 300px;
-  height: 100px;
+  width: 100px;
+  height: 200px;
   margin: 80px auto;
   transition:
     transform 0.3s ease,
     box-shadow 0.3s ease;
   position: absolute;
-  top: 50%;
-  right: 1%; /* adjust based on your book’s width */
   cursor: pointer;
   transition: opacity 0.7s ease;
-  transform: translateX(200px);
-  z-index: 2;
+  transform: translateY(-220px);
   clip-path: polygon(0 0, 85% 0, 100% 50%, 85% 100%, 0 100%);
 }
 .bookmark:hover {
-  transform: translateX(210px);
+  transform: translateY(-230px);
   box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
 }
 .bookmark:active {
-  transform: translateX(212px) scale(0.95);
+  transform: translateY(-232px) scale(0.95);
 }
 
 .back-bookmark {
-  width: 300px;
-  height: 100px;
+  width: 100px;
+  height: 200px;
   margin: 80px auto;
   transition:
     transform 0.3s ease,
     box-shadow 0.3s ease;
   position: absolute;
-  top: 50%;
-  left: 1%; /* adjust based on your book’s width */
   cursor: pointer;
   transition: opacity 0.7s ease;
-  z-index: 2;
-  transform: translateX(-200px);
+  transform: translateY(-220px);
   clip-path: polygon(0 0, 85% 0, 100% 50%, 85% 100%, 0 100%);
 }
 .back-bookmark:hover {
-  transform: translateX(-210px);
+  transform: translateY(-230px);
   box-shadow: 0 8px 15px rgba(0,0,0,0.3);
 }
 .back-bookmark:active {
-  transform: translateX(-212px) scale(0.95);
+  transform: translateY(-232px) scale(0.95);
 }
