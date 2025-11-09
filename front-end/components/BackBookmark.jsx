@@ -40,10 +40,10 @@ const BackBookmark = ({ label, targetPage, x, onClick, zIndex, color = "#77425f"
           points="2,42 2,198 52,158 102,198 102,42"
           fill="none"
           stroke="#9f814a"
-          
+
           strokeWidth="4"
         />
-        
+
         {/* Text label */}
         <text
           x="50"

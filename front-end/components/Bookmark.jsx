@@ -40,10 +40,10 @@ const Bookmark = ({ label, targetPage, x, onClick, zIndex, color = "#C56BC5", st
           points="2,42 2,198 50,160 100,200 100,42"
           fill="none"
           stroke="#9f814a"
-          
+
           strokeWidth="4"
         />
-        
+
         {/* Text label */}
         <text
           x="50"
