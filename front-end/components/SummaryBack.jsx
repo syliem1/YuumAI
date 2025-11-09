@@ -1,9 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
-import TraitPopup from "./TraitPopup"; // ✅ make sure path is correct
+import TraitPopup from "./TraitPopup";
+import Image from "next/image";
 
 const SummaryBack = ({ data }) => {
   const [activeTrait, setActiveTrait] = useState(null);
   const [activeRef, setActiveRef] = useState(null);
+
+  // ✅ Create a ref array for all trait items
+  const traitRefs = useRef([]);
 
   const descriptions = {
     "Late-Game": "Shines in the late stages of battle once resources are built.",
@@ -39,17 +43,17 @@ const SummaryBack = ({ data }) => {
       <div className="info-box">
         <h3 className="region-title">
           Region: {data.region}
-          <img
+          <Image
             src={`/images/regions/${data.region
               .toLowerCase()
               .replace(/\s+/g, "_")}_crest_icon.png`}
             alt={`${data.region} crest`}
             className="region-icon"
+            width={32}
+            height={32}
           />
         </h3>
-        <p>
-          Shurima is a region known for its incredible power built over dynasties.
-        </p>
+        <p>Shurima is a region known for its incredible power built over dynasties.</p>
       </div>
 
       {/* Profile traits with popups */}
@@ -57,7 +61,12 @@ const SummaryBack = ({ data }) => {
         <h3>Profile</h3>
         <ul className="profile-list">
           {data.profile.map((trait, index) => {
-            const ref = useRef(null);
+            // ✅ assign a ref for each trait
+            if (!traitRefs.current[index]) {
+              traitRefs.current[index] = React.createRef();
+            }
+
+            const ref = traitRefs.current[index];
             return (
               <li
                 key={index}
@@ -96,12 +105,14 @@ const SummaryBack = ({ data }) => {
             <div className="champion-row">
               {data.mostPlayed.slice(0, 3).map((champ, index) => (
                 <div key={index} className="champion-item">
-                  <img
+                  <Image
                     src={`/images/champions/${champ.name
                       .toLowerCase()
                       .replace(/\s+/g, "_")}.avif`}
                     alt={champ.name}
                     className="champion-icon"
+                    width={64}
+                    height={64}
                   />
                   <p className="champion-name">{champ.name}</p>
                   <p className="champion-games">{champ.games} games</p>

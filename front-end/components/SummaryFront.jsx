@@ -15,6 +15,10 @@ const SummaryFront = ({ data }) => {
   const [activeTrait, setActiveTrait] = useState(null);
   const [activeRef, setActiveRef] = useState(null);
 
+  // ✅ Create ref arrays outside the render loop
+  const strengthRefs = useRef([]);
+  const weaknessRefs = useRef([]);
+
   const roleData = Object.entries(data.roles || {}).map(([role, count]) => ({
     role: role.toUpperCase(),
     games: count,
@@ -83,7 +87,12 @@ const SummaryFront = ({ data }) => {
             <h4 style={{ color: "#22c55e" }}>Strengths</h4>
             <ul className="trait-list">
               {data.strengths?.slice(0, 4).map((trait, index) => {
-                const ref = useRef(null);
+                // ✅ Initialize a unique ref for each item (once)
+                if (!strengthRefs.current[index]) {
+                  strengthRefs.current[index] = React.createRef();
+                }
+
+                const ref = strengthRefs.current[index];
                 return (
                   <li
                     key={index}
@@ -95,7 +104,10 @@ const SummaryFront = ({ data }) => {
                     {trait}
                     {activeTrait === trait && activeRef === ref && (
                       <TraitPopup targetRef={ref}>
-                        <p>{data.details?.[trait] || "No specific data available."}</p>
+                        <p>
+                          {data.details?.[trait] ||
+                            "No specific data available."}
+                        </p>
                       </TraitPopup>
                     )}
                   </li>
@@ -109,7 +121,12 @@ const SummaryFront = ({ data }) => {
             <h4 style={{ color: "#ef4444" }}>Weaknesses</h4>
             <ul className="trait-list">
               {data.weaknesses?.slice(0, 4).map((trait, index) => {
-                const ref = useRef(null);
+                // ✅ Initialize a unique ref for each weakness item
+                if (!weaknessRefs.current[index]) {
+                  weaknessRefs.current[index] = React.createRef();
+                }
+
+                const ref = weaknessRefs.current[index];
                 return (
                   <li
                     key={index}
@@ -121,7 +138,10 @@ const SummaryFront = ({ data }) => {
                     {trait}
                     {activeTrait === trait && activeRef === ref && (
                       <TraitPopup targetRef={ref}>
-                        <p>{data.details?.[trait] || "No specific data available."}</p>
+                        <p>
+                          {data.details?.[trait] ||
+                            "No specific data available."}
+                        </p>
                       </TraitPopup>
                     )}
                   </li>

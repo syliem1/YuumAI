@@ -84,7 +84,7 @@ const SearchAndCompare = ({ player1Stats, onPlayer2Found }) => {
       {/* Stats Display - Identical to Social */}
       <div className="bg-black bg-opacity-70 rounded-lg p-8 w-full max-w-md">
         <h3 className="text-xl font-semibold text-white mb-6 text-center">
-          Searched Player's Name
+          Searched Player&apos;s Name
         </h3>
         
         <div className="space-y-1">

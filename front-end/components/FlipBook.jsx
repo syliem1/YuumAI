@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import FlipPage from "./FlipPage";
 import SummaryFront from "./SummaryFront";
 import SummaryBack from "./SummaryBack";
@@ -180,7 +180,6 @@ const FlipBook = () => {
       await new Promise((r) => requestAnimationFrame(r));
       await new Promise((r) => setTimeout(r, 300));
 
-      await flipToPage(3);
     };
 
     waitForRefs();
