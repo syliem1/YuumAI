@@ -1,0 +1,41 @@
+.bookmark {
+  width: 100px;
+  height: 200px;
+  margin: 80px auto;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+  position: absolute;
+  cursor: pointer;
+  transition: opacity 0.7s ease;
+  transform: translateY(-220px);
+  clip-path: polygon(0 0, 85% 0, 100% 50%, 85% 100%, 0 100%);
+}
+.bookmark:hover {
+  transform: translateY(-230px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+}
+.bookmark:active {
+  transform: translateY(-232px) scale(0.95);
+}
+
+.back-bookmark {
+  width: 100px;
+  height: 200px;
+  margin: 80px auto;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+  position: absolute;
+  cursor: pointer;
+  transition: opacity 0.7s ease;
+  transform: translateY(-220px);
+  clip-path: polygon(0 0, 85% 0, 100% 50%, 85% 100%, 0 100%);
+}
+.back-bookmark:hover {
+  transform: translateY(-230px);
+  box-shadow: 0 8px 15px rgba(0,0,0,0.3);
+}
+.back-bookmark:active {
+  transform: translateY(-232px) scale(0.95);
+}

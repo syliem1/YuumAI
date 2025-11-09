@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-primary: #78bcb0;
+  --color-accent: #b99758;
+  --color-background: #f4eaea;
+  --color-dark: #56374e;
+}
+
+html,
+body {
+  background-color: var(--color-background);
+  color: var(--color-dark);
+  font-family: "Georgia", serif;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
