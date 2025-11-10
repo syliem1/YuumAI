@@ -343,7 +343,7 @@ const FlipBook = () => {
 
   // Initialize pages only once
   useEffect(() => {
-    if (!pageStructure.length) return;
+    if (!pageStructure.length || isInitialized.current) return;
 
     const total = pageStructure.length;
     setPages(pageStructure);
