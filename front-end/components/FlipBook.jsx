@@ -9,7 +9,6 @@ import MatchTimeline from "./MatchTimeline";
 import { useTimelineContext } from "@/context/TimelineContext";
 import ChatInput from "./ChatInput";
 import ChatOutput from "./ChatOutput.jsx";
-import matchesData from "../data/matches.json";
 import AncientRunicPage from "./AncientRunicPage.jsx";
 import MapFragmentPage from "./MapFragmentPage";
 
@@ -29,25 +28,17 @@ const FlipBook = () => {
   const [selectedMatchId, setSelectedMatchId] = useState(null);
   
   // Player stats state
-  const [player1Stats, setPlayer1Stats] = useState({
-    Games: "150",
-    WinRate: "60%",
-    KDA: "100",
-    CPM: "85",
-    gold15: "70",
-    GPM: "60",
-    DPM: "90"
-  });
+  const [player1Stats, setPlayer1Stats] = useState({});
   
   const [player2Stats, setPlayer2Stats] = useState({
-    Games: "",
-    WinRate: "",
-    KDA: "",
-    CPM: "",
-    gold15: "",
-    GPM: "",
-    DPM: ""
-  });
+    "avg_kda": 0,
+    "avg_cs_per_min": 0,
+    "avg_kill_participation": 0,
+    "avg_dpm": 0,
+    "avg_gpm": 0,
+    "avg_solo_kills": 0,
+    "avg_vision_score": 0,
+    "avg_cc_time": 0});
 
   // Chat state
   const [chatMessages, setChatMessages] = useState([]);
@@ -66,11 +57,13 @@ const FlipBook = () => {
     if (!timelineResult) return; 
 
     if (timelineResult.timeline_data) {
+      
       setMatches(timelineResult.timeline_data);
       setSelectedMatchId(timelineResult.timeline_data[0]?.match_id || null);
     } else {
       console.warn("No timeline data found in search result:", timelineResult);
     }
+    setPlayer1Stats(timelineResult.stats)
   }, [timelineResult]);
   
 

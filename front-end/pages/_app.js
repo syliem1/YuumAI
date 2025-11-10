@@ -8,7 +8,6 @@ import "@/styles/FlipBook.css";
 import "@/styles/FlipPage.css";
 import "@/styles/Summary.css";
 import { TimelineContextProvider } from "@/context/TimelineContext";
-import { PlayerContextProvider } from "@/context/PlayerContext";
 import { FriendContextProvider } from "@/context/FriendContext";
 
 export default function App({ Component, pageProps }) {
@@ -16,11 +15,9 @@ export default function App({ Component, pageProps }) {
     <>
       <main className="min-h-screen w-screen">
         <FriendContextProvider>
-          <PlayerContextProvider>
             <TimelineContextProvider>
               <Component {...pageProps} />
             </TimelineContextProvider>
-          </PlayerContextProvider>
         </FriendContextProvider>
         
       </main>
