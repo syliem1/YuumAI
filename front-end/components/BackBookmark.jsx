@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const BackBookmark = ({ label, targetPage, y, onClick, zIndex, color = "#77425f", stroke = "#5a2f49" }) => {
+const BackBookmark = ({ label, targetPage, x, onClick, zIndex, color = "#77425f", stroke = "#5a2f49" }) => {
   const handleClick = (e) => {
     if (onClick) {
       onClick(e, targetPage); // send target page up
@@ -13,29 +13,41 @@ const BackBookmark = ({ label, targetPage, y, onClick, zIndex, color = "#77425f"
       className="bookmark-container back-bookmark"
       onClick={handleClick}
       style={{
-        top: y,
+        right: x,
         zIndex: zIndex || 10,
         position: "absolute",
-        right: "auto",
+        cursor: "pointer",
       }}
     >
-      <svg viewBox="0 0 300 100" preserveAspectRatio="none">
+      <svg viewBox="0 0 120 200" preserveAspectRatio="none">
+        <defs>
+          {/* Vertical gradient */}
+          <linearGradient id="bookmarkGrad" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="10%" stopColor={color}/>
+            <stop offset="100%" stopColor={color} stopOpacity=".7"/>
+          </linearGradient>
+        </defs>
+
+        {/* Main body */}
         <polygon
-          points="300,0 40,0 0,50 40,100 300,100"
+          points="0,40 0,200 50,160 100,200 100,40"
           fill={color}
           stroke={stroke}
           strokeWidth="1"
         />
+        {/* Inner dashed border */}
         <polygon
-          points="295,5 45,5 4,50 46,95 295,95"
+          points="2,42 2,198 52,158 102,198 102,42"
           fill="none"
-          stroke= "white"
-          strokeWidth="2"
-          strokeDasharray="8,6"
+          stroke="#9f814a"
+
+          strokeWidth="4"
         />
+
+        {/* Text label */}
         <text
-          x="150"
-          y="58"
+          x="50"
+          y="78"
           textAnchor="middle"
           fill="white"
           fontWeight="bold"

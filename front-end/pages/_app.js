@@ -6,12 +6,27 @@ import "@/styles/bookmark.css";
 import "@/styles/classroom.css";
 import "@/styles/FlipBook.css";
 import "@/styles/FlipPage.css";
+import "@/styles/Summary.css";
+import { TimelineContextProvider } from "@/context/TimelineContext";
+import { FriendContextProvider } from "@/context/FriendContext";
+import { RealTimelineContextProvider } from "@/context/RealTimelineContext";
+import { PercentileContextProvider } from "@/context/PercentileContext";
+import "@/styles/detentionslip.css";
+import "@/styles/index.css";
 
 export default function App({ Component, pageProps }) {
   return (
     <>
       <main className="min-h-screen w-screen">
-        <Component {...pageProps} />
+        <PercentileContextProvider>
+          <RealTimelineContextProvider>
+            <FriendContextProvider>
+              <TimelineContextProvider>
+                <Component {...pageProps} />
+              </TimelineContextProvider>
+            </FriendContextProvider>
+          </RealTimelineContextProvider>
+        </PercentileContextProvider>
       </main>
     </>
   );

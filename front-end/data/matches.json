@@ -1,0 +1,544 @@
+{
+  "success": true,
+  "player_id": "ShadowLeaf#8005",
+  "timeline_data": [
+    {
+      "match_id": "NA1_5409172415",
+      "events": [
+        {
+          "event_id": "OBJECTIVE_28.0_381c5871",
+          "timestamp_minutes": 28.008,
+          "event_type": "OBJECTIVE",
+          "impact_score": 3030,
+          "game_state": "late",
+          "event_details": {
+            "objective_type": "BARON_NASHOR",
+            "securing_team": "ENEMY_TEAM",
+            "killer_id": 7,
+            "event_position_x": 5007,
+            "event_position_y": 10471,
+            "event_position_lane": "TOP"
+          },
+          "context": {
+            "gold_difference": -7846,
+            "gold_state": "behind",
+            "player_location": {
+              "position": {
+                "x": 2127,
+                "y": 7521
+              },
+              "lane": "BOT",
+              "distance_to_event": 4122
+            },
+            "summoner_spells": {
+              "flash_cooldown": 0,
+              "other_cooldown": 0,
+              "other_spell": "Teleport",
+              "tp_available": true
+            }
+          },
+          "has_summary": true,
+          "summary": "The enemy team secured Baron Nashor while you were in bot lane. With Teleport available, you should have rotated to contest this critical objective."
+        },
+        {
+          "event_id": "OBJECTIVE_17.0_8041c5dd",
+          "timestamp_minutes": 17.006,
+          "event_type": "OBJECTIVE",
+          "impact_score": 1550,
+          "game_state": "mid",
+          "event_details": {
+            "objective_type": "RIFTHERALD",
+            "securing_team": "PLAYER_TEAM",
+            "killer_id": 5,
+            "event_position_x": 4686,
+            "event_position_y": 9952,
+            "event_position_lane": "BOT"
+          },
+          "context": {
+            "gold_difference": 1122,
+            "gold_state": "ahead",
+            "player_location": {
+              "position": {
+                "x": 4106,
+                "y": 13950
+              },
+              "lane": "BOT",
+              "distance_to_event": 4039
+            },
+            "summoner_spells": {
+              "flash_cooldown": 0,
+              "other_cooldown": 0,
+              "other_spell": "Teleport",
+              "tp_available": true
+            }
+          },
+          "has_summary": true,
+          "summary": "Your team secured Rift Herald while you maintained pressure in bot lane. Good decision to stay and keep the enemy occupied."
+        },
+        {
+          "event_id": "STRUCTURE_27.0_72fc14f6",
+          "timestamp_minutes": 27.008,
+          "event_type": "STRUCTURE",
+          "impact_score": 1525,
+          "game_state": "late",
+          "event_details": {
+            "structure_type": "INHIBITOR_BUILDING",
+            "lane": "MID_LANE",
+            "destroying_team": "ENEMY_TEAM",
+            "event_position_x": 3210,
+            "event_position_y": 3217,
+            "event_position_lane": "BOT"
+          },
+          "context": {
+            "gold_difference": -6976,
+            "gold_state": "behind",
+            "player_location": {
+              "position": {
+                "x": 1425,
+                "y": 7559
+              },
+              "lane": "BOT",
+              "distance_to_event": 4694
+            },
+            "summoner_spells": {
+              "flash_cooldown": 0,
+              "other_cooldown": 0,
+              "other_spell": "Teleport",
+              "tp_available": true
+            }
+          },
+          "has_summary": true,
+          "summary": "The enemy destroyed your mid inhibitor. You should have rotated to defend this critical structure."
+        },
+        {
+          "event_id": "KILL_15.5_abc123",
+          "timestamp_minutes": 15.5,
+          "event_type": "KILL",
+          "impact_score": 850,
+          "game_state": "mid",
+          "event_details": {
+            "victim": "Enemy ADC",
+            "killer_id": 2,
+            "event_position_x": 8500,
+            "event_position_y": 3200,
+            "event_position_lane": "BOT"
+          },
+          "context": {
+            "gold_difference": 500,
+            "gold_state": "even",
+            "player_location": {
+              "position": {
+                "x": 8600,
+                "y": 3100
+              },
+              "lane": "BOT",
+              "distance_to_event": 150
+            },
+            "summoner_spells": {
+              "flash_cooldown": 180,
+              "other_cooldown": 0,
+              "other_spell": "Teleport",
+              "tp_available": true
+            }
+          },
+          "has_summary": true,
+          "summary": "Great solo kill in bot lane! This gave your team a significant advantage in the early-mid game."
+        },
+        {
+          "event_id": "TEAMFIGHT_22.3_def456",
+          "timestamp_minutes": 22.3,
+          "event_type": "TEAMFIGHT",
+          "impact_score": 2100,
+          "game_state": "mid",
+          "event_details": {
+            "kills": 3,
+            "deaths": 1,
+            "event_position_x": 6500,
+            "event_position_y": 6500,
+            "event_position_lane": "MID"
+          },
+          "context": {
+            "gold_difference": -1200,
+            "gold_state": "behind",
+            "player_location": {
+              "position": {
+                "x": 6400,
+                "y": 6600
+              },
+              "lane": "MID",
+              "distance_to_event": 150
+            },
+            "summoner_spells": {
+              "flash_cooldown": 0,
+              "other_cooldown": 120,
+              "other_spell": "Teleport",
+              "tp_available": false
+            }
+          },
+          "has_summary": true,
+          "summary": "Won a crucial teamfight 3-for-1 in mid lane. This helped close the gold gap and secure map control."
+        }
+      ],
+      "total_events": 5
+    },
+    {
+      "match_id": "NA1_5409155112",
+      "events": [
+        {
+          "event_id": "OBJECTIVE_18.0_83edc311",
+          "timestamp_minutes": 18.006,
+          "event_type": "OBJECTIVE",
+          "impact_score": 1530,
+          "game_state": "mid",
+          "event_details": {
+            "objective_type": "RIFTHERALD",
+            "securing_team": "ENEMY_TEAM",
+            "killer_id": 7,
+            "event_position_x": 4624,
+            "event_position_y": 9994,
+            "event_position_lane": "BOT"
+          },
+          "context": {
+            "gold_difference": -4238,
+            "gold_state": "behind",
+            "player_location": {
+              "position": {
+                "x": 1257,
+                "y": 8905
+              },
+              "lane": "BOT",
+              "distance_to_event": 3538
+            },
+            "summoner_spells": {
+              "flash_cooldown": 0,
+              "other_cooldown": 0,
+              "other_spell": "Teleport",
+              "tp_available": true
+            }
+          },
+          "has_summary": true,
+          "summary": "Enemy secured Rift Herald. You should have used Teleport to contest this objective since your team was already behind."
+        },
+        {
+          "event_id": "STRUCTURE_29.0_27444fb6",
+          "timestamp_minutes": 29.009,
+          "event_type": "STRUCTURE",
+          "impact_score": 1525,
+          "game_state": "late",
+          "event_details": {
+            "structure_type": "INHIBITOR_BUILDING",
+            "lane": "MID_LANE",
+            "destroying_team": "ENEMY_TEAM",
+            "event_position_x": 3210,
+            "event_position_y": 3217,
+            "event_position_lane": "BOT"
+          },
+          "context": {
+            "gold_difference": -15030,
+            "gold_state": "behind",
+            "player_location": {
+              "position": {
+                "x": 1570,
+                "y": 2129
+              },
+              "lane": "BOT",
+              "distance_to_event": 1968
+            },
+            "summoner_spells": {
+              "flash_cooldown": 0,
+              "other_cooldown": 0,
+              "other_spell": "Teleport",
+              "tp_available": true
+            }
+          },
+          "has_summary": true,
+          "summary": "Close proximity to mid inhibitor destruction. Should have rotated to defend with available summoner spells."
+        },
+        {
+          "event_id": "OBJECTIVE_13.0_c454246d",
+          "timestamp_minutes": 13.004,
+          "event_type": "OBJECTIVE",
+          "impact_score": 1050,
+          "game_state": "early",
+          "event_details": {
+            "objective_type": "DRAGON",
+            "securing_team": "PLAYER_TEAM",
+            "killer_id": 2,
+            "event_position_x": 9863,
+            "event_position_y": 4488,
+            "event_position_lane": "TOP"
+          },
+          "context": {
+            "gold_difference": 898,
+            "gold_state": "even",
+            "player_location": {
+              "position": {
+                "x": 2144,
+                "y": 12156
+              },
+              "lane": "BOT",
+              "distance_to_event": 10880
+            },
+            "summoner_spells": {
+              "flash_cooldown": 0,
+              "other_cooldown": 0,
+              "other_spell": "Teleport",
+              "tp_available": true
+            }
+          },
+          "has_summary": true,
+          "summary": "Team secured Dragon while you maintained bot lane pressure. Correct decision given the distance."
+        },
+        {
+          "event_id": "KILL_10.2_ghi789",
+          "timestamp_minutes": 10.2,
+          "event_type": "KILL",
+          "impact_score": 650,
+          "game_state": "early",
+          "event_details": {
+            "victim": "Enemy Support",
+            "killer_id": 3,
+            "event_position_x": 9200,
+            "event_position_y": 3800,
+            "event_position_lane": "BOT"
+          },
+          "context": {
+            "gold_difference": 200,
+            "gold_state": "even",
+            "player_location": {
+              "position": {
+                "x": 9300,
+                "y": 3900
+              },
+              "lane": "BOT",
+              "distance_to_event": 140
+            },
+            "summoner_spells": {
+              "flash_cooldown": 300,
+              "other_cooldown": 0,
+              "other_spell": "Teleport",
+              "tp_available": true
+            }
+          },
+          "has_summary": true,
+          "summary": "Secured an early kill in bot lane with good positioning and timing."
+        },
+        {
+          "event_id": "TEAMFIGHT_25.7_jkl012",
+          "timestamp_minutes": 25.7,
+          "event_type": "TEAMFIGHT",
+          "impact_score": 1800,
+          "game_state": "late",
+          "event_details": {
+            "kills": 2,
+            "deaths": 3,
+            "event_position_x": 5500,
+            "event_position_y": 5500,
+            "event_position_lane": "MID"
+          },
+          "context": {
+            "gold_difference": -8000,
+            "gold_state": "behind",
+            "player_location": {
+              "position": {
+                "x": 5600,
+                "y": 5400
+              },
+              "lane": "MID",
+              "distance_to_event": 140
+            },
+            "summoner_spells": {
+              "flash_cooldown": 50,
+              "other_cooldown": 0,
+              "other_spell": "Teleport",
+              "tp_available": true
+            }
+          },
+          "has_summary": true,
+          "summary": "Lost teamfight 2-for-3. Better positioning could have turned this fight in your favor."
+        }
+      ],
+      "total_events": 5
+    },
+    {
+      "match_id": "NA1_5409200789",
+      "events": [
+        {
+          "event_id": "OBJECTIVE_8.5_mno345",
+          "timestamp_minutes": 8.5,
+          "event_type": "OBJECTIVE",
+          "impact_score": 1050,
+          "game_state": "early",
+          "event_details": {
+            "objective_type": "DRAGON",
+            "securing_team": "PLAYER_TEAM",
+            "killer_id": 4,
+            "event_position_x": 9800,
+            "event_position_y": 4300,
+            "event_position_lane": "BOT"
+          },
+          "context": {
+            "gold_difference": 1500,
+            "gold_state": "ahead",
+            "player_location": {
+              "position": {
+                "x": 10200,
+                "y": 4100
+              },
+              "lane": "BOT",
+              "distance_to_event": 450
+            },
+            "summoner_spells": {
+              "flash_cooldown": 0,
+              "other_cooldown": 0,
+              "other_spell": "Teleport",
+              "tp_available": true
+            }
+          },
+          "has_summary": true,
+          "summary": "Early dragon secure with team. Good rotation and map awareness to help secure the objective."
+        },
+        {
+          "event_id": "STRUCTURE_12.3_pqr678",
+          "timestamp_minutes": 12.3,
+          "event_type": "STRUCTURE",
+          "impact_score": 825,
+          "game_state": "early",
+          "event_details": {
+            "structure_type": "TOWER_BUILDING",
+            "lane": "BOT_LANE",
+            "destroying_team": "PLAYER_TEAM",
+            "event_position_x": 10500,
+            "event_position_y": 1400,
+            "event_position_lane": "BOT"
+          },
+          "context": {
+            "gold_difference": 2200,
+            "gold_state": "ahead",
+            "player_location": {
+              "position": {
+                "x": 10400,
+                "y": 1500
+              },
+              "lane": "BOT",
+              "distance_to_event": 140
+            },
+            "summoner_spells": {
+              "flash_cooldown": 120,
+              "other_cooldown": 0,
+              "other_spell": "Teleport",
+              "tp_available": true
+            }
+          },
+          "has_summary": true,
+          "summary": "Took first tower in bot lane. Great lane pressure and objective focus."
+        },
+        {
+          "event_id": "KILL_16.8_stu901",
+          "timestamp_minutes": 16.8,
+          "event_type": "KILL",
+          "impact_score": 920,
+          "game_state": "mid",
+          "event_details": {
+            "victim": "Enemy Jungler",
+            "killer_id": 1,
+            "event_position_x": 7200,
+            "event_position_y": 8500,
+            "event_position_lane": "TOP"
+          },
+          "context": {
+            "gold_difference": 3100,
+            "gold_state": "ahead",
+            "player_location": {
+              "position": {
+                "x": 7100,
+                "y": 8600
+              },
+              "lane": "TOP",
+              "distance_to_event": 140
+            },
+            "summoner_spells": {
+              "flash_cooldown": 0,
+              "other_cooldown": 80,
+              "other_spell": "Teleport",
+              "tp_available": false
+            }
+          },
+          "has_summary": true,
+          "summary": "Caught enemy jungler out of position. Good roam timing and map awareness."
+        },
+        {
+          "event_id": "TEAMFIGHT_20.1_vwx234",
+          "timestamp_minutes": 20.1,
+          "event_type": "TEAMFIGHT",
+          "impact_score": 2400,
+          "game_state": "mid",
+          "event_details": {
+            "kills": 4,
+            "deaths": 1,
+            "event_position_x": 6800,
+            "event_position_y": 7200,
+            "event_position_lane": "MID"
+          },
+          "context": {
+            "gold_difference": 4500,
+            "gold_state": "ahead",
+            "player_location": {
+              "position": {
+                "x": 6900,
+                "y": 7100
+              },
+              "lane": "MID",
+              "distance_to_event": 140
+            },
+            "summoner_spells": {
+              "flash_cooldown": 0,
+              "other_cooldown": 0,
+              "other_spell": "Teleport",
+              "tp_available": true
+            }
+          },
+          "has_summary": true,
+          "summary": "Dominated teamfight 4-for-1. Excellent execution and focus fire on priority targets."
+        },
+        {
+          "event_id": "OBJECTIVE_24.5_yza567",
+          "timestamp_minutes": 24.5,
+          "event_type": "OBJECTIVE",
+          "impact_score": 3030,
+          "game_state": "late",
+          "event_details": {
+            "objective_type": "BARON_NASHOR",
+            "securing_team": "PLAYER_TEAM",
+            "killer_id": 2,
+            "event_position_x": 5100,
+            "event_position_y": 10500,
+            "event_position_lane": "TOP"
+          },
+          "context": {
+            "gold_difference": 6200,
+            "gold_state": "ahead",
+            "player_location": {
+              "position": {
+                "x": 5000,
+                "y": 10400
+              },
+              "lane": "TOP",
+              "distance_to_event": 140
+            },
+            "summoner_spells": {
+              "flash_cooldown": 180,
+              "other_cooldown": 0,
+              "other_spell": "Teleport",
+              "tp_available": true
+            }
+          },
+          "has_summary": true,
+          "summary": "Secured Baron with team. Perfect setup and execution to close out the game."
+        }
+      ],
+      "total_events": 5
+    }
+  ],
+  "timeline_processing_complete": true
+}

@@ -85,35 +85,37 @@ const FlipPage = forwardRef(
         ) : (
           <>
             <div className="back-page">
+              
               <div className="paper">
-                <p>{Back || "Back content"}</p>
                 {bookmark && (
                   <BackBookmark
                     label={bookmark.label}
                     targetPage={bookmark.targetPage}
-                    y={bookmark.y}
+                    x={bookmark.x}
                     onClick={onBookmarkClick}
                     zIndex={zIndex - 100}
                     color={bookmark.color}
                     stroke={bookmark.stroke}
                   />
                 )}
+                <div className="timeline-wrapper">{React.isValidElement(Back) ? Back : <p>{Back || "Back content"}</p>}</div>
               </div>
             </div>
             <div className="front-page">
               <div className="paper">
-                <p>{Front || "Front content"}</p>
                 {bookmark && (
                   <Bookmark
                     label={bookmark.label}
                     targetPage={bookmark.targetPage}
-                    y={bookmark.y}
+                    x={bookmark.x}
                     onClick={onBookmarkClick}
                     zIndex={zIndex + 1}
                     color={bookmark.color}
                     stroke={bookmark.stroke}
                   />
                 )}
+                <div className="timeline-wrapper">{React.isValidElement(Front) ? Front : <p>{Front || "Front content"}</p>}</div>
+                
               </div>
             </div>
           </>
