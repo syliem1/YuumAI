@@ -6,7 +6,6 @@ import Social from "./Social";
 import SearchAndCompare from "./SearchandCompare";
 import MatchSelector from "./MatchSelector";
 import MatchTimeline from "./MatchTimeline";
-import matchesData from "../data/matches.json";
 import { useContextResults } from "@/context/SearchContext";
 
 
@@ -18,7 +17,7 @@ const FlipBook = () => {
   const [onFirstPage, setOnFirstPage] = useState(true);
   const [onLastPage, setOnLastPage] = useState(false);
   const [isTurning, setIsTurning] = useState(false);
-  const searchResult = useContextResults();
+  const { searchResult } = useContextResults();
 
   // Match Timeline state + Match Selector
   const [matches, setMatches] = useState([]);
@@ -54,16 +53,17 @@ const FlipBook = () => {
   const pageRefs = useRef([]);
   const isInitialized = useRef(false);
 
-  // Load matches data on component mount
   useEffect(() => {
-    if (matchesData && matchesData.timeline_data) {
-      setMatches(matchesData.timeline_data);
-      // Set first match as selected by default
-      if (matchesData.timeline_data.length > 0) {
-        setSelectedMatchId(matchesData.timeline_data[0].match_id);
-      }
+    if (!searchResult) return; 
+
+    if (searchResult.timeline_data) {
+      setMatches(searchResult.timeline_data);
+      setSelectedMatchId(searchResult.timeline_data[0]?.match_id || null);
+    } else {
+      console.warn("No timeline data found in search result:", searchResult);
     }
-  }, []);
+  }, [searchResult]);
+  
 
   // Get the currently selected match - use useMemo to prevent unnecessary recalculations
   const selectedMatch = useMemo(() => 
@@ -78,7 +78,6 @@ const FlipBook = () => {
 
   // Create page structure once and store it in a ref
   const pageStructure = useMemo(() => {
-    //if(!searchResult) return null;
 
     return [
     { cover: "book_cover.jpg", frontCover: true, id: 0 },
@@ -240,6 +239,14 @@ const FlipBook = () => {
     
     return newPage;
   }, [player1Stats, player2Stats, matches, selectedMatchId, selectedMatch, handleMatchSelect, handlePlayer2Found]);
+
+  if(!searchResult){
+    return (
+      <div className="w-full text-center text-3xl">
+        LOADING...
+      </div>
+    )
+  }
 
   return (
     <div className="book-frame">

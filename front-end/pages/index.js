@@ -24,7 +24,10 @@ export default function Home() {
       console.log("fetching...")
       const res = await fetch(endpoint, {
         method: "POST",
-        body,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body),
       });
 
       if (!res.ok) {
