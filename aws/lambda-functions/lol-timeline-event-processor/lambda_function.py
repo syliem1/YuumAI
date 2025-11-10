@@ -317,7 +317,7 @@ class TimelineEventExtractor:
             if len(assisting_ids) >= 3:
                 impact_score += 30
             if shutdown_bounty > 500:
-                impact_score += 20
+                impact_score += 100
             if killer_id == target_participant_id:
                 impact_score += 20
             elif victim_id == target_participant_id:
@@ -367,9 +367,9 @@ class TimelineEventExtractor:
             
             impact_score = self.OBJECTIVE_VALUES.get(monster_type, 500)
             if is_player_team:
-                impact_score += 50
+                impact_score += 100
             else:
-                impact_score += 30
+                impact_score += 60
             
             event_details = {
                 'objective_type': monster_type,
@@ -405,7 +405,7 @@ class TimelineEventExtractor:
             if 'INHIBITOR' in building_type:
                 impact_score = self.OBJECTIVE_VALUES['INHIBITOR']
             else:
-                impact_score = self.OBJECTIVE_VALUES.get('OUTER_TURRET', 800)
+                impact_score = self.OBJECTIVE_VALUES.get('OUTER_TURRET', 600)
             
             if is_player_team:
                 impact_score += 40
@@ -439,13 +439,12 @@ class TimelineEventExtractor:
         return None
     
     def _detect_teamfights(self, frames: List[dict], 
-                          participant_map: dict,
-                          target_participant_id: int,
-                          target_team: int,
-                          player_context: Dict = None) -> List[Dict]:
+                           participant_map: dict,
+                           target_participant_id: int,
+                           target_team: int,
+                           player_context: Dict = None) -> List[Dict]:
         """
         Detects teamfights by clustering kills/deaths in time and space
-        Now includes player location context
         """
         teamfights = []
         
@@ -523,7 +522,7 @@ class TimelineEventExtractor:
                         'event_id': f"TEAMFIGHT_{cluster[0]['timestamp']:.1f}_{uuid.uuid4().hex[:8]}",
                         'timestamp_minutes': float(cluster[0]['timestamp']),
                         'event_type': 'TEAMFIGHT',
-                        'impact_score': int(100 + (len(cluster) * 20)),
+                        'impact_score': int(150 + (len(cluster) * 50)),
                         'event_details': {
                             'kills_count': len(cluster),
                             'participants_count': len(all_participants),
@@ -645,111 +644,27 @@ class TimelineEventExtractor:
 
 def lambda_handler(event, context):
     """
-    Processes timeline data and extracts critical events
-    Triggered when new timeline-data.json uploaded to S3
+    Processes timeline data - handles both S3 triggers and Step Functions invocations
     """
     
-    print("Timeline Processor Lambda invoked (S3 Trigger)")
+    print(f"Timeline Processor Lambda invoked. Event keys: {list(event.keys())}")
     processing_results = []
 
     try:
-        if 'Records' in event:
-            print(f"Processing {len(event['Records'])} S3 event record(s)")
-            for record in event['Records']:
-                bucket = record['s3']['bucket']['name']
-                key = record['s3']['object']['key']
-                
-                print(f"Processing file: s3://{bucket}/{key}")
-                
-                parts = key.split('/')
-                if len(parts) < 4:
-                    print(f"Invalid key format: {key}")
-                    continue
-                
-                player_folder = parts[1]
-                match_id = parts[2]
-
-                match_key = key.replace('timeline-data.json', 'match-data.json')
-                match_obj = s3_client.get_object(Bucket=bucket, Key=match_key)
-                match_data = json.loads(match_obj['Body'].read())
-
-                target_puuid = None
-                player_folder_parts = player_folder.split('_')
-                if len(player_folder_parts) >= 2:
-                    target_game_name = player_folder_parts[0]
-                    target_tagline = '_'.join(player_folder_parts[1:])
-
-                    for p in match_data.get('info', {}).get('participants', []):
-                        if p.get('riotIdGameName') == target_game_name and p.get('riotIdTagline') == target_tagline:
-                            target_puuid = p.get('puuid')
-                            break
-                
-                if not target_puuid:
-                    print(f"Warning: Could not find PUUID for {player_folder}. Aborting.")
-                    continue
-                    
-                timeline_obj = s3_client.get_object(Bucket=bucket, Key=key)
-                timeline_data = json.loads(timeline_obj['Body'].read())
-                
-                print(f"Extracting events for match {match_id}, player {target_puuid}")
-                
-                extractor = TimelineEventExtractor()
-                critical_moments, player_context = extractor.extract_critical_moments(
-                    timeline_data, match_data, target_puuid
-                )
-                
-                print(f"Extracted {len(critical_moments)} critical moments")
-                print(f"Player Context: {player_context}")
-                
-                save_count = 0
-                if critical_moments:
-                    with events_table.batch_writer() as batch:
-                        for moment in critical_moments:
-                            item = {
-                                'match_id': match_id,
-                                'event_id': moment['event_id'],
-                                'puuid': target_puuid,
-                                'timestamp_minutes': Decimal(str(moment['timestamp_minutes'])),
-                                'event_type': moment['event_type'],
-                                'impact_score': moment['impact_score'],
-                                'game_state': moment['game_state'],
-                                'event_details': json.dumps(moment['event_details']),
-                                'context': json.dumps(moment.get('context', {})),
-                                'player_context': json.dumps(moment.get('player_context', {})),
-                                'created_at': int(datetime.utcnow().timestamp())
-                            }
-                            batch.put_item(Item=item)
-                            save_count += 1
-                
-                print(f"Saved {save_count} events to DynamoDB")
-                
-                metadata_table.put_item(Item={
-                    'puuid': target_puuid,
-                    'match_id': match_id,
-                    'champion': player_context.get('champion'),
-                    'lane': player_context.get('lane'),
-                    'position': player_context.get('position'),
-                    'processed_timestamp': int(datetime.utcnow().timestamp()),
-                    'events_count': len(critical_moments),
-                    'processing_status': 'completed_s3',
-                    'player_folder': player_folder,
-                    's3_key': key 
-                })
-                
-                print(f"✓ Successfully processed {key}")
-                processing_results.append({'match_id': match_id, 'events_found': save_count})
+        # Case 1: S3 Trigger (direct upload)
+        if 'Records' in event and event['Records'][0].get('s3'):
+            print("Handling S3 trigger event")
+            return handle_s3_trigger(event)
+        
+        # Case 2: Step Functions invocation
+        elif 'match_id' in event and 'puuid' in event:
+            print("Handling Step Functions invocation")
+            return handle_step_functions_invocation(event)
         
         else:
-            raise ValueError("Invalid event payload. Expected S3 trigger.")
-
-        return {
-            'statusCode': 200,
-            'body': json.dumps({
-                'message': f'Processed {len(processing_results)} match files',
-                'results': processing_results
-            })
-        }
-        
+            print(f"Unknown event type. Event structure: {json.dumps(event)[:500]}")
+            raise ValueError("Invalid event payload. Expected S3 trigger or Step Functions payload.")
+            
     except Exception as e:
         print(f"Error processing timeline: {str(e)}")
         import traceback
@@ -759,3 +674,198 @@ def lambda_handler(event, context):
             'statusCode': 500,
             'body': json.dumps({'error': str(e)})
         }
+
+
+def handle_s3_trigger(event):
+    """Handle S3 upload trigger"""
+    import urllib.parse
+    
+    processing_results = []
+    
+    for record in event['Records']:
+        bucket = record['s3']['bucket']['name']
+        key = urllib.parse.unquote_plus(record['s3']['object']['key'])
+        
+        print(f"Processing S3 file: s3://{bucket}/{key}")
+        
+        result = process_timeline_file(bucket, key)
+        if result:
+            processing_results.append(result)
+    
+    return {
+        'statusCode': 200,
+        'body': json.dumps({
+            'message': f'Processed {len(processing_results)} match files',
+            'results': processing_results
+        })
+    }
+
+
+def handle_step_functions_invocation(event):
+    """Handle Step Functions invocation"""
+    match_id = event['match_id']
+    puuid = event['puuid']
+    force_reprocess = event.get('force_reprocess', False)
+    
+    print(f"Processing match {match_id} for player {puuid}")
+    
+    # Check if already processed
+    if not force_reprocess:
+        try:
+            response = metadata_table.get_item(
+                Key={'puuid': puuid, 'match_id': match_id}
+            )
+            if 'Item' in response:
+                print(f"Match {match_id} already processed, skipping")
+                return {
+                    'statusCode': 200,
+                    'already_processed': True,
+                    'match_id': match_id
+                }
+        except Exception as e:
+            print(f"Error checking metadata: {e}")
+    
+    # Get game_name and tagline directly from the event payload
+    game_name = event.get('game_name')
+    tagline = event.get('tagline')
+    
+    player_folder = None
+    
+    if game_name and tagline:
+        player_folder = f"{game_name}_{tagline}"
+        print(f"Received player folder from event: {player_folder}")
+    else:
+        print(f"Warning: game_name/tagline not in Step Functions event for match {match_id}.")
+        pass
+    
+    if not player_folder:
+        # This is the error your log shows
+        print(f"Could not find S3 folder for match {match_id}. Event data missing game_name/tagline.")
+        return {
+            'statusCode': 404,
+            'error': f'Match data S3 folder not found for {match_id}. Event missing game_name/tagline.'
+        }
+    
+    # Construct S3 key directly
+    bucket = os.environ.get('S3_BUCKET_RAW', 'lol-training-matches-150k')
+    timeline_key = f"raw-matches/{player_folder}/{match_id}/timeline-data.json"
+    
+    # Process the file, passing the known PUUID
+    result = process_timeline_file(bucket, timeline_key, target_puuid_from_event=puuid)
+    
+    if result:
+        return {
+            'statusCode': 200,
+            'match_id': match_id,
+            'events_extracted': result.get('events_found', 0)
+        }
+    else:
+        return {
+            'statusCode': 500,
+            'error': 'Failed to process timeline'
+        }
+
+
+def process_timeline_file(bucket: str, key: str, target_puuid_from_event: str = None):
+    """
+    Core processing logic - extracted to be used by both trigger types
+    """
+    try:
+        parts = key.split('/')
+        if len(parts) < 4:
+            print(f"Invalid key format: {key}")
+            return None
+        
+        player_folder = parts[1]
+        match_id = parts[2]
+
+        # Get match data
+        match_key = key.replace('timeline-data.json', 'match-data.json')
+        print(f"Looking for match data at: {match_key}")
+        
+        try:
+            match_obj = s3_client.get_object(Bucket=bucket, Key=match_key)
+            match_data = json.loads(match_obj['Body'].read())
+        except s3_client.exceptions.NoSuchKey:
+            print(f"ERROR: match-data.json not found at {match_key}")
+            return None
+
+        target_puuid = target_puuid_from_event
+        
+        if not target_puuid:
+            # Fallback for S3 trigger (not Step Functions)
+            print(f"PUUID not passed from event, deriving from folder name: {player_folder}")
+            player_folder_parts = player_folder.split('_')
+            if len(player_folder_parts) >= 2:
+                target_game_name = player_folder_parts[0]
+                target_tagline = '_'.join(player_folder_parts[1:])
+
+                for p in match_data.get('info', {}).get('participants', []):
+                    if p.get('riotIdGameName') == target_game_name and \
+                       p.get('riotIdTagline') == target_tagline:
+                        target_puuid = p.get('puuid')
+                        break
+        
+        if not target_puuid:
+            print(f"Warning: Could not find PUUID for {player_folder}")
+            return None
+        
+        # Get timeline data
+        timeline_obj = s3_client.get_object(Bucket=bucket, Key=key)
+        timeline_data = json.loads(timeline_obj['Body'].read())
+        
+        print(f"Extracting events for match {match_id}, player {target_puuid}")
+        
+        # Extract critical moments
+        extractor = TimelineEventExtractor()
+        critical_moments, player_context = extractor.extract_critical_moments(
+            timeline_data, match_data, target_puuid
+        )
+        
+        print(f"Extracted {len(critical_moments)} critical moments")
+        
+        # Save to DynamoDB
+        save_count = 0
+        if critical_moments:
+            with events_table.batch_writer() as batch:
+                for moment in critical_moments:
+                    item = {
+                        'match_id': match_id,
+                        'event_id': moment['event_id'],
+                        'puuid': target_puuid,
+                        'timestamp_minutes': Decimal(str(moment['timestamp_minutes'])),
+                        'event_type': moment['event_type'],
+                        'impact_score': moment['impact_score'],
+                        'game_state': moment['game_state'],
+                        'event_details': json.dumps(moment['event_details']),
+                        'context': json.dumps(moment.get('context', {})),
+                        'player_context': json.dumps(moment.get('player_context', {})),
+                        'created_at': int(datetime.utcnow().timestamp())
+                    }
+                    batch.put_item(Item=item)
+                    save_count += 1
+        
+        print(f"Saved {save_count} events to DynamoDB")
+        
+        # Save metadata
+        metadata_table.put_item(Item={
+            'puuid': target_puuid,
+            'match_id': match_id,
+            'champion': player_context.get('champion'),
+            'lane': player_context.get('lane'),
+            'position': player_context.get('position'),
+            'processed_timestamp': int(datetime.utcnow().timestamp()),
+            'events_count': len(critical_moments),
+            'processing_status': 'completed',
+            'player_folder': player_folder,
+            's3_key': key 
+        })
+        
+        print(f"✓ Successfully processed {key}")
+        return {'match_id': match_id, 'events_found': save_count}
+        
+    except Exception as e:
+        print(f"Error in process_timeline_file: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        return None
