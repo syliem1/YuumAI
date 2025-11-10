@@ -34,8 +34,9 @@
   margin-top: 2%;
   height: calc(100% - 4%);
   padding: 5%;
-  background-color: #fdfaf7;
-  border: solid 1px #c7bebc;
+  background-color: #8B704E;
+  background-image: url('/images/parchment.jpg') !important;
+  border: solid 1px #8B704E;
 }
 
 .back-page .paper {
