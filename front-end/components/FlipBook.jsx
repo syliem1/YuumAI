@@ -7,6 +7,7 @@ import SearchAndCompare from "./SearchandCompare";
 import MatchSelector from "./MatchSelector";
 import MatchTimeline from "./MatchTimeline";
 import { useTimelineContext } from "@/context/TimelineContext";
+import { useRealTimelineContext } from "@/context/RealTimelineContext";
 import ChatInput from "./ChatInput";
 import ChatOutput from "./ChatOutput.jsx";
 import AncientRunicPage from "./AncientRunicPage.jsx";
@@ -22,21 +23,14 @@ const FlipBook = () => {
   const [onLastPage, setOnLastPage] = useState(false);
   const [isTurning, setIsTurning] = useState(false);
   const { timelineResult } = useTimelineContext();
+  const { realTimelineResult, setRealTimelineResult} = useRealTimelineContext();
 
   // Match Timeline state + Match Selector
   const [matches, setMatches] = useState([]);
   const [selectedMatchId, setSelectedMatchId] = useState(null);
   
   // Player stats state
-  const [player1Stats, setPlayer1Stats] = useState({
-    "avg_kda": 0,
-    "avg_cs_per_min": 0,
-    "avg_kill_participation": 0,
-    "avg_dpm": 0,
-    "avg_gpm": 0,
-    "avg_solo_kills": 0,
-    "avg_vision_score": 0,
-    "avg_cc_time": 0});
+  const [player1Stats, setPlayer1Stats] = useState(null);
   
   const [player2Stats, setPlayer2Stats] = useState({
     "avg_kda": 0,
@@ -57,26 +51,77 @@ const FlipBook = () => {
   }, []);
   
   const [searchQuery, setSearchQuery] = useState("");
+  async function pollUntilReady(interval = 5000, timeout = 60000) {
+    const start = Date.now();
+    while (true) {
+      if(!timelineResult) continue;
+      const [username, tag] = timelineResult.player_id.split("#");
+      try {
+        const response = await fetch(`https://v4ft9564pb.execute-api.us-west-2.amazonaws.com/player/profile?game_name=${username}&tagline=${tag}`);
+        if (response.ok) {
+          const data = await response.json();
+          return data;
+        }
+      } catch (err) {
+        console.warn("Polling error:", err.message);
+      }
+
+      if (Date.now() - start > timeout) {
+        throw new Error("Polling timed out");
+      }
+
+      await new Promise(resolve => setTimeout(resolve, interval));
+    }
+  }
+
+  useEffect(() => {
+    let isActive = true;
+    async function fetchRealTimelineResult() {
+      try {
+        console.log("Polling for timeline result...");
+        const data = await pollUntilReady(
+          5000,    
+          600000   
+        );
+
+        if (isActive) {
+          console.log("Received 200 response:", data);
+          setRealTimelineResult(data);
+        }
+      } catch (err) {
+        console.error("Polling failed:", err);
+      }
+    }
+
+    fetchRealTimelineResult();
+
+    return () => {
+      isActive = false;
+    };
+  }, []);
 
   const pageRefs = useRef([]);
   const isInitialized = useRef(false);
 
   useEffect(() => {
-    if (!timelineResult) return; 
-
-    if (timelineResult.timeline_data) {
-      
-      setMatches(timelineResult.timeline_data);
-      setSelectedMatchId(timelineResult.timeline_data[0]?.match_id || null);
-    } else {
-      console.warn("No timeline data found in search result:", timelineResult);
-    }
+     
+    
+    if (!timelineResult) return;
     setPlayer1Stats(timelineResult.stats)
     const mostPlayedList = timelineResult.most_played_champions
     const championsArray = Object.entries(mostPlayedList).map(([name, games]) => ({ name, games }));
     setMostPlayed(championsArray);
-    console.log(mostPlayed)
-  }, [timelineResult]);
+    
+    if (!realTimelineResult) return;
+
+    if (realTimelineResult.timeline_data) {
+      
+      setMatches(realTimelineResult.timeline_data);
+      setSelectedMatchId(realTimelineResult.timeline_data[0]?.match_id || null);
+    } else {
+      console.warn("No timeline data found in search result:", realTimelineResult);
+    }
+  }, [timelineResult, realTimelineResult]);
   
 
   // Get the currently selected match
@@ -149,7 +194,7 @@ const FlipBook = () => {
 
   // Create page structure once and store it in a ref
   const pageStructure = useMemo(() => {
-    if (!mostPlayed) return [];
+    if (!mostPlayed || !timelineResult || !player1Stats) return [];
 
     return [
     { cover: "book_cover.jpg", frontCover: true, id: 0 },
@@ -174,10 +219,12 @@ const FlipBook = () => {
         runeCount={10}            // Number of runes (default 9)
       />, 
       back: <SummaryBack data={{ 
-        region: "Shurima", 
+        username: timelineResult.player_id,
+        region: timelineResult.playstyle.archetype, 
         profile:["Late-Game", "Scaling", "Empire-Building"],
-        statistics: { gamesPlayed: 120, winRate: "55%", averageKDA: "3.5", cspm: "7.8"}, 
+        statistics: { goldpm: player1Stats.avg_gpm.toFixed(2), winRate: player1Stats.win_rate.toFixed(2), averageKDA: player1Stats.avg_kda.toFixed(2), cspm: player1Stats.avg_cs_per_min.toFixed(2)}, 
         mostPlayed: mostPlayed,
+        playerStats: player1Stats
       }}/>,
       id: 2
     },
@@ -290,20 +337,20 @@ const FlipBook = () => {
       id: 11 
     },
     { cover: "green-cover.jpg", id: 12 },
-  ]}, [mostPlayed]);
+  ]}, [timelineResult, mostPlayed, player1Stats]);
 
   // Initialize pages only once
   useEffect(() => {
-  if (!pageStructure.length) return;
+    if (!pageStructure.length) return;
 
-  const total = pageStructure.length;
-  setPages(pageStructure);
-  setZIndices(Array.from({ length: total }, (_, i) => total - i + 1));
-  setFlippedStates(Array(total).fill(false));
-  pageRefs.current = Array(total).fill().map(() => React.createRef());
-  
-  isInitialized.current = true;
-}, [pageStructure]);
+    const total = pageStructure.length;
+    setPages(pageStructure);
+    setZIndices(Array.from({ length: total }, (_, i) => total - i + 1));
+    setFlippedStates(Array(total).fill(false));
+    pageRefs.current = Array(total).fill().map(() => React.createRef());
+    
+    isInitialized.current = true;
+  }, [pageStructure]);
 
   const handleFlip = useCallback((pageIndex, isFlipped) => {
     setFlippedStates(prevFlipped => {
