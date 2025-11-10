@@ -405,7 +405,7 @@ const FlipBook = () => {
     
     return newPage;
   }, [player1Stats, player2Stats, matches, selectedMatchId, selectedMatch, handleMatchSelect, handlePlayer2Found, chatMessages, isLoadingChat, handleSendMessage]);
-
+/*
   if(!timelineResult){
     return (
       <div className="w-full text-center text-3xl">
@@ -413,7 +413,7 @@ const FlipBook = () => {
       </div>
     )
   }
-
+*/
   return (
     <div className="book-frame">
       <div className="page-wrapper slideUp-animation">
