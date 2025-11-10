@@ -8,6 +8,7 @@ import "@/styles/FlipBook.css";
 import "@/styles/FlipPage.css";
 import "@/styles/Summary.css";
 import "@/styles/detentionslip.css";
+import "@/styles/index.css";
 
 export default function App({ Component, pageProps }) {
   return (
