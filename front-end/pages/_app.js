@@ -7,15 +7,18 @@ import "@/styles/classroom.css";
 import "@/styles/FlipBook.css";
 import "@/styles/FlipPage.css";
 import "@/styles/Summary.css";
-import { SearchContextProvider } from "@/context/SearchContext";
+import { TimelineContextProvider } from "@/context/TimelineContext";
+import { PlayerContextProvider } from "@/context/PlayerContext";
 
 export default function App({ Component, pageProps }) {
   return (
     <>
       <main className="min-h-screen w-screen">
-        <SearchContextProvider>
-          <Component {...pageProps} />
-        </SearchContextProvider>
+        <PlayerContextProvider>
+          <TimelineContextProvider>
+            <Component {...pageProps} />
+          </TimelineContextProvider>
+        </PlayerContextProvider>
       </main>
     </>
   );

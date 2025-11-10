@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
-import { useContextResults } from "@/context/SearchContext";
-import Link from "next/link";
+import { useTimelineContext } from "@/context/TimelineContext";
+import { usePlayerContext } from "@/context/PlayerContext";
 
 export default function Home() {
   const [inputValue, setInputValue] = useState("");
@@ -9,36 +9,59 @@ export default function Home() {
   const handleChange = (event) => {
     setInputValue(event.target.value);
   };
-  const { setSearchResult } = useContextResults();
+  const { setTimelineResult } = useTimelineContext();
+  const { setPlayerResult } = usePlayerContext();
   const router = useRouter();
   const handleSearch = async () => {
     router.push("/FlipBook");
 
-    try {
-      const endpoint = "https://v4ft9564pb.execute-api.us-west-2.amazonaws.com/player/process";
-      const body = {
-        "game_name": "ShadowLeaf",
-        "tagline": "8005",
-        "num_games": 1
-      };
-      console.log("fetching...")
-      const res = await fetch(endpoint, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(body),
-      });
+    const timelineEndpoint = "https://v4ft9564pb.execute-api.us-west-2.amazonaws.com/player/process";
+    const profileEndpoint = "https://n891ddrkmg.execute-api.us-west-2.amazonaws.com/classify-player";
 
-      if (!res.ok) {
-        throw new Error(`AWS API request failed: ${res.status} ${res.statusText}`);
+    const timelinebody = {
+      game_name: "ShadowLeaf",
+      tagline: "8005",
+      num_games: 1
+    };
+
+    const profilebody = {
+      username: "ShadowLeaf",
+      tag: "8005",
+      match_count: 10
+    }
+
+    try {
+      console.log("Fetching data from both APIs...");
+
+      const [timelineRes, profileRes] = await Promise.all([
+        fetch(timelineEndpoint, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(timelinebody),
+        }),
+        fetch(profileEndpoint, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(profilebody),
+        })
+      ]);
+
+      if (!timelineRes.ok || !profileRes.ok) {
+        throw new Error(`API request failed: ${timelineRes.status} / ${profileRes.status}`);
       }
 
-      const data = await res.json();
-      setSearchResult(data);
+      const [timelineData, profileData] = await Promise.all([
+        timelineRes.json(),
+        profileRes.json(),
+      ]);
+
+      setTimelineResult(timelineData);
+      setPlayerResult(profileData);
+
     } catch (err) {
-      console.error("Error fetching search results:", err);
-      setSearchResult({ error: "Failed to load search results." });
+      console.error("Error fetching API data:", err);
+      setTimelineResult({ error: "Failed to load timeline." });
+      setPlayerResult({ error: "Failed to load profile." });
     }
   };
 

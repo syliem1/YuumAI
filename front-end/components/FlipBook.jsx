@@ -6,7 +6,7 @@ import Social from "./Social";
 import SearchAndCompare from "./SearchandCompare";
 import MatchSelector from "./MatchSelector";
 import MatchTimeline from "./MatchTimeline";
-import { useContextResults } from "@/context/SearchContext";
+import { useTimelineContext } from "@/context/TimelineContext";
 
 
 const FlipBook = () => {
@@ -17,7 +17,7 @@ const FlipBook = () => {
   const [onFirstPage, setOnFirstPage] = useState(true);
   const [onLastPage, setOnLastPage] = useState(false);
   const [isTurning, setIsTurning] = useState(false);
-  const { searchResult } = useContextResults();
+  const { timelineResult } = useTimelineContext();
 
   // Match Timeline state + Match Selector
   const [matches, setMatches] = useState([]);
@@ -54,15 +54,15 @@ const FlipBook = () => {
   const isInitialized = useRef(false);
 
   useEffect(() => {
-    if (!searchResult) return; 
+    if (!timelineResult) return; 
 
-    if (searchResult.timeline_data) {
-      setMatches(searchResult.timeline_data);
-      setSelectedMatchId(searchResult.timeline_data[0]?.match_id || null);
+    if (timelineResult.timeline_data) {
+      setMatches(timelineResult.timeline_data);
+      setSelectedMatchId(timelineResult.timeline_data[0]?.match_id || null);
     } else {
-      console.warn("No timeline data found in search result:", searchResult);
+      console.warn("No timeline data found in search result:", timelineResult);
     }
-  }, [searchResult]);
+  }, [timelineResult]);
   
 
   // Get the currently selected match - use useMemo to prevent unnecessary recalculations
@@ -240,7 +240,7 @@ const FlipBook = () => {
     return newPage;
   }, [player1Stats, player2Stats, matches, selectedMatchId, selectedMatch, handleMatchSelect, handlePlayer2Found]);
 
-  if(!searchResult){
+  if(!timelineResult){
     return (
       <div className="w-full text-center text-3xl">
         LOADING...
