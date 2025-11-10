@@ -1,0 +1,30 @@
+.slip-container {
+  width: 650px;
+  background: linear-gradient(#1a1a1a, #2b2b2b);
+  padding: 30px;
+  border: 6px solid #caa64c;
+  font-family: "Cinzel", serif;
+  color: #e7d18c;
+}
+
+.label-row {
+  margin: 12px 0;
+  font-size: 18px;
+}
+
+.lol-input {
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid #caa64c;
+  color: #caa64c;
+  font-family: "Cinzel", serif;
+  font-size: 18px;
+  width: 250px;
+  outline: none;
+  padding: 3px;
+}
+
+.lol-input::placeholder {
+  color: #b9964d;
+  opacity: 0.7;
+}

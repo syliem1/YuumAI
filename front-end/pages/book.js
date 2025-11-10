@@ -105,154 +105,43 @@ export default function BookPage() {
         </span>
         <span className="page turn page-5">:3</span>
         <span className="cover"></span>
-        <span className="page page-6">Page 5</span>
-        <span className="page page-7">Page 4</span>
-        <span className="page page-8">
-          Page 3
-          {bookmarks
-            .filter((b) => b.page === 8)
-            .map((b, i) => (
-              <div
-                key={i}
-                onClick={(e) => handleBookmarkClick(e, b.page, b.opposite)}
-                className={`bookmark-container bookmark ${
-                  bookFullscreen
-                    ? "opacity-100"
-                    : "pointer-events-none opacity-0"
-                }`}
-                style={{
-                  top: b.y,
-                }}
-              >
-                <svg viewBox="0 0 300 100" preserveAspectRatio="none">
-                  <polygon
-                    points="0,0 260,0 300,50 260,100 0,100"
-                    fill="#77425f"
-                    stroke="#5a2f49"
-                    strokeWidth="1"
-                  />
-                  <polygon
-                    points="5,5 255,5 296,50 254,95 5,95"
-                    fill="none"
-                    stroke="white"
-                    strokeWidth="2"
-                    strokeDasharray="8,6"
-                  />
-                  <text
-                    x="150"
-                    y="58"
-                    textAnchor="middle"
-                    fill="white"
-                    fontWeight="bold"
-                    fontFamily="sans-serif"
-                  >
-                    {b.label}
-                  </text>
-                </svg>
-              </div>
-            ))}
-        </span>
-        <span className="page page-9">
-          Page 2
-          {bookmarks
-            .filter((b) => b.page === 9)
-            .map((b, i) => (
-              <div
-                key={i}
-                onClick={(e) => handleBookmarkClick(e, b.page, b.opposite)}
-                className={`bookmark-container bookmark ${
-                  bookFullscreen
-                    ? "opacity-100"
-                    : "pointer-events-none opacity-0"
-                }`}
-                style={{
-                  top: b.y,
-                }}
-              >
-                <svg viewBox="0 0 300 100" preserveAspectRatio="none">
-                  <polygon
-                    points="0,0 260,0 300,50 260,100 0,100"
-                    fill="#77425f"
-                    stroke="#5a2f49"
-                    strokeWidth="1"
-                  />
-                  <polygon
-                    points="5,5 255,5 296,50 254,95 5,95"
-                    fill="none"
-                    stroke="white"
-                    strokeWidth="2"
-                    strokeDasharray="8,6"
-                  />
-                  <text
-                    x="150"
-                    y="58"
-                    textAnchor="middle"
-                    fill="white"
-                    fontWeight="bold"
-                    fontFamily="sans-serif"
-                  >
-                    {b.label}
-                  </text>
-                </svg>
-              </div>
-            ))}
-        </span>
-        <span className="page page-10">
-          <span className="page-text">Placeholder Text</span>
-          {bookmarks
-            .filter((b) => b.page === 10)
-            .map((b, i) => (
-              <div
-                key={i}
-                onClick={(e) => handleBookmarkClick(e, b.page, b.opposite)}
-                className={`bookmark-container bookmark ${
-                  bookFullscreen
-                    ? "opacity-100"
-                    : "pointer-events-none opacity-0"
-                }`}
-                style={{
-                  top: b.y,
-                }}
-              >
-                <svg viewBox="0 0 300 100" preserveAspectRatio="none">
-                  <polygon
-                    points="0,0 260,0 300,50 260,100 0,100"
-                    fill="#77425f"
-                    stroke="#5a2f49"
-                    strokeWidth="1"
-                  />
-                  <polygon
-                    points="5,5 255,5 296,50 254,95 5,95"
-                    fill="none"
-                    stroke="white"
-                    strokeWidth="2"
-                    strokeDasharray="8,6"
-                  />
-                  <text
-                    x="150"
-                    y="58"
-                    textAnchor="middle"
-                    fill="white"
-                    fontWeight="bold"
-                    fontFamily="sans-serif"
-                  >
-                    {b.label}
-                  </text>
-                </svg>
-              </div>
-            ))}
-        </span>
-        <span className="page turn page-11">
-          <span className="flipped-page-content">Placeholder Text</span>
-        </span>
-        <span className="page turn page-12 invisible">
-          <span className="flipped-page-content">Pogg</span>
-        </span>
-        <span className="page turn page-13 invisible">
-          <span className="flipped-page-content">Whoas</span>
-        </span>
-
+        <span className="page">Page 5</span>
+        <span className="page">Page 4</span>
+        <span className="page">Page 3</span>
+        <span className="page">Page 2</span>
+        <span className="page">What if we have a </span>
         <span className="cover turn">Hello</span>
+      </div>
+      
+        <div class="bookmark">
+          <svg viewBox="0 0 300 100" preserveAspectRatio="none">
+            <defs>
+              <mask id="cutout">
+               <polygon points="0,0 260,0 300,50 260,100 0,100" fill="white"/>
+              <polygon points="10,10 255,10 290,50 255,90 10,90" fill="black"/>
+              </mask>
+            </defs>
+            <polygon 
+              points="0,0 260,0 300,50 260,100 0,100" 
+              fill="#77425f" 
+              stroke="#5a2f49" 
+              stroke-width="1" />
+            <polygon 
+              points="5,5 255,5 296,50 254,95 5,95" 
+              fill="none" 
+              stroke="white" 
+              stroke-width="2" 
+              stroke-dasharray="8,6" />
+            <text x="150" y="58" text-anchor="middle" fill="white" font-weight="bold" font-family="sans-serif">Bookmark</text>
+          </svg>
+        </div>
+
+      {/* Other components that appear after fullscreen */}
+      <div
+        className={`absolute inset-0 flex items-center justify-center transition-opacity duration-700 ${
+          appFullscreen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+        }`}
+      >
       </div>
     </section>
   );

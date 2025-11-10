@@ -1,5 +1,7 @@
 .magical-button {
-  position: relative;
+  position: absolute;
+  right: 18%;
+  bottom: 13%;
   padding: 12px 28px;
   font-size: 18px;
   font-weight: 600;
