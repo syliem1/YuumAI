@@ -1,21 +1,26 @@
 import { useState } from "react";
+import { useTimelineContext } from "@/context/TimelineContext";
 
 export default function ChatBox() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
-
+  const { timelineResult } = useTimelineContext();
   const sendMessage = async (e) => {
     e.preventDefault();
     if (!input.trim()) return;
 
     const userMessage = { sender: "user", text: input };
     setMessages([...messages, userMessage]);
-
+    const [username, tag] = timelineResult.player_id.split("#");
     // Example: send to backend/chatbot API
-    const response = await fetch("/api/chat", {
+    const response = await fetch("https://v4ft9564pb.execute-api.us-west-2.amazonaws.com/player/ask", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message: input }),
+      body: JSON.stringify({ 
+        game_name: username,
+        tagline: tag,
+        question: input 
+      }),
     });
 
     const data = await response.json();

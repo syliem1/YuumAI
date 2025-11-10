@@ -47,7 +47,7 @@ const FlipBook = () => {
     "avg_solo_kills": 0,
     "avg_vision_score": 0,
     "avg_cc_time": 0});
-
+  const [mostPlayed, setMostPlayed] = useState(null);
   // Chat state
   const [chatMessages, setChatMessages] = useState([]);
   const [isLoadingChat, setIsLoadingChat] = useState(false);
@@ -72,6 +72,10 @@ const FlipBook = () => {
       console.warn("No timeline data found in search result:", timelineResult);
     }
     setPlayer1Stats(timelineResult.stats)
+    const mostPlayedList = timelineResult.most_played_champions
+    const championsArray = Object.entries(mostPlayedList).map(([name, games]) => ({ name, games }));
+    setMostPlayed(championsArray);
+    console.log(mostPlayed)
   }, [timelineResult]);
   
 
@@ -103,19 +107,23 @@ const FlipBook = () => {
     setIsLoadingChat(true);
 
     try {
-      // TODO: Replace with actual API call to your backend
-      const response = await fetch("/api/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: userMessage }),
-      });
+      const [username, tag] = timelineResult.player_id.split("#");
+      const response = await fetch("https://v4ft9564pb.execute-api.us-west-2.amazonaws.com/player/ask", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ 
+        game_name: username,
+        tagline: tag,
+        question: userMessage
+      }),
+    });
 
       const data = await response.json();
       
       // Add bot response
       const botMessage = { 
         sender: "bot", 
-        text: data.reply || "I received your question. Let me analyze that for you...",
+        text: data.answer || "I received your question. Let me analyze that for you...",
         timestamp: new Date().toLocaleTimeString([], { 
           hour: '2-digit', 
           minute: '2-digit' 
@@ -140,9 +148,10 @@ const FlipBook = () => {
   }, []);
 
   // Create page structure once and store it in a ref
-  const pageStructure = useMemo(() => 
+  const pageStructure = useMemo(() => {
+    if (!mostPlayed) return [];
 
-     [
+    return [
     { cover: "book_cover.jpg", frontCover: true, id: 0 },
     { front: <AncientRunicPage 
         variant="power"           // "default", "power", "mystical", "elements"
@@ -168,11 +177,7 @@ const FlipBook = () => {
         region: "Shurima", 
         profile:["Late-Game", "Scaling", "Empire-Building"],
         statistics: { gamesPlayed: 120, winRate: "55%", averageKDA: "3.5", cspm: "7.8"}, 
-        mostPlayed: [
-          { name: "Azir", games: 23 },
-          { name: "Sivir", games: 17 },
-          { name: "Cassiopeia", games: 12 },
-        ],
+        mostPlayed: mostPlayed,
       }}/>,
       id: 2
     },
@@ -285,23 +290,20 @@ const FlipBook = () => {
       id: 11 
     },
     { cover: "green-cover.jpg", id: 12 },
-  ], []);
+  ]}, [mostPlayed]);
 
   // Initialize pages only once
   useEffect(() => {
-    if (isInitialized.current) return;
-    
-    const total = pageStructure.length;
-    setPages(pageStructure);
-    setZIndices(Array.from({ length: total }, (_, i) => total - i + 1));
-    setFlippedStates(Array(total).fill(false));
+  if (!pageStructure.length) return;
 
-    pageRefs.current = Array(total)
-      .fill()
-      .map(() => React.createRef());
-    
-    isInitialized.current = true;
-  }, [pageStructure]);
+  const total = pageStructure.length;
+  setPages(pageStructure);
+  setZIndices(Array.from({ length: total }, (_, i) => total - i + 1));
+  setFlippedStates(Array(total).fill(false));
+  pageRefs.current = Array(total).fill().map(() => React.createRef());
+  
+  isInitialized.current = true;
+}, [pageStructure]);
 
   const handleFlip = useCallback((pageIndex, isFlipped) => {
     setFlippedStates(prevFlipped => {
