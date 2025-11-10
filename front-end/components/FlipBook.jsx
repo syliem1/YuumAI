@@ -7,6 +7,11 @@ import SearchAndCompare from "./SearchandCompare";
 import MatchSelector from "./MatchSelector";
 import MatchTimeline from "./MatchTimeline";
 import { useTimelineContext } from "@/context/TimelineContext";
+import ChatInput from "./ChatInput";
+import ChatOutput from "./ChatOutput.jsx";
+import matchesData from "../data/matches.json";
+import AncientRunicPage from "./AncientRunicPage.jsx";
+import MapFragmentPage from "./MapFragmentPage";
 
 
 const FlipBook = () => {
@@ -44,6 +49,10 @@ const FlipBook = () => {
     DPM: ""
   });
 
+  // Chat state
+  const [chatMessages, setChatMessages] = useState([]);
+  const [isLoadingChat, setIsLoadingChat] = useState(false);
+
   const handlePlayer2Found = useCallback((stats) => {
     setPlayer2Stats(stats);
   }, []);
@@ -65,25 +74,95 @@ const FlipBook = () => {
   }, [timelineResult]);
   
 
-  // Get the currently selected match - use useMemo to prevent unnecessary recalculations
+  // Get the currently selected match
   const selectedMatch = useMemo(() => 
     matches.find(m => m.match_id === selectedMatchId),
     [matches, selectedMatchId]
   );
 
-  // Memoize the match selector callback to prevent recreating it
+  // Memoize the match selector callback
   const handleMatchSelect = useCallback((matchId) => {
     setSelectedMatchId(matchId);
   }, []);
 
-  // Create page structure once and store it in a ref
-  const pageStructure = useMemo(() => {
+  // Handle sending chat messages
+  const handleSendMessage = useCallback(async (userMessage) => {
+    const timestamp = new Date().toLocaleTimeString([], { 
+      hour: '2-digit', 
+      minute: '2-digit' 
+    });
 
-    return [
+    // Add user message
+    const newUserMessage = { 
+      sender: "user", 
+      text: userMessage, 
+      timestamp 
+    };
+    setChatMessages(prev => [...prev, newUserMessage]);
+    setIsLoadingChat(true);
+
+    try {
+      // TODO: Replace with actual API call to your backend
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: userMessage }),
+      });
+
+      const data = await response.json();
+      
+      // Add bot response
+      const botMessage = { 
+        sender: "bot", 
+        text: data.reply || "I received your question. Let me analyze that for you...",
+        timestamp: new Date().toLocaleTimeString([], { 
+          hour: '2-digit', 
+          minute: '2-digit' 
+        })
+      };
+      setChatMessages(prev => [...prev, botMessage]);
+    } catch (error) {
+      console.error("Chat error:", error);
+      // Add error message
+      const errorMessage = {
+        sender: "bot",
+        text: "I apologize, but I'm having trouble connecting right now. Please try again later.",
+        timestamp: new Date().toLocaleTimeString([], { 
+          hour: '2-digit', 
+          minute: '2-digit' 
+        })
+      };
+      setChatMessages(prev => [...prev, errorMessage]);
+    } finally {
+      setIsLoadingChat(false);
+    }
+  }, []);
+
+  // Create page structure once and store it in a ref
+  const pageStructure = useMemo(() => 
+
+     [
     { cover: "book_cover.jpg", frontCover: true, id: 0 },
-    { front: "test.txt", back: "test.txt", id: 1 },
+    { front: <AncientRunicPage 
+        variant="power"           // "default", "power", "mystical", "elements"
+        centerText="ᛗᚨᚷᛁᚲ"       // Custom text at bottom (or null to hide)
+        runeColor="#8b7355"       // Color of the runes
+        runeCount={12}            // Number of runes (default 9)
+      />, back: <MapFragmentPage 
+        region="Shurima"          // Text displayed in center
+        variant="mountains"       // "default", "mountains", "rivers", "forest"
+        showCompass={true}        // Show/hide compass rose
+        markerCount={5}           // Number of location markers (default 3)
+        fragmentCount={3}         // Number of map fragments (1-3)
+        theme="mystical"          // "warm", "cool", "dark", "mystical"
+      />, id: 1 },
     { 
-      front: "test.txt", 
+      front: <AncientRunicPage 
+        variant="mystical"           // "default", "power", "mystical", "elements"
+        centerText="ᛗᚨᚷᛁᚲ"       // Custom text at bottom (or null to hide)
+        runeColor="#558b7dff"       // Color of the runes
+        runeCount={10}            // Number of runes (default 9)
+      />, 
       back: <SummaryBack data={{ 
         region: "Shurima", 
         profile:["Late-Game", "Scaling", "Empire-Building"],
@@ -102,37 +181,110 @@ const FlipBook = () => {
         strengths:["Azir", "Sivir", "Cassiopeia"], 
         weaknesses:["Nasus", "Taliyah"] 
       }}/>, 
-      back: "test.txt",
+      back: <MapFragmentPage 
+        region="Ionia"          // Text displayed in center
+        variant="forest"       // "default", "mountains", "rivers", "forest"
+        showCompass={true}        // Show/hide compass rose
+        markerCount={8}           // Number of location markers (default 3)
+        fragmentCount={3}         // Number of map fragments (1-3)
+        theme="mystical"          // "warm", "cool", "dark", "mystical"
+      />,
       bookmark: { label: "Summary", targetPage: 3, x: "12%", color: "#7B4643" },
       id: 3
     },
-    { front: "test.txt", back: "test.txt", id: 4 },
+    { front: <AncientRunicPage 
+        variant="elements"           // "default", "power", "mystical", "elements"
+        centerText="ᛗᚨᚷᛁᚲ"       // Custom text at bottom (or null to hide)
+        runeColor="#8b5582ff"       // Color of the runes
+        runeCount={7}            // Number of runes (default 9)
+      />, back: <MapFragmentPage 
+        region="Zaun"          // Text displayed in center
+        variant="default"       // "default", "mountains", "rivers", "forest"
+        showCompass={true}        // Show/hide compass rose
+        markerCount={4}           // Number of location markers (default 3)
+        fragmentCount={8}         // Number of map fragments (1-3)
+        theme="dark"          // "warm", "cool", "dark", "mystical"
+      />, id: 4 },
     { 
-      front: "test.txt", 
-      back: "social", // Placeholder - will be replaced
+      front: <AncientRunicPage 
+        variant="default"           // "default", "power", "mystical", "elements"
+        centerText="ᛗᚨᚷᛁᚲ"       // Custom text at bottom (or null to hide)
+        runeColor="#377b45ff"       // Color of the runes
+        runeCount={16}            // Number of runes (default 9)
+      />, 
+      back: "social",
       id: 5
     },
     { 
-      front: "search", // Placeholder - will be replaced
-      back: "text",
-      bookmark: { label: "Social", targetPage: 6, x: "50%", color: "#354B89" },
+      front: "search",
+      back: <MapFragmentPage 
+        region="Shadow Isles"          // Text displayed in center
+        variant="rivers"       // "default", "mountains", "rivers", "forest"
+        showCompass={true}        // Show/hide compass rose
+        markerCount={7}           // Number of location markers (default 3)
+        fragmentCount={6}         // Number of map fragments (1-3)
+        theme="dark"          // "warm", "cool", "dark", "mystical"
+      />,
+      bookmark: { label: "Social", targetPage: 6, x: "40%", color: "#354B89" },
       id: 6
     },
-    { front: "text", back: "test.txt", id: 7 },
+    { front: <AncientRunicPage 
+        variant="power"           // "default", "power", "mystical", "elements"
+        centerText="ᛗᚨᚷᛁᚲ"       // Custom text at bottom (or null to hide)
+        runeColor="#91b047ff"       // Color of the runes
+        runeCount={12}            // Number of runes (default 9)
+      />, back: <MapFragmentPage 
+        region="Demacia"          // Text displayed in center
+        variant="mountains"       // "default", "mountains", "rivers", "forest"
+        showCompass={true}        // Show/hide compass rose
+        markerCount={6}           // Number of location markers (default 3)
+        fragmentCount={9}         // Number of map fragments (1-3)
+        theme="warm"          // "warm", "cool", "dark", "mystical"
+      />, id: 7 },
     { 
-      front: "test.txt", 
-      back: "matchSelector", // Placeholder - will be replaced
+      front: <AncientRunicPage 
+        variant="mystical"           // "default", "power", "mystical", "elements"
+        centerText="ᛗᚨᚷᛁᚲ"       // Custom text at bottom (or null to hide)
+        glowColor="rgba(59, 185, 162, 0.8)"  // Glow effect color
+        runeCount={15}            // Number of runes (default 9)
+      />, 
+      back: "matchSelector",
       id: 8
     },
     { 
-      front: "matchTimeline", // Placeholder - will be replaced
-      back: "test.txt",
-      bookmark: { label: "Matches", targetPage: 9, x: "75%", color: "#595440" },
+      front: "matchTimeline",
+      back: <MapFragmentPage 
+        region="Freljord"          // Text displayed in center
+        variant="mountains"       // "default", "mountains", "rivers", "forest"
+        showCompass={true}        // Show/hide compass rose
+        markerCount={8}           // Number of location markers (default 3)
+        fragmentCount={8}         // Number of map fragments (1-3)
+        theme="cool"          // "warm", "cool", "dark", "mystical"
+      />,
+      bookmark: { label: "Matches", targetPage: 9, x: "65%", color: "#595440" },
       id: 9
     },
-    { front: "test.txt", back: "test.txt", id: 10 },
-    { cover: "green-cover.jpg", id: 11 },
-  ]}, []); // Empty dependency array - only create once
+    { front: <AncientRunicPage 
+        variant="elements"           // "default", "power", "mystical", "elements"
+        centerText="ᛗᚨᚷᛁᚲ"       // Custom text at bottom (or null to hide)
+        glowColor="rgba(96, 78, 171, 0.8)"  // Glow effect color
+        runeCount={12}            // Number of runes (default 9)
+      />, back: "chatInput", id: 10 },
+    { 
+      front: "chatOutput", 
+      back: <MapFragmentPage 
+        region="Shurima"          // Text displayed in center
+        variant="mountains"       // "default", "mountains", "rivers", "forest"
+        showCompass={true}        // Show/hide compass rose
+        markerCount={5}           // Number of location markers (default 3)
+        fragmentCount={3}         // Number of map fragments (1-3)
+        theme="mystical"          // "warm", "cool", "dark", "mystical"
+      />,
+      bookmark: { label: "Questions", targetPage: 11, x: "78%", color: "#4A5568" },
+      id: 11 
+    },
+    { cover: "green-cover.jpg", id: 12 },
+  ], []);
 
   // Initialize pages only once
   useEffect(() => {
@@ -236,9 +388,22 @@ const FlipBook = () => {
     if (page.front === "matchTimeline") {
       newPage.front = <MatchTimeline match={selectedMatch} />;
     }
+
+    // Replace ChatInput component
+    if (page.back === "chatInput") {
+      newPage.back = <ChatInput 
+        onSendMessage={handleSendMessage} 
+        isLoading={isLoadingChat}
+      />;
+    }
+
+    // Replace ChatOutput component
+    if (page.front === "chatOutput") {
+      newPage.front = <ChatOutput messages={chatMessages} />;
+    }
     
     return newPage;
-  }, [player1Stats, player2Stats, matches, selectedMatchId, selectedMatch, handleMatchSelect, handlePlayer2Found]);
+  }, [player1Stats, player2Stats, matches, selectedMatchId, selectedMatch, handleMatchSelect, handlePlayer2Found, chatMessages, isLoadingChat, handleSendMessage]);
 
   if(!timelineResult){
     return (
