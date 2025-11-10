@@ -7,6 +7,7 @@
   position: absolute;
   pointer-events: none;
   transition: transform 1s ease;
+  backface-visibility: hidden;
 }
 
 .flip-page.flipped .front-page {
@@ -28,15 +29,55 @@
   transition-duration: 1.5s;
 }
 
+/* Add to your FlipPage.css */
+
 .front-page .paper,
 .back-page .paper {
   width: calc(100% - 2%);
   margin-top: 2%;
-  height: calc(100% - 4%);
-  padding: 5%;
+  height: 96%;
+  max-height: calc(100% - 4%); /* Force maximum height */
+  padding: 1rem;
   background-color: #8B704E;
   background-image: url('/images/parchment.jpg') !important;
   border: solid 1px #8B704E;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Add a scrollable wrapper for page content */
+/* Only apply scroll to div elements (React components), not text nodes */
+.paper > div {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  min-height: 0; /* Critical for flex children to respect parent height */
+}
+
+/* For simple text content (p tags), don't make scrollable */
+.paper > p {
+  flex: 0 0 auto;
+  overflow: visible;
+}
+
+/* Optional: Style the scrollbar to match the parchment theme */
+.paper > div::-webkit-scrollbar {
+  width: 8px;
+}
+
+.paper > div::-webkit-scrollbar-track {
+  background: rgba(139, 112, 78, 0.2);
+  border-radius: 4px;
+}
+
+.paper > div::-webkit-scrollbar-thumb {
+  background: rgba(139, 112, 78, 0.6);
+  border-radius: 4px;
+}
+
+.paper > div::-webkit-scrollbar-thumb:hover {
+  background: rgba(139, 112, 78, 0.8);
 }
 
 .back-page .paper {
@@ -47,6 +88,13 @@
 .front-page .paper {
   box-shadow: inset 7px 0 30px -7px #00000066, 10px 10px 15px 0px #0000001f;
   margin-right: 2%;
+}
+
+.paper-content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  min-height: 0;
 }
 
 .back-page {
@@ -106,3 +154,16 @@
   transform: translateX(calc(-50% / -2));
 }
 
+.timeline-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%; /* or specific height */
+  overflow: hidden;
+}
+
+.timeline-wrapper > * {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+}

@@ -85,6 +85,7 @@ const FlipPage = forwardRef(
         ) : (
           <>
             <div className="back-page">
+              
               <div className="paper">
                 {bookmark && (
                   <BackBookmark
@@ -97,7 +98,7 @@ const FlipPage = forwardRef(
                     stroke={bookmark.stroke}
                   />
                 )}
-                {React.isValidElement(Back) ? Back : <p>{Back || "Back content"}</p>}
+                <div className="timeline-wrapper">{React.isValidElement(Back) ? Back : <p>{Back || "Back content"}</p>}</div>
               </div>
             </div>
             <div className="front-page">
@@ -113,7 +114,8 @@ const FlipPage = forwardRef(
                     stroke={bookmark.stroke}
                   />
                 )}
-                {React.isValidElement(Front) ? Front : <p>{Front || "Front content"}</p>}
+                <div className="timeline-wrapper">{React.isValidElement(Front) ? Front : <p>{Front || "Front content"}</p>}</div>
+                
               </div>
             </div>
           </>
