@@ -7,6 +7,7 @@ const SearchAndCompare = ({ player1Stats, onPlayer2Found }) => {
   const [username, setUsername] = useState("");
   const [tagline, setTagline] = useState("");
   const [fetchingPlayer2, setFetchingPlayer2] = useState(false);
+  const [errorFetchingPlayer2, setErrorFetchingPlayer2] = useState(false);
   const [player2Stats, setPlayer2Stats] = useState({
     "avg_kda": 0,
     "avg_cs_per_min": 0,
@@ -63,10 +64,13 @@ const SearchAndCompare = ({ player1Stats, onPlayer2Found }) => {
       setPlayer2Stats(timelineData.stats);
       onPlayer2Found(timelineData.stats);
       setFetchingPlayer2(false);
+      setErrorFetchingPlayer2(false);
       setHasSearched(true);
     } catch (err) {
       console.error("Error fetching API data:", err);
       setFriendResult({ error: "Failed to load timeline." });
+      setErrorFetchingPlayer2(true)
+      setFetchingPlayer2(false);
     }
   };
 
@@ -133,6 +137,11 @@ const SearchAndCompare = ({ player1Stats, onPlayer2Found }) => {
             </div>
             <h2 className="text-xl font-semibold text-white">Loading...</h2>
             <p className="text-amber-100">Please wait...</p>
+          </div>
+        </div>)}
+        {!fetchingPlayer2 && errorFetchingPlayer2 && (<div className="absolute inset-0 bg-black bg-opacity-70 rounded-lg p-8 h-full w-full max-w-md">
+          <div className="text-center">
+            <h2 className="text-xl font-semibold text-white">Error loading player, try again</h2>
           </div>
         </div>)}
         <h3 className="text-xl font-semibold text-white mb-6 text-center">

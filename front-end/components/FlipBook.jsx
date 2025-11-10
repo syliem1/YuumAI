@@ -196,7 +196,7 @@ const FlipBook = () => {
 
   // Create page structure once and store it in a ref
   const pageStructure = useMemo(() => {
-    if (!mostPlayed || !timelineResult || !player1Stats || !percentileResult) return [];
+    if (!mostPlayed || !timelineResult || !player1Stats || !percentileResult ) return [];
 
     return [
     { cover: "book_cover.jpg", frontCover: true, id: 0 },
@@ -223,7 +223,7 @@ const FlipBook = () => {
       back: <SummaryBack data={{ 
         username: timelineResult.player_id,
         region: timelineResult.playstyle.archetype, 
-        profile: timelineResult.playstyle.profile.split(",").map(s => s.trim()),
+        profile: timelineResult.playstyle?.profile ? timelineResult.playstyle.profile.split(",").map(s => s.trim()): [],
         statistics: { goldpm: player1Stats.avg_gpm.toFixed(2), winRate: player1Stats.win_rate.toFixed(2), averageKDA: player1Stats.avg_kda.toFixed(2), cspm: player1Stats.avg_cs_per_min.toFixed(2)}, 
         mostPlayed: mostPlayed,
         playerStats: player1Stats
