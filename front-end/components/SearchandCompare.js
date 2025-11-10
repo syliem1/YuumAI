@@ -3,6 +3,8 @@ import { useFriendContext } from "@/context/FriendContext";
 
 const SearchAndCompare = ({ player1Stats, onPlayer2Found }) => {
   const [searchQuery, setSearchQuery] = useState("");
+  const [username, setUsername] = useState("");
+  const [tagline, setTagline] = useState("");
   const [player2Stats, setPlayer2Stats] = useState({
     "avg_kda": 0,
     "avg_cs_per_min": 0,
@@ -27,14 +29,14 @@ const SearchAndCompare = ({ player1Stats, onPlayer2Found }) => {
   }
 
   const handleSearch = async () => {
-    if (!searchQuery.trim()) return;
+    if (!username.trim() || !tagline.trim()) return;
     
     // TODO: Replace with actual API call
-    const endpoint = "https://v4ft9564pb.execute-api.us-west-2.amazonaws.com/player/process";
+    const endpoint = "https://v4ft9564pb.execute-api.us-west-2.amazonaws.com/player/compare";
 
     const body = {
-      game_name: "ShadowLeaf",
-      tagline: "8005",
+      game_name: username,
+      tagline: tagline,
       num_games: 1
     };
 
@@ -72,8 +74,8 @@ const SearchAndCompare = ({ player1Stats, onPlayer2Found }) => {
     if (!stat2 || stat2 === "") return "text-gray-300";
     if (isNaN(val1) || isNaN(val2)) return "text-gray-300";
     
-    if (val1 > val2) return "text-green-400";
-    if (val1 < val2) return "text-red-400";
+    if (val1 < val2) return "text-green-400";
+    if (val1 > val2) return "text-red-400";
     return "text-gray-300";
   };
 
@@ -84,16 +86,20 @@ const SearchAndCompare = ({ player1Stats, onPlayer2Found }) => {
         <div className="flex gap-2">
           <input
             type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            onKeyPress={(e) => e.key === "Enter" && handleSearch()}
             className="flex-1 px-4 py-3 bg-gray-800 bg-opacity-70 border border-gray-700 rounded text-white focus:outline-none focus:border-gray-500"
-            placeholder="Find opponent..."
+            placeholder="Game name"
           />
           <input
             type="text"
-            placeholder="# ..."
-            className="w-24 px-4 py-3 bg-gray-800 bg-opacity-70 border border-gray-700 rounded text-white focus:outline-none focus:border-gray-500"/>
+            value={tagline}
+            onChange={(e) => setTagline(e.target.value)}
+            onKeyPress={(e) => e.key === "Enter" && handleSearch()}
+            className="w-24 px-4 py-3 bg-gray-800 bg-opacity-70 border border-gray-700 rounded text-white focus:outline-none focus:border-gray-500"
+            placeholder="#tag"
+          />
           <button
             onClick={handleSearch}
             className="magical-button"
