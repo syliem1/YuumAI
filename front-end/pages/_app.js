@@ -9,6 +9,7 @@ import "@/styles/FlipPage.css";
 import "@/styles/Summary.css";
 import { TimelineContextProvider } from "@/context/TimelineContext";
 import { FriendContextProvider } from "@/context/FriendContext";
+import { RealTimelineContextProvider } from "@/context/RealTimelineContext";
 import "@/styles/detentionslip.css";
 import "@/styles/index.css";
 
@@ -16,11 +17,14 @@ export default function App({ Component, pageProps }) {
   return (
     <>
       <main className="min-h-screen w-screen">
-        <FriendContextProvider>
+        <RealTimelineContextProvider>
+          <FriendContextProvider>
             <TimelineContextProvider>
               <Component {...pageProps} />
             </TimelineContextProvider>
-        </FriendContextProvider>
+          </FriendContextProvider>
+        </RealTimelineContextProvider>
+        
       </main>
     </>
   );
