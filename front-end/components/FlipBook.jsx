@@ -389,7 +389,7 @@ const FlipBook = () => {
           setTimeout(() => {
             pageRefs.current[i]?.flip();
             resolve();
-          }, 800);
+          }, 500);
         });
       }
     } else {
@@ -398,7 +398,7 @@ const FlipBook = () => {
           setTimeout(() => {
             pageRefs.current[i]?.flip();
             resolve();
-          }, 800);
+          }, 500);
         });
       }
     }
