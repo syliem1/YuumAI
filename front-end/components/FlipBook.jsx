@@ -7,6 +7,7 @@ import SearchAndCompare from "./SearchandCompare";
 import MatchSelector from "./MatchSelector";
 import MatchTimeline from "./MatchTimeline";
 import matchesData from "../data/matches.json";
+import { useContextResults } from "@/context/SearchContext";
 
 
 const FlipBook = () => {
@@ -17,6 +18,7 @@ const FlipBook = () => {
   const [onFirstPage, setOnFirstPage] = useState(true);
   const [onLastPage, setOnLastPage] = useState(false);
   const [isTurning, setIsTurning] = useState(false);
+  const searchResult = useContextResults();
 
   // Match Timeline state + Match Selector
   const [matches, setMatches] = useState([]);
@@ -75,7 +77,10 @@ const FlipBook = () => {
   }, []);
 
   // Create page structure once and store it in a ref
-  const pageStructure = useMemo(() => [
+  const pageStructure = useMemo(() => {
+    //if(!searchResult) return null;
+
+    return [
     { cover: "book_cover.jpg", frontCover: true, id: 0 },
     { front: "test.txt", back: "test.txt", id: 1 },
     { 
@@ -128,7 +133,7 @@ const FlipBook = () => {
     },
     { front: "test.txt", back: "test.txt", id: 10 },
     { cover: "green-cover.jpg", id: 11 },
-  ], []); // Empty dependency array - only create once
+  ]}, []); // Empty dependency array - only create once
 
   // Initialize pages only once
   useEffect(() => {

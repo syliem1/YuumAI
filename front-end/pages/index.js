@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { useRouter } from "next/router";
+import { useContextResults } from "@/context/SearchContext";
 import Link from "next/link";
 
 export default function Home() {
@@ -6,6 +8,35 @@ export default function Home() {
 
   const handleChange = (event) => {
     setInputValue(event.target.value);
+  };
+  const { setSearchResult } = useContextResults();
+  const router = useRouter();
+  const handleSearch = async () => {
+    router.push("/FlipBook");
+
+    try {
+      const endpoint = "https://v4ft9564pb.execute-api.us-west-2.amazonaws.com/player/process";
+      const body = {
+        "game_name": "ShadowLeaf",
+        "tagline": "8005",
+        "num_games": 1
+      };
+      console.log("fetching...")
+      const res = await fetch(endpoint, {
+        method: "POST",
+        body,
+      });
+
+      if (!res.ok) {
+        throw new Error(`AWS API request failed: ${res.status} ${res.statusText}`);
+      }
+
+      const data = await res.json();
+      setSearchResult(data);
+    } catch (err) {
+      console.error("Error fetching search results:", err);
+      setSearchResult({ error: "Failed to load search results." });
+    }
   };
 
   return (
@@ -25,11 +56,9 @@ export default function Home() {
             placeholder="Enter text here"
             className="flex-1 rounded-lg border p-2 text-dark"
           />
-          <Link href="/FlipBook" className="text-background hover:underline">
-            <button className="rounded-lg bg-[#8b6f4e] px-4 py-2 text-white transition hover:bg-[#73583f]">
+            <button className="rounded-lg bg-[#8b6f4e] px-4 py-2 hover:underline text-white transition hover:bg-[#73583f]" onClick={handleSearch}>
               Search
             </button>
-          </Link>
         </div>
         <p className="mt-2 text-dark">Current input: {inputValue}</p>
       </div>
