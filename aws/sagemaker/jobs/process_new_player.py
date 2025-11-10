@@ -4,6 +4,7 @@ Combines playstyle profiling + timeline feature
 """
 
 import boto3
+import os
 import json
 import requests
 from datetime import datetime
@@ -15,7 +16,7 @@ stepfunctions = boto3.client('stepfunctions')
 dynamodb = boto3.resource('dynamodb')
 
 # Configuration
-RIOT_API_KEY = 'RGAPI-a9a2f807-d39e-4546-9123-23f24310aba3'
+RIOT_API_KEY = os.environ['RIOT_API_KEY']
 API_ENDPOINT = 'https://v4ft9564pb.execute-api.us-west-2.amazonaws.com'
 STATE_MACHINE_ARN = 'arn:aws:states:us-west-2:768394660366:stateMachine:lol-timeline-batch-processor'
 S3_BUCKET_RAW = 'lol-training-matches-150k'
