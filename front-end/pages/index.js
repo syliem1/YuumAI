@@ -65,6 +65,10 @@ export default function Home() {
         <input type="text" className="tagline_box" placeholder="1234" value={taglineValue} onChange={handleTaglineChange}/>
         <input type="number" className="num_games_analyzed_box" placeholder="10" value={gameCountValue} onChange={handleCountChange}/>
         <button
+          style={{
+            position: "absolute",
+            bottom:"14%",
+            right:"18%"}}
             className="magical-button"
             onClick={handleSearch}
         >
@@ -75,7 +79,7 @@ export default function Home() {
                     <span className="particle"></span>
                     <span className="particle"></span>
                 </div>
-          </button>
+        </button>
       </div>
     </section>
   );

@@ -90,6 +90,10 @@ const SearchAndCompare = ({ player1Stats, onPlayer2Found }) => {
             className="flex-1 px-4 py-3 bg-gray-800 bg-opacity-70 border border-gray-700 rounded text-white focus:outline-none focus:border-gray-500"
             placeholder="Find opponent..."
           />
+          <input
+            type="text"
+            placeholder="# ..."
+            className="w-24 px-4 py-3 bg-gray-800 bg-opacity-70 border border-gray-700 rounded text-white focus:outline-none focus:border-gray-500"/>
           <button
             onClick={handleSearch}
             className="magical-button"
@@ -101,7 +105,7 @@ const SearchAndCompare = ({ player1Stats, onPlayer2Found }) => {
                     <span className="particle"></span>
                     <span className="particle"></span>
                 </div>
-          </button>
+      </button>
         </div>
         {hasSearched && player2Stats.Games && (
           <p className="text-green-400 text-center text-sm mt-2">
@@ -109,7 +113,6 @@ const SearchAndCompare = ({ player1Stats, onPlayer2Found }) => {
           </p>
         )}
       </div>
-
       {/* Stats Display - Identical to Social */}
       <div className="bg-black bg-opacity-70 rounded-lg p-8 w-full max-w-md">
         <h3 className="text-xl font-semibold text-white mb-6 text-center">
