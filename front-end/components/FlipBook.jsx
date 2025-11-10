@@ -6,9 +6,9 @@ import Social from "./Social";
 import SearchAndCompare from "./SearchandCompare";
 import MatchSelector from "./MatchSelector";
 import MatchTimeline from "./MatchTimeline";
+import { useTimelineContext } from "@/context/TimelineContext";
 import ChatInput from "./ChatInput";
 import ChatOutput from "./ChatOutput.jsx";
-import matchesData from "../data/matches.json";
 import AncientRunicPage from "./AncientRunicPage.jsx";
 import MapFragmentPage from "./MapFragmentPage";
 
@@ -21,6 +21,7 @@ const FlipBook = () => {
   const [onFirstPage, setOnFirstPage] = useState(true);
   const [onLastPage, setOnLastPage] = useState(false);
   const [isTurning, setIsTurning] = useState(false);
+  const { timelineResult } = useTimelineContext();
 
   // Match Timeline state + Match Selector
   const [matches, setMatches] = useState([]);
@@ -28,24 +29,24 @@ const FlipBook = () => {
   
   // Player stats state
   const [player1Stats, setPlayer1Stats] = useState({
-    Games: "150",
-    WinRate: "60%",
-    KDA: "100",
-    CPM: "85",
-    gold15: "70",
-    GPM: "60",
-    DPM: "90"
-  });
+    "avg_kda": 0,
+    "avg_cs_per_min": 0,
+    "avg_kill_participation": 0,
+    "avg_dpm": 0,
+    "avg_gpm": 0,
+    "avg_solo_kills": 0,
+    "avg_vision_score": 0,
+    "avg_cc_time": 0});
   
   const [player2Stats, setPlayer2Stats] = useState({
-    Games: "",
-    WinRate: "",
-    KDA: "",
-    CPM: "",
-    gold15: "",
-    GPM: "",
-    DPM: ""
-  });
+    "avg_kda": 0,
+    "avg_cs_per_min": 0,
+    "avg_kill_participation": 0,
+    "avg_dpm": 0,
+    "avg_gpm": 0,
+    "avg_solo_kills": 0,
+    "avg_vision_score": 0,
+    "avg_cc_time": 0});
 
   // Chat state
   const [chatMessages, setChatMessages] = useState([]);
@@ -60,16 +61,19 @@ const FlipBook = () => {
   const pageRefs = useRef([]);
   const isInitialized = useRef(false);
 
-  // Load matches data on component mount
   useEffect(() => {
-    if (matchesData && matchesData.timeline_data) {
-      setMatches(matchesData.timeline_data);
-      // Set first match as selected by default
-      if (matchesData.timeline_data.length > 0) {
-        setSelectedMatchId(matchesData.timeline_data[0].match_id);
-      }
+    if (!timelineResult) return; 
+
+    if (timelineResult.timeline_data) {
+      
+      setMatches(timelineResult.timeline_data);
+      setSelectedMatchId(timelineResult.timeline_data[0]?.match_id || null);
+    } else {
+      console.warn("No timeline data found in search result:", timelineResult);
     }
-  }, []);
+    setPlayer1Stats(timelineResult.stats)
+  }, [timelineResult]);
+  
 
   // Get the currently selected match
   const selectedMatch = useMemo(() => 
@@ -136,7 +140,9 @@ const FlipBook = () => {
   }, []);
 
   // Create page structure once and store it in a ref
-  const pageStructure = useMemo(() => [
+  const pageStructure = useMemo(() => 
+
+     [
     { cover: "book_cover.jpg", frontCover: true, id: 0 },
     { front: <AncientRunicPage 
         variant="power"           // "default", "power", "mystical", "elements"
@@ -399,7 +405,15 @@ const FlipBook = () => {
     
     return newPage;
   }, [player1Stats, player2Stats, matches, selectedMatchId, selectedMatch, handleMatchSelect, handlePlayer2Found, chatMessages, isLoadingChat, handleSendMessage]);
-
+/*
+  if(!timelineResult){
+    return (
+      <div className="w-full text-center text-3xl">
+        LOADING...
+      </div>
+    )
+  }
+*/
   return (
     <div className="book-frame">
       <div className="page-wrapper slideUp-animation">
