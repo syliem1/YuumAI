@@ -7,19 +7,25 @@ export default function Home() {
   const [taglineValue, setTaglineValue] = useState("");
   const [gameCountValue, setCountValue] = useState(10);
 
-  const handleChange = (event) => {
-    setInputValue(event.target.value);
+  const handleUsernameChange = (event) => {
+    setUsernameValue(event.target.value);
+  };
+  const handleTaglineChange = (event) => {
+    setTaglineValue(event.target.value);
+  };
+  const handleCountChange = (event) => {
+    setCountValue(event.target.value);
   };
   const { setTimelineResult } = useTimelineContext();
   const router = useRouter();
   const handleSearch = async () => {
-    router.push("/FlipBook");
+    router.push("/loading");
     const endpoint = "https://v4ft9564pb.execute-api.us-west-2.amazonaws.com/player/process";
 
     const body = {
-      game_name: "ShadowLeaf",
-      tagline: "8005",
-      num_games: 1
+      game_name: usernameValue,
+      tagline: taglineValue,
+      num_games: gameCountValue
     };
 
     try {
@@ -39,11 +45,12 @@ export default function Home() {
       const timelineData = await res.json();
 
       setTimelineResult(timelineData);
+      router.push("/FlipBook")
 
     } catch (err) {
       console.error("Error fetching API data:", err);
       setTimelineResult({ error: "Failed to load timeline." });
-      router.push("/")
+      router.push("/invalid")
     }
   };
 
@@ -54,9 +61,9 @@ export default function Home() {
 
       {/* Content */}
       <div className="detention_card">
-        <input type="text" className="riotID_box" placeholder="Riot ID" onChange={setUsernameValue}/>
-        <input type="text" className="tagline_box" placeholder="1234" onChange={setTaglineValue}/>
-        <input type="number" className="num_games_analyzed_box" placeholder="10" onChange={setCountValue}/>
+        <input type="text" className="riotID_box" placeholder="Riot ID" value={usernameValue} onChange={handleUsernameChange}/>
+        <input type="text" className="tagline_box" placeholder="1234" value={taglineValue} onChange={handleTaglineChange}/>
+        <input type="number" className="num_games_analyzed_box" placeholder="10" value={gameCountValue} onChange={handleCountChange}/>
         <button
           style={{
             position: "absolute",
