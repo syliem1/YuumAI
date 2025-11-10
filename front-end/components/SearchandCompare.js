@@ -1,8 +1,13 @@
 import React, { useState } from "react";
 import { useFriendContext } from "@/context/FriendContext";
+import { useTimelineContext } from "@/context/TimelineContext";
 
 const SearchAndCompare = ({ player1Stats, onPlayer2Found }) => {
   const [searchQuery, setSearchQuery] = useState("");
+  const [username, setUsername] = useState("");
+  const [tagline, setTagline] = useState("");
+  const [fetchingPlayer2, setFetchingPlayer2] = useState(false);
+  const [errorFetchingPlayer2, setErrorFetchingPlayer2] = useState(false);
   const [player2Stats, setPlayer2Stats] = useState({
     "avg_kda": 0,
     "avg_cs_per_min": 0,
@@ -14,6 +19,7 @@ const SearchAndCompare = ({ player1Stats, onPlayer2Found }) => {
     "avg_cc_time": 0});
   const [hasSearched, setHasSearched] = useState(false); // Track if user has searched
   const { friendResult, setFriendResult } = useFriendContext();
+  const { timelineResult } = useTimelineContext();
   const stats = ["avg_kda", "avg_cs_per_min", "avg_kill_participation", "avg_dpm", "avg_gpm", "avg_solo_kills", "avg_vision_score", "avg_cc_time"];
   const displayStats = {
     "avg_kda": "KDA",
@@ -27,18 +33,19 @@ const SearchAndCompare = ({ player1Stats, onPlayer2Found }) => {
   }
 
   const handleSearch = async () => {
-    if (!searchQuery.trim()) return;
+    if (!username.trim() || !tagline.trim() || !timelineResult) return;
     
     // TODO: Replace with actual API call
-    const endpoint = "https://v4ft9564pb.execute-api.us-west-2.amazonaws.com/player/process";
+    const endpoint = "https://v4ft9564pb.execute-api.us-west-2.amazonaws.com/player/compare";
 
     const body = {
-      game_name: "ShadowLeaf",
-      tagline: "8005",
-      num_games: 1
+      game_name: username,
+      tagline: tagline,
+      num_games: timelineResult.matches_processed
     };
 
     try {
+      setFetchingPlayer2(true);
       console.log("Fetching...");
 
       const res= await 
@@ -56,10 +63,14 @@ const SearchAndCompare = ({ player1Stats, onPlayer2Found }) => {
       setFriendResult(timelineData)
       setPlayer2Stats(timelineData.stats);
       onPlayer2Found(timelineData.stats);
+      setFetchingPlayer2(false);
+      setErrorFetchingPlayer2(false);
       setHasSearched(true);
     } catch (err) {
       console.error("Error fetching API data:", err);
       setFriendResult({ error: "Failed to load timeline." });
+      setErrorFetchingPlayer2(true)
+      setFetchingPlayer2(false);
     }
   };
 
@@ -72,8 +83,8 @@ const SearchAndCompare = ({ player1Stats, onPlayer2Found }) => {
     if (!stat2 || stat2 === "") return "text-gray-300";
     if (isNaN(val1) || isNaN(val2)) return "text-gray-300";
     
-    if (val1 > val2) return "text-green-400";
-    if (val1 < val2) return "text-red-400";
+    if (val1 < val2) return "text-green-400";
+    if (val1 > val2) return "text-red-400";
     return "text-gray-300";
   };
 
@@ -84,16 +95,20 @@ const SearchAndCompare = ({ player1Stats, onPlayer2Found }) => {
         <div className="flex gap-2">
           <input
             type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            onKeyPress={(e) => e.key === "Enter" && handleSearch()}
             className="flex-1 px-4 py-3 bg-gray-800 bg-opacity-70 border border-gray-700 rounded text-white focus:outline-none focus:border-gray-500"
-            placeholder="Find opponent..."
+            placeholder="Game name"
           />
           <input
             type="text"
-            placeholder="# ..."
-            className="w-24 px-4 py-3 bg-gray-800 bg-opacity-70 border border-gray-700 rounded text-white focus:outline-none focus:border-gray-500"/>
+            value={tagline}
+            onChange={(e) => setTagline(e.target.value)}
+            onKeyPress={(e) => e.key === "Enter" && handleSearch()}
+            className="w-24 px-4 py-3 bg-gray-800 bg-opacity-70 border border-gray-700 rounded text-white focus:outline-none focus:border-gray-500"
+            placeholder="#tag"
+          />
           <button
             onClick={handleSearch}
             className="magical-button"
@@ -114,12 +129,25 @@ const SearchAndCompare = ({ player1Stats, onPlayer2Found }) => {
         )}
       </div>
       {/* Stats Display - Identical to Social */}
-      <div className="bg-black bg-opacity-70 rounded-lg p-8 w-full max-w-md">
+      <div className="relative bg-black bg-opacity-70 rounded-lg p-8 w-full max-w-md">
+        {fetchingPlayer2 && (<div className="absolute inset-0 bg-black bg-opacity-70 rounded-lg p-8 h-full w-full max-w-md">
+          <div className="text-center">
+            <div className="relative w-16 h-16 mx-auto mb-4">
+              <div className="absolute inset-0 border-4 border-sky-200 border-t-sky-400 rounded-full animate-spin"></div>
+            </div>
+            <h2 className="text-xl font-semibold text-white">Loading...</h2>
+            <p className="text-amber-100">Please wait...</p>
+          </div>
+        </div>)}
+        {!fetchingPlayer2 && errorFetchingPlayer2 && (<div className="absolute inset-0 bg-black bg-opacity-70 rounded-lg p-8 h-full w-full max-w-md">
+          <div className="text-center">
+            <h2 className="text-xl font-semibold text-white">Error loading player, try again</h2>
+          </div>
+        </div>)}
         <h3 className="text-xl font-semibold text-white mb-6 text-center">
           {!friendResult && "Search for a player"}
           {friendResult && `${friendResult.player_id}`}
         </h3>
-        
         <div className="space-y-1">
           {stats.map(stat => (
             <div key={stat} className={`flex justify-between items-center px-3 py-2 bg-gray-800 border border-gray-700 rounded ${getStatColor(player1Stats[stat], player2Stats[stat])}`}>

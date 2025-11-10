@@ -8,6 +8,7 @@ import MatchSelector from "./MatchSelector";
 import MatchTimeline from "./MatchTimeline";
 import { useTimelineContext } from "@/context/TimelineContext";
 import { useRealTimelineContext } from "@/context/RealTimelineContext";
+import { usePercentileContext } from "@/context/PercentileContext";
 import ChatInput from "./ChatInput";
 import ChatOutput from "./ChatOutput.jsx";
 import AncientRunicPage from "./AncientRunicPage.jsx";
@@ -24,6 +25,7 @@ const FlipBook = () => {
   const [isTurning, setIsTurning] = useState(false);
   const { timelineResult } = useTimelineContext();
   const { realTimelineResult, setRealTimelineResult} = useRealTimelineContext();
+  const { percentileResult } = usePercentileContext();
 
   // Match Timeline state + Match Selector
   const [matches, setMatches] = useState([]);
@@ -111,7 +113,7 @@ const FlipBook = () => {
     const mostPlayedList = timelineResult.most_played_champions
     const championsArray = Object.entries(mostPlayedList).map(([name, games]) => ({ name, games }));
     setMostPlayed(championsArray);
-    
+
     if (!realTimelineResult) return;
 
     if (realTimelineResult.timeline_data) {
@@ -194,7 +196,7 @@ const FlipBook = () => {
 
   // Create page structure once and store it in a ref
   const pageStructure = useMemo(() => {
-    if (!mostPlayed || !timelineResult || !player1Stats) return [];
+    if (!mostPlayed || !timelineResult || !player1Stats || !percentileResult ) return [];
 
     return [
     { cover: "book_cover.jpg", frontCover: true, id: 0 },
@@ -221,7 +223,7 @@ const FlipBook = () => {
       back: <SummaryBack data={{ 
         username: timelineResult.player_id,
         region: timelineResult.playstyle.archetype, 
-        profile:["Late-Game", "Scaling", "Empire-Building"],
+        profile: timelineResult.playstyle?.profile ? timelineResult.playstyle.profile.split(",").map(s => s.trim()): [],
         statistics: { goldpm: player1Stats.avg_gpm.toFixed(2), winRate: player1Stats.win_rate.toFixed(2), averageKDA: player1Stats.avg_kda.toFixed(2), cspm: player1Stats.avg_cs_per_min.toFixed(2)}, 
         mostPlayed: mostPlayed,
         playerStats: player1Stats
@@ -230,9 +232,9 @@ const FlipBook = () => {
     },
     { 
       front: <SummaryFront data={{ 
-        roles: { top: 2, jg: 19, mid: 10, adc: 8, sup: 5 },
-        strengths:["Azir", "Sivir", "Cassiopeia"], 
-        weaknesses:["Nasus", "Taliyah"] 
+        overall: percentileResult.overall_performance,
+        strengths: percentileResult.ranked_stats.top_5, 
+        weaknesses: percentileResult.ranked_stats.bottom_5
       }}/>, 
       back: <MapFragmentPage 
         region="Ionia"          // Text displayed in center
@@ -337,7 +339,7 @@ const FlipBook = () => {
       id: 11 
     },
     { cover: "green-cover.jpg", id: 12 },
-  ]}, [timelineResult, mostPlayed, player1Stats]);
+  ]}, [timelineResult, mostPlayed, player1Stats, percentileResult]);
 
   // Initialize pages only once
   useEffect(() => {
@@ -387,7 +389,7 @@ const FlipBook = () => {
           setTimeout(() => {
             pageRefs.current[i]?.flip();
             resolve();
-          }, 800);
+          }, 500);
         });
       }
     } else {
@@ -396,7 +398,7 @@ const FlipBook = () => {
           setTimeout(() => {
             pageRefs.current[i]?.flip();
             resolve();
-          }, 800);
+          }, 500);
         });
       }
     }
