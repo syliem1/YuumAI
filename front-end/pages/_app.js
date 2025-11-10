@@ -7,6 +7,7 @@ import "@/styles/classroom.css";
 import "@/styles/FlipBook.css";
 import "@/styles/FlipPage.css";
 import "@/styles/Summary.css";
+import "@/styles/detentionslip.css";
 
 export default function App({ Component, pageProps }) {
   return (
