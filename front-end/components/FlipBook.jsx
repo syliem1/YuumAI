@@ -1,10 +1,12 @@
-import React, { useEffect, useRef, useState, useCallback } from "react";
+import React, { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import FlipPage from "./FlipPage";
 import SummaryFront from "./SummaryFront";
 import SummaryBack from "./SummaryBack";
 import Social from "./Social";
 import SearchAndCompare from "./SearchandCompare";
-import { color } from "framer-motion";
+import MatchSelector from "./MatchSelector";
+import MatchTimeline from "./MatchTimeline";
+import matchesData from "../data/matches.json";
 
 
 const FlipBook = () => {
@@ -15,6 +17,10 @@ const FlipBook = () => {
   const [onFirstPage, setOnFirstPage] = useState(true);
   const [onLastPage, setOnLastPage] = useState(false);
   const [isTurning, setIsTurning] = useState(false);
+
+  // Match Timeline state + Match Selector
+  const [matches, setMatches] = useState([]);
+  const [selectedMatchId, setSelectedMatchId] = useState(null);
   
   // Player stats state
   const [player1Stats, setPlayer1Stats] = useState({
@@ -37,99 +43,134 @@ const FlipBook = () => {
     DPM: ""
   });
 
-  const handlePlayer2Found = (stats) => {
+  const handlePlayer2Found = useCallback((stats) => {
     setPlayer2Stats(stats);
-  };
+  }, []);
   
   const [searchQuery, setSearchQuery] = useState("");
 
   const pageRefs = useRef([]);
+  const isInitialized = useRef(false);
 
-  // Mock function to search for player stats
-  const handleSearch = async () => {
-    if (!searchQuery.trim()) return;
-    
-    // TODO: Replace this with actual API call to fetch player stats
-    // For now, using mock data
-    const mockPlayerData = {
-      Games: "",
-      WinRate: "",
-      KDA: "",
-      CPM: "",
-      gold15: "",
-      GPM: "",
-      DPM: ""
-    };
-    
-    setPlayer2Stats(mockPlayerData);
-  };
-
+  // Load matches data on component mount
   useEffect(() => {
-    const pageList = [
-      { cover: "book_cover.jpg", frontCover: true },
-      { front: "test.txt", back: "test.txt" },
-      { front: "test.txt", back: <SummaryBack data={{ region: "Shurima", profile:["Late-Game", "Scaling", "Empire-Building"],
+    if (matchesData && matchesData.timeline_data) {
+      setMatches(matchesData.timeline_data);
+      // Set first match as selected by default
+      if (matchesData.timeline_data.length > 0) {
+        setSelectedMatchId(matchesData.timeline_data[0].match_id);
+      }
+    }
+  }, []);
+
+  // Get the currently selected match - use useMemo to prevent unnecessary recalculations
+  const selectedMatch = useMemo(() => 
+    matches.find(m => m.match_id === selectedMatchId),
+    [matches, selectedMatchId]
+  );
+
+  // Memoize the match selector callback to prevent recreating it
+  const handleMatchSelect = useCallback((matchId) => {
+    setSelectedMatchId(matchId);
+  }, []);
+
+  // Create page structure once and store it in a ref
+  const pageStructure = useMemo(() => [
+    { cover: "book_cover.jpg", frontCover: true, id: 0 },
+    { front: "test.txt", back: "test.txt", id: 1 },
+    { 
+      front: "test.txt", 
+      back: <SummaryBack data={{ 
+        region: "Shurima", 
+        profile:["Late-Game", "Scaling", "Empire-Building"],
         statistics: { gamesPlayed: 120, winRate: "55%", averageKDA: "3.5", cspm: "7.8"}, 
         mostPlayed: [
           { name: "Azir", games: 23 },
           { name: "Sivir", games: 17 },
-          { name: "Cassiopeia", games: 12 },],
-      }}/> },
-      { front: <SummaryFront data={{ roles: { top: 2, jg: 19, mid: 10, adc: 8, sup: 5 },
-        strengths:["Azir", "Sivir", "Cassiopeia"], weaknesses:["Nasus", "Taliyah"] }}/>, back: "test.txt",
-        bookmark: { label: "Summary", targetPage: 3, x: "12%", color: "#7B4643" }
-      },
-      { front: "test.txt", back: "test.txt" },
-      { front: "test.txt", back: <Social input1={player1Stats} input2={player2Stats} /> },
-      // Search bar on the front (right page) with Social bookmark
-      { front: <SearchAndCompare onPlayer2Found={handlePlayer2Found} player1Stats={player1Stats}/> , back: "text",
-        bookmark: { label: "Social", targetPage: 6, x: "50%", color: "#354B89" }
-      },
-      // Player 2's perspective on the front (left page after bookmark)
-      { front: "text", back: "test.txt" },
-      { front: "test.txt", back: "test.txt" },
-      { front: "test.txt", back: "test.txt",
-        bookmark: { label: "Matches", targetPage: 9, x: "75%", color: "#595440" }
-      },
-      { front: "test.txt", back: "test.txt" },
-      { cover: "green-cover.jpg" },
-    ].map((page, index) => ({ ...page, id: index }));
+          { name: "Cassiopeia", games: 12 },
+        ],
+      }}/>,
+      id: 2
+    },
+    { 
+      front: <SummaryFront data={{ 
+        roles: { top: 2, jg: 19, mid: 10, adc: 8, sup: 5 },
+        strengths:["Azir", "Sivir", "Cassiopeia"], 
+        weaknesses:["Nasus", "Taliyah"] 
+      }}/>, 
+      back: "test.txt",
+      bookmark: { label: "Summary", targetPage: 3, x: "12%", color: "#7B4643" },
+      id: 3
+    },
+    { front: "test.txt", back: "test.txt", id: 4 },
+    { 
+      front: "test.txt", 
+      back: "social", // Placeholder - will be replaced
+      id: 5
+    },
+    { 
+      front: "search", // Placeholder - will be replaced
+      back: "text",
+      bookmark: { label: "Social", targetPage: 6, x: "50%", color: "#354B89" },
+      id: 6
+    },
+    { front: "text", back: "test.txt", id: 7 },
+    { 
+      front: "test.txt", 
+      back: "matchSelector", // Placeholder - will be replaced
+      id: 8
+    },
+    { 
+      front: "matchTimeline", // Placeholder - will be replaced
+      back: "test.txt",
+      bookmark: { label: "Matches", targetPage: 9, x: "75%", color: "#595440" },
+      id: 9
+    },
+    { front: "test.txt", back: "test.txt", id: 10 },
+    { cover: "green-cover.jpg", id: 11 },
+  ], []); // Empty dependency array - only create once
 
-    setPages(pageList);
-
-    const total = pageList.length;
+  // Initialize pages only once
+  useEffect(() => {
+    if (isInitialized.current) return;
+    
+    const total = pageStructure.length;
+    setPages(pageStructure);
     setZIndices(Array.from({ length: total }, (_, i) => total - i + 1));
     setFlippedStates(Array(total).fill(false));
 
     pageRefs.current = Array(total)
       .fill()
-      .map((_, i) => pageRefs.current[i] || React.createRef());
-  }, [player1Stats, player2Stats, searchQuery]); // Re-render when stats change
+      .map(() => React.createRef());
+    
+    isInitialized.current = true;
+  }, [pageStructure]);
 
-  const handleFlip = (pageIndex, isFlipped) => {
-    const updatedFlipped = [...flippedStates];
-    updatedFlipped[pageIndex] = isFlipped;
-    setFlippedStates(updatedFlipped);
+  const handleFlip = useCallback((pageIndex, isFlipped) => {
+    setFlippedStates(prevFlipped => {
+      const updatedFlipped = [...prevFlipped];
+      updatedFlipped[pageIndex] = isFlipped;
+      
+      setZIndices(prevZ => {
+        const maxZ = Math.max(...prevZ);
+        const newZ = [...prevZ];
+        newZ[pageIndex] = maxZ + 1;
+        return newZ;
+      });
 
-    const maxZ = Math.max(...zIndices);
-    const newZ = [...zIndices];
-    newZ[pageIndex] = maxZ + 1;
-    setZIndices(newZ);
+      const flippedCount = updatedFlipped.filter(Boolean).length;
+      setCurrentPage(flippedCount);
 
-    const flippedCount = updatedFlipped.filter(Boolean).length;
-    setCurrentPage(flippedCount);
+      const firstFlipped = updatedFlipped[0];
+      const lastFlipped = updatedFlipped[updatedFlipped.length - 1];
+      setOnFirstPage(!firstFlipped);
+      setOnLastPage(!!lastFlipped);
 
-    checkAllPagesFlipped(updatedFlipped);
-  };
+      return updatedFlipped;
+    });
+  }, []);
 
-  const checkAllPagesFlipped = (flips) => {
-    const firstFlipped = flips[0];
-    const lastFlipped = flips[flips.length - 1];
-    setOnFirstPage(!firstFlipped);
-    setOnLastPage(!!lastFlipped);
-  };
-
-  const flipToPage = async (targetPage) => {
+  const flipToPage = useCallback(async (targetPage) => {
     if (targetPage === currentPage) return;
     if (isTurning) return;
     setIsTurning(true);
@@ -157,54 +198,67 @@ const FlipBook = () => {
     setTimeout(() => {
       setIsTurning(false);
     }, 1000);
-  };
+  }, [currentPage, isTurning]);
 
-  const handleBookmarkClick = (e, targetPage) => {
+  const handleBookmarkClick = useCallback((e, targetPage) => {
     e.stopPropagation();
     flipToPage(targetPage);
-  };
+  }, [flipToPage]);
 
-  useEffect(() => {
-    if (!pages.length) return;
-
-    const waitForRefs = async () => {
-      const total = pages.length;
-      for (let i = 0; i < total; i++) {
-        let tries = 0;
-        while (!pageRefs.current[i] && tries < 40) {
-          await new Promise((r) => setTimeout(r, 50));
-          tries++;
-        }
-      }
-
-      await new Promise((r) => requestAnimationFrame(r));
-      await new Promise((r) => setTimeout(r, 300));
-
-    };
-
-    waitForRefs();
-  }, [pages.length]);
+  // Replace placeholders with actual components that have dynamic data
+  const getPageContent = useCallback((page) => {
+    const newPage = { ...page };
+    
+    // Replace Social component
+    if (page.back === "social") {
+      newPage.back = <Social input1={player1Stats} input2={player2Stats} />;
+    }
+    
+    // Replace SearchAndCompare component
+    if (page.front === "search") {
+      newPage.front = <SearchAndCompare onPlayer2Found={handlePlayer2Found} player1Stats={player1Stats}/>;
+    }
+    
+    // Replace MatchSelector component
+    if (page.back === "matchSelector") {
+      newPage.back = <MatchSelector 
+        matches={matches} 
+        selectedMatchId={selectedMatchId}
+        onMatchSelect={handleMatchSelect}
+      />;
+    }
+    
+    // Replace MatchTimeline component
+    if (page.front === "matchTimeline") {
+      newPage.front = <MatchTimeline match={selectedMatch} />;
+    }
+    
+    return newPage;
+  }, [player1Stats, player2Stats, matches, selectedMatchId, selectedMatch, handleMatchSelect, handlePlayer2Found]);
 
   return (
     <div className="book-frame">
       <div className="page-wrapper slideUp-animation">
-        {pages.map((page, i) => (
-          <FlipPage
-            key={i}
-            ref={(el) => (pageRefs.current[i] = el)}
-            Front={page.front}
-            Back={page.back}
-            Cover={page.cover}
-            FrontCover={page.frontCover}
-            onFlip={(flipped) => handleFlip(i, flipped)}
-            flipped={flippedStates[i]}
-            zIndex={zIndices[i]}
-            bookmark={page.bookmark}
-            onBookmarkClick={handleBookmarkClick}
-            onFirstPage={onFirstPage}
-            onLastPage={onLastPage}
-          />
-        ))}
+        {pages.map((page, i) => {
+          const pageContent = getPageContent(page);
+          return (
+            <FlipPage
+              key={page.id}
+              ref={(el) => (pageRefs.current[i] = el)}
+              Front={pageContent.front}
+              Back={pageContent.back}
+              Cover={pageContent.cover}
+              FrontCover={pageContent.frontCover}
+              onFlip={(flipped) => handleFlip(i, flipped)}
+              flipped={flippedStates[i]}
+              zIndex={zIndices[i]}
+              bookmark={pageContent.bookmark}
+              onBookmarkClick={handleBookmarkClick}
+              onFirstPage={onFirstPage}
+              onLastPage={onLastPage}
+            />
+          );
+        })}
       </div>
     </div>
   );
