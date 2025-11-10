@@ -4,6 +4,7 @@ Triggered by API Gateway POST request with game_name, tagline, num_games
 """
 
 import boto3
+import os
 import json
 import requests
 from datetime import datetime, timedelta
@@ -17,7 +18,7 @@ dynamodb = boto3.resource('dynamodb')
 sagemaker_runtime = boto3.client('sagemaker-runtime')
 
 # Configuration
-RIOT_API_KEY = 'RGAPI-cdb417b3-2ebb-4ed3-8039-084087b1ef19'
+RIOT_API_KEY = os.environ['RIOT_API_KEY']
 STATE_MACHINE_ARN = 'arn:aws:states:us-west-2:768394660366:stateMachine:lol-timeline-batch-processor'
 S3_BUCKET_RAW = 'lol-training-matches-150k'
 SAGEMAKER_ENDPOINT = 'playstyle-profiler-20251108-073923'
