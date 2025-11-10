@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
 import { useTimelineContext } from "@/context/TimelineContext";
+import { usePercentileContext } from "@/context/PercentileContext";
 
 export default function Home() {
   const [usernameValue, setUsernameValue] = useState("");
@@ -17,6 +18,7 @@ export default function Home() {
     setCountValue(event.target.value);
   };
   const { setTimelineResult } = useTimelineContext();
+  const { setPercentileResult } = usePercentileContext();
   const router = useRouter();
   const handleSearch = async () => {
     router.push("/loading");
@@ -31,25 +33,30 @@ export default function Home() {
     try {
       console.log("Fetching...");
 
-      const res= await 
+      const [timelineRes, percentileRes] = await Promise.all([
         fetch(endpoint, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(body),
-        })
+        }),
+        fetch(`https://v4ft9564pb.execute-api.us-west-2.amazonaws.com/player/percentiles?game_name=${usernameValue}&tagline=${taglineValue}`)
+      ])
 
-      if (!res.ok) {
-        throw new Error(`API request failed: ${res.status}`);
+      if (!timelineRes.ok || !percentileRes.ok) {
+        throw new Error(`API request failed: ${timelineRes.status} / ${percentileRes.status}`);
       }
 
-      const timelineData = await res.json();
+      const timelineData = await timelineRes.json();
+      const percentileData = await percentileRes.json();
 
       setTimelineResult(timelineData);
+      setPercentileResult(percentileData);
       router.push("/FlipBook")
 
     } catch (err) {
       console.error("Error fetching API data:", err);
       setTimelineResult({ error: "Failed to load timeline." });
+      setPercentileResult({ error: "Failed to load percentiles." });
       router.push("/invalid")
     }
   };

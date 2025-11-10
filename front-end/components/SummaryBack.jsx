@@ -23,8 +23,8 @@ const SummaryBack = ({ data }) => {
       setActiveTrait(null);
       setActiveRef(null);
     };
-    window.addEventListener("click", handleClickOutside);
-    return () => window.removeEventListener("click", handleClickOutside);
+    window.addEventListener("mousedown", handleClickOutside);
+    return () => window.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   const handleTraitClick = (trait, ref, e) => {

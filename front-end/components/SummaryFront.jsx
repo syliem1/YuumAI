@@ -1,13 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
+  PieChart,
+  Pie,
   Cell,
+  ResponsiveContainer,
 } from "recharts";
 import TraitPopup from "./TraitPopup";
 
@@ -15,27 +11,23 @@ const SummaryFront = ({ data }) => {
   const [activeTrait, setActiveTrait] = useState(null);
   const [activeRef, setActiveRef] = useState(null);
 
-  // ✅ Create ref arrays outside the render loop
   const strengthRefs = useRef([]);
   const weaknessRefs = useRef([]);
+  const overallPercentile = data.overall.percentile; 
+  const percentileLabel = data.overall.interpretation;
 
-  const roleData = Object.entries(data.roles || {}).map(([role, count]) => ({
-    role: role.toUpperCase(),
-    games: count,
-  }));
+  const pieData = [
+    { name: "Percentile", value: overallPercentile },
+    { name: "Remaining", value: 100 - overallPercentile },
+  ];
 
-  const roleColors = {
-    TOP: "#f9c74f",
-    JG: "#90be6d",
-    MID: "#577590",
-    ADC: "#f94144",
-    SUP: "#f3722c",
-  };
+  const pieColors = ["#8b6f4e", "#e5e5e5"];
+
 
   useEffect(() => {
     const handleClickOutside = () => setActiveTrait(null);
-    window.addEventListener("click", handleClickOutside);
-    return () => window.removeEventListener("click", handleClickOutside);
+    window.addEventListener("mousedown", handleClickOutside);
+    return () => window.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   const handleTraitClick = (trait, ref, e) => {
@@ -49,32 +41,66 @@ const SummaryFront = ({ data }) => {
     }
   };
 
+  const statDisplayNames = {
+    "avg_dpm": "Damage per minute",
+    "avg_gpm": "Gold per minute",
+    "avg_kill_participation": "Kill participation",
+    "avg_kda": "KDA",
+    "avg_vision_score": "Vision Score",
+    "avg_cs_per_min": "CS per minute",
+    "avg_team_damage_pct": "Team Damage Participation",
+    "avg_outnumbered_kills": "Outnumbered Kills",
+    "avg_solo_kills": "Solo Kills",
+    "avg_kills_near_tower": "Kills near tower",
+    "avg_shields_on_teammates": "Shielding Teammates",
+    "avg_objective_damage": "Objective Damage",
+    "avg_dragon_takedowns": "Dragon Takedowns",
+    "avg_herald_takedowns": "Rift Herald Takedowns",
+    "avg_early_gold_adv": "Early Gold Advantage",
+    "avg_heals_on_teammates": "Healing Teammates",
+    "avg_longest_alive": "Time Alive",
+    "avg_cc_time": "Crowd Control Time",
+    "avg_time_dead": "Time Dead",
+    "avg_pick_kills": "Pick Kills",
+    "avg_deaths": "Deaths",
+    "death_consistency": "Death rate",
+    "cs_consistency": "CS rate",
+    "win_rate": "Win Rate"
+  }
+
   return (
     <div className="page-content summary-front">
       <h2 className="section-title">Gameplay Overview</h2>
-
-      {/* Role Distribution Chart */}
-      <div className="chart-container" style={{ width: "100%", height: 250 }}>
-        <h3 className="header-text">Role Distribution</h3>
-        <ResponsiveContainer>
-          <BarChart
-            data={roleData}
-            margin={{ top: 10, right: 20, left: 0, bottom: 10 }}
-          >
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="role" />
-            <YAxis allowDecimals={false} />
-            <Tooltip />
-            <Bar dataKey="games" radius={[6, 6, 0, 0]}>
-              {roleData.map((entry, index) => (
-                <Cell
-                  key={`cell-${index}`}
-                  fill={roleColors[entry.role] || "#8884d8"}
-                />
-              ))}
-            </Bar>
-          </BarChart>
-        </ResponsiveContainer>
+      {/* 🌟 Overall Percentile Section */}
+      <div className="info-box" style={{ marginBottom: "1.5rem", height: 270}}>
+        <h3>Overall Performance Percentile</h3>
+        <div className="flex flex-col items-center justify-center">
+          <div style={{ width: "200px", height: "200px" }}>
+            <ResponsiveContainer>
+              <PieChart>
+                <Pie
+                  data={pieData}
+                  innerRadius={70}
+                  outerRadius={90}
+                  dataKey="value"
+                  startAngle={90}
+                  endAngle={-270}
+                  stroke="none"
+                >
+                  {pieData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={pieColors[index]} />
+                  ))}
+                </Pie>
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
+          <div className="text-center mt-[-120px]">
+            <h2 className="text-4xl font-bold text-[#8b6f4e]">
+              {overallPercentile}%
+            </h2>
+            <p className="text-lg text-gray-700">{percentileLabel}</p>
+          </div>
+        </div>
       </div>
 
       {/* Strengths & Weaknesses Section */}
@@ -86,7 +112,7 @@ const SummaryFront = ({ data }) => {
           <div className="trait-group">
             <h4 style={{ color: "#22c55e" }}>Strengths</h4>
             <ul className="trait-list">
-              {data.strengths?.slice(0, 4).map((trait, index) => {
+              {data.strengths?.slice(0, 5).map((trait, index) => {
                 // ✅ Initialize a unique ref for each item (once)
                 if (!strengthRefs.current[index]) {
                   strengthRefs.current[index] = React.createRef();
@@ -97,15 +123,15 @@ const SummaryFront = ({ data }) => {
                   <li
                     key={index}
                     ref={ref}
-                    className="trait-item strength"
+                    className="trait-item strength my-1"
                     onClick={(e) => handleTraitClick(trait, ref, e)}
                     style={{ color: "#16a34a" }}
                   >
-                    {trait}
+                    {statDisplayNames[trait.stat]}
                     {activeTrait === trait && activeRef === ref && (
                       <TraitPopup targetRef={ref}>
                         <p>
-                          {data.details?.[trait] ||
+                          {`Percentile: ${trait.percentile}` ||
                             "No specific data available."}
                         </p>
                       </TraitPopup>
@@ -120,7 +146,7 @@ const SummaryFront = ({ data }) => {
           <div className="trait-group">
             <h4 style={{ color: "#ef4444" }}>Weaknesses</h4>
             <ul className="trait-list">
-              {data.weaknesses?.slice(0, 4).map((trait, index) => {
+              {data.weaknesses?.slice(0, 5).map((trait, index) => {
                 // ✅ Initialize a unique ref for each weakness item
                 if (!weaknessRefs.current[index]) {
                   weaknessRefs.current[index] = React.createRef();
@@ -131,15 +157,15 @@ const SummaryFront = ({ data }) => {
                   <li
                     key={index}
                     ref={ref}
-                    className="trait-item weakness"
+                    className="trait-item weakness my-1"
                     onClick={(e) => handleTraitClick(trait, ref, e)}
                     style={{ color: "#dc2626" }}
                   >
-                    {trait}
+                    {statDisplayNames[trait.stat]}
                     {activeTrait === trait && activeRef === ref && (
                       <TraitPopup targetRef={ref}>
                         <p>
-                          {data.details?.[trait] ||
+                          {`Percentile: ${trait.percentile}` ||
                             "No specific data available."}
                         </p>
                       </TraitPopup>

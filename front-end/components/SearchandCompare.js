@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { useFriendContext } from "@/context/FriendContext";
+import { useTimelineContext } from "@/context/TimelineContext";
 
 const SearchAndCompare = ({ player1Stats, onPlayer2Found }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [username, setUsername] = useState("");
   const [tagline, setTagline] = useState("");
+  const [fetchingPlayer2, setFetchingPlayer2] = useState(false);
   const [player2Stats, setPlayer2Stats] = useState({
     "avg_kda": 0,
     "avg_cs_per_min": 0,
@@ -16,6 +18,7 @@ const SearchAndCompare = ({ player1Stats, onPlayer2Found }) => {
     "avg_cc_time": 0});
   const [hasSearched, setHasSearched] = useState(false); // Track if user has searched
   const { friendResult, setFriendResult } = useFriendContext();
+  const { timelineResult } = useTimelineContext();
   const stats = ["avg_kda", "avg_cs_per_min", "avg_kill_participation", "avg_dpm", "avg_gpm", "avg_solo_kills", "avg_vision_score", "avg_cc_time"];
   const displayStats = {
     "avg_kda": "KDA",
@@ -29,7 +32,7 @@ const SearchAndCompare = ({ player1Stats, onPlayer2Found }) => {
   }
 
   const handleSearch = async () => {
-    if (!username.trim() || !tagline.trim()) return;
+    if (!username.trim() || !tagline.trim() || !timelineResult) return;
     
     // TODO: Replace with actual API call
     const endpoint = "https://v4ft9564pb.execute-api.us-west-2.amazonaws.com/player/compare";
@@ -37,10 +40,11 @@ const SearchAndCompare = ({ player1Stats, onPlayer2Found }) => {
     const body = {
       game_name: username,
       tagline: tagline,
-      num_games: 1
+      num_games: timelineResult.matches_processed
     };
 
     try {
+      setFetchingPlayer2(true);
       console.log("Fetching...");
 
       const res= await 
@@ -58,6 +62,7 @@ const SearchAndCompare = ({ player1Stats, onPlayer2Found }) => {
       setFriendResult(timelineData)
       setPlayer2Stats(timelineData.stats);
       onPlayer2Found(timelineData.stats);
+      setFetchingPlayer2(false);
       setHasSearched(true);
     } catch (err) {
       console.error("Error fetching API data:", err);
@@ -121,7 +126,7 @@ const SearchAndCompare = ({ player1Stats, onPlayer2Found }) => {
       </div>
       {/* Stats Display - Identical to Social */}
       <div className="relative bg-black bg-opacity-70 rounded-lg p-8 w-full max-w-md">
-        <div className="absolute inset-0 bg-black bg-opacity-70 rounded-lg p-8 h-full w-full max-w-md">
+        {fetchingPlayer2 && (<div className="absolute inset-0 bg-black bg-opacity-70 rounded-lg p-8 h-full w-full max-w-md">
           <div className="text-center">
             <div className="relative w-16 h-16 mx-auto mb-4">
               <div className="absolute inset-0 border-4 border-sky-200 border-t-sky-400 rounded-full animate-spin"></div>
@@ -129,7 +134,7 @@ const SearchAndCompare = ({ player1Stats, onPlayer2Found }) => {
             <h2 className="text-xl font-semibold text-white">Loading...</h2>
             <p className="text-amber-100">Please wait...</p>
           </div>
-        </div>
+        </div>)}
         <h3 className="text-xl font-semibold text-white mb-6 text-center">
           {!friendResult && "Search for a player"}
           {friendResult && `${friendResult.player_id}`}
