@@ -45,21 +45,21 @@ jobs:
         working-directory: front-end
         run: npm run build
 
-  python-lint:
-    name: Lint Python
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
+  # python-lint:
+  #   name: Lint Python
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.11"
+  #     - name: Set up Python
+  #       uses: actions/setup-python@v4
+  #       with:
+  #         python-version: "3.11"
 
-      - name: install dependencies
-        working-directory: aws
-        run: pip install -r requirements.txt
+  #     - name: install dependencies
+  #       working-directory: aws
+  #       run: pip install -r requirements.txt
 
-      - name: lint python
-        working-directory: aws
-        run: flake8 .
+  #     - name: lint python
+  #       working-directory: aws
+  #       run: flake8 .

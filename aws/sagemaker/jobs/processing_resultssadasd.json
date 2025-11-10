@@ -1,0 +1,1649 @@
+{
+  "puuid": "343DBW7AAURr6TKdf4oaG3C1zEQbW1xYTkKYdjAkn3xVvsQIWe7qljuCLWkPbDDVD02xIuzm1wLRoQ",
+  "playstyle": {
+    "region": "Demacia",
+    "playstyle_score": 85
+  },
+  "timeline_results": [
+    {
+      "match_id": "NA1_5408317784",
+      "puuid": "343DBW7AAURr6TKdf4oaG3C1zEQbW1xYTkKYdjAkn3xVvsQIWe7qljuCLWkPbDDVD02xIuzm1wLRoQ",
+      "events": [
+        {
+          "event_id": "OBJECTIVE_29.0_3c794f91",
+          "timestamp_minutes": 29.009516666666666,
+          "event_type": "OBJECTIVE",
+          "impact_score": 5030,
+          "game_state": "late",
+          "event_details": {
+            "objective_type": "BARON_NASHOR",
+            "securing_team": "ENEMY_TEAM",
+            "position": {
+              "x": 5007,
+              "y": 10471
+            },
+            "killer_id": 4
+          },
+          "context": {
+            "gold_difference": 1599,
+            "gold_state": "ahead"
+          },
+          "has_summary": false,
+          "summary": null
+        },
+        {
+          "event_id": "TEAMFIGHT_26.0_ab478be9",
+          "timestamp_minutes": 26.00865,
+          "event_type": "TEAMFIGHT",
+          "impact_score": 2500,
+          "game_state": "late",
+          "event_details": {
+            "kills_count": 5,
+            "participants_count": 9,
+            "player_team_kills": 4,
+            "enemy_team_kills": 1,
+            "outcome": "WON",
+            "duration_seconds": 0
+          },
+          "context": {},
+          "has_summary": false,
+          "summary": null
+        },
+        {
+          "event_id": "TEAMFIGHT_19.0_03341c42",
+          "timestamp_minutes": 19.006216666666667,
+          "event_type": "TEAMFIGHT",
+          "impact_score": 2500,
+          "game_state": "mid",
+          "event_details": {
+            "kills_count": 5,
+            "participants_count": 9,
+            "player_team_kills": 3,
+            "enemy_team_kills": 2,
+            "outcome": "WON",
+            "duration_seconds": 0
+          },
+          "context": {},
+          "has_summary": false,
+          "summary": null
+        },
+        {
+          "event_id": "TEAMFIGHT_7.0_27d2af12",
+          "timestamp_minutes": 7.002683333333334,
+          "event_type": "TEAMFIGHT",
+          "impact_score": 2400,
+          "game_state": "early",
+          "event_details": {
+            "kills_count": 4,
+            "participants_count": 8,
+            "player_team_kills": 3,
+            "enemy_team_kills": 1,
+            "outcome": "WON",
+            "duration_seconds": 0
+          },
+          "context": {},
+          "has_summary": false,
+          "summary": null
+        },
+        {
+          "event_id": "KILL_26.0_88980572",
+          "timestamp_minutes": 26.00865,
+          "event_type": "KILL",
+          "impact_score": 2400,
+          "game_state": "late",
+          "event_details": {
+            "killer": "Viego",
+            "killer_name": "Dottash",
+            "victim": "Ambessa",
+            "victim_name": "ShadowLeaf",
+            "assistants": [
+              "Lissandra",
+              "Swain",
+              "MissFortune"
+            ],
+            "assistants_count": 3,
+            "shutdown_gold": 390,
+            "position": {
+              "x": 4831,
+              "y": 6844
+            },
+            "player_role": "assistant",
+            "is_player_team": true,
+            "is_player_involved": true
+          },
+          "context": {
+            "gold_difference": 5042,
+            "gold_state": "ahead"
+          },
+          "has_summary": false,
+          "summary": null
+        },
+        {
+          "event_id": "KILL_18.0_a49d0372",
+          "timestamp_minutes": 18.006183333333336,
+          "event_type": "KILL",
+          "impact_score": 2400,
+          "game_state": "mid",
+          "event_details": {
+            "killer": "Jax",
+            "killer_name": "Viper3",
+            "victim": "Lissandra",
+            "victim_name": "Goop",
+            "assistants": [
+              "Ambessa",
+              "Galio",
+              "Jinx",
+              "Lulu"
+            ],
+            "assistants_count": 4,
+            "shutdown_gold": 360,
+            "position": {
+              "x": 9588,
+              "y": 4696
+            },
+            "player_role": "victim",
+            "is_player_team": false,
+            "is_player_involved": true
+          },
+          "context": {
+            "gold_difference": 2569,
+            "gold_state": "ahead"
+          },
+          "has_summary": false,
+          "summary": null
+        },
+        {
+          "event_id": "TEAMFIGHT_29.0_a659465b",
+          "timestamp_minutes": 29.009516666666666,
+          "event_type": "TEAMFIGHT",
+          "impact_score": 2400,
+          "game_state": "late",
+          "event_details": {
+            "kills_count": 4,
+            "participants_count": 9,
+            "player_team_kills": 0,
+            "enemy_team_kills": 4,
+            "outcome": "LOST",
+            "duration_seconds": 0
+          },
+          "context": {},
+          "has_summary": false,
+          "summary": null
+        },
+        {
+          "event_id": "KILL_29.0_5150e9fc",
+          "timestamp_minutes": 29.009516666666666,
+          "event_type": "KILL",
+          "impact_score": 2400,
+          "game_state": "late",
+          "event_details": {
+            "killer": "Jax",
+            "killer_name": "Viper3",
+            "victim": "Lissandra",
+            "victim_name": "Goop",
+            "assistants": [
+              "Ambessa",
+              "Galio",
+              "Jinx",
+              "Lulu"
+            ],
+            "assistants_count": 4,
+            "shutdown_gold": 400,
+            "position": {
+              "x": 4959,
+              "y": 4988
+            },
+            "player_role": "victim",
+            "is_player_team": false,
+            "is_player_involved": true
+          },
+          "context": {
+            "gold_difference": 1599,
+            "gold_state": "ahead"
+          },
+          "has_summary": false,
+          "summary": null
+        },
+        {
+          "event_id": "KILL_24.0_09a6f0b9",
+          "timestamp_minutes": 24.007633333333334,
+          "event_type": "KILL",
+          "impact_score": 2400,
+          "game_state": "mid",
+          "event_details": {
+            "killer": "Viego",
+            "killer_name": "Dottash",
+            "victim": "Jax",
+            "victim_name": "Viper3",
+            "assistants": [
+              "Lissandra",
+              "Swain",
+              "MissFortune"
+            ],
+            "assistants_count": 3,
+            "shutdown_gold": 380,
+            "position": {
+              "x": 5489,
+              "y": 6800
+            },
+            "player_role": "assistant",
+            "is_player_team": true,
+            "is_player_involved": true
+          },
+          "context": {
+            "gold_difference": 3092,
+            "gold_state": "ahead"
+          },
+          "has_summary": false,
+          "summary": null
+        },
+        {
+          "event_id": "KILL_29.0_657fe3aa",
+          "timestamp_minutes": 29.009516666666666,
+          "event_type": "KILL",
+          "impact_score": 2350,
+          "game_state": "late",
+          "event_details": {
+            "killer": "Jax",
+            "killer_name": "Viper3",
+            "victim": "Viego",
+            "victim_name": "Dottash",
+            "assistants": [
+              "Galio",
+              "Jinx",
+              "Lulu"
+            ],
+            "assistants_count": 3,
+            "shutdown_gold": 400,
+            "position": {
+              "x": 5043,
+              "y": 5589
+            },
+            "player_role": "observer",
+            "is_player_team": false,
+            "is_player_involved": false
+          },
+          "context": {
+            "gold_difference": 1599,
+            "gold_state": "ahead"
+          },
+          "has_summary": false,
+          "summary": null
+        },
+        {
+          "event_id": "KILL_18.0_0ceb476d",
+          "timestamp_minutes": 18.006183333333336,
+          "event_type": "KILL",
+          "impact_score": 2350,
+          "game_state": "mid",
+          "event_details": {
+            "killer": "Viego",
+            "killer_name": "Dottash",
+            "victim": "Jax",
+            "victim_name": "Viper3",
+            "assistants": [
+              "DrMundo",
+              "Swain",
+              "MissFortune"
+            ],
+            "assistants_count": 3,
+            "shutdown_gold": 350,
+            "position": {
+              "x": 9378,
+              "y": 4445
+            },
+            "player_role": "team_kill",
+            "is_player_team": true,
+            "is_player_involved": false
+          },
+          "context": {
+            "gold_difference": 2569,
+            "gold_state": "ahead"
+          },
+          "has_summary": false,
+          "summary": null
+        },
+        {
+          "event_id": "KILL_19.0_83088242",
+          "timestamp_minutes": 19.006216666666667,
+          "event_type": "KILL",
+          "impact_score": 2350,
+          "game_state": "mid",
+          "event_details": {
+            "killer": "Viego",
+            "killer_name": "Dottash",
+            "victim": "Galio",
+            "victim_name": "Muelsyseee",
+            "assistants": [
+              "DrMundo",
+              "Swain",
+              "MissFortune"
+            ],
+            "assistants_count": 3,
+            "shutdown_gold": 350,
+            "position": {
+              "x": 9675,
+              "y": 4907
+            },
+            "player_role": "team_kill",
+            "is_player_team": true,
+            "is_player_involved": false
+          },
+          "context": {
+            "gold_difference": 2754,
+            "gold_state": "ahead"
+          },
+          "has_summary": false,
+          "summary": null
+        },
+        {
+          "event_id": "KILL_19.0_a70280bd",
+          "timestamp_minutes": 19.006216666666667,
+          "event_type": "KILL",
+          "impact_score": 2350,
+          "game_state": "mid",
+          "event_details": {
+            "killer": "Jinx",
+            "killer_name": "IolPhriedPickle",
+            "victim": "Swain",
+            "victim_name": "Make em Dance",
+            "assistants": [
+              "Ambessa",
+              "Jax",
+              "Galio",
+              "Lulu"
+            ],
+            "assistants_count": 4,
+            "shutdown_gold": 340,
+            "position": {
+              "x": 8599,
+              "y": 5967
+            },
+            "player_role": "observer",
+            "is_player_team": false,
+            "is_player_involved": false
+          },
+          "context": {
+            "gold_difference": 2754,
+            "gold_state": "ahead"
+          },
+          "has_summary": false,
+          "summary": null
+        },
+        {
+          "event_id": "KILL_29.0_c874c249",
+          "timestamp_minutes": 29.009516666666666,
+          "event_type": "KILL",
+          "impact_score": 2350,
+          "game_state": "late",
+          "event_details": {
+            "killer": "Jax",
+            "killer_name": "Viper3",
+            "victim": "Swain",
+            "victim_name": "Make em Dance",
+            "assistants": [
+              "Ambessa",
+              "Galio",
+              "Jinx",
+              "Lulu"
+            ],
+            "assistants_count": 4,
+            "shutdown_gold": 380,
+            "position": {
+              "x": 4822,
+              "y": 5195
+            },
+            "player_role": "observer",
+            "is_player_team": false,
+            "is_player_involved": false
+          },
+          "context": {
+            "gold_difference": 1599,
+            "gold_state": "ahead"
+          },
+          "has_summary": false,
+          "summary": null
+        },
+        {
+          "event_id": "TEAMFIGHT_6.0_66b1ccf6",
+          "timestamp_minutes": 6.002583333333333,
+          "event_type": "TEAMFIGHT",
+          "impact_score": 2300,
+          "game_state": "early",
+          "event_details": {
+            "kills_count": 3,
+            "participants_count": 8,
+            "player_team_kills": 1,
+            "enemy_team_kills": 2,
+            "outcome": "LOST",
+            "duration_seconds": 0
+          },
+          "context": {},
+          "has_summary": false,
+          "summary": null
+        },
+        {
+          "event_id": "KILL_27.0_7a5ffa33",
+          "timestamp_minutes": 27.00906666666667,
+          "event_type": "KILL",
+          "impact_score": 2100,
+          "game_state": "late",
+          "event_details": {
+            "killer": "Viego",
+            "killer_name": "Dottash",
+            "victim": "Ambessa",
+            "victim_name": "ShadowLeaf",
+            "assistants": [
+              "Lissandra",
+              "Swain"
+            ],
+            "assistants_count": 2,
+            "shutdown_gold": 390,
+            "position": {
+              "x": 2346,
+              "y": 2470
+            },
+            "player_role": "assistant",
+            "is_player_team": true,
+            "is_player_involved": true
+          },
+          "context": {
+            "gold_difference": 7481,
+            "gold_state": "ahead"
+          },
+          "has_summary": false,
+          "summary": null
+        },
+        {
+          "event_id": "KILL_25.0_6036d453",
+          "timestamp_minutes": 25.008166666666668,
+          "event_type": "KILL",
+          "impact_score": 2100,
+          "game_state": "late",
+          "event_details": {
+            "killer": "Lissandra",
+            "killer_name": "Goop",
+            "victim": "Jinx",
+            "victim_name": "IolPhriedPickle",
+            "assistants": [],
+            "assistants_count": 0,
+            "shutdown_gold": 360,
+            "position": {
+              "x": 14056,
+              "y": 10557
+            },
+            "player_role": "killer",
+            "is_player_team": true,
+            "is_player_involved": true
+          },
+          "context": {
+            "gold_difference": 3123,
+            "gold_state": "ahead"
+          },
+          "has_summary": false,
+          "summary": null
+        },
+        {
+          "event_id": "KILL_26.0_c736ce0e",
+          "timestamp_minutes": 26.00865,
+          "event_type": "KILL",
+          "impact_score": 2100,
+          "game_state": "late",
+          "event_details": {
+            "killer": "Viego",
+            "killer_name": "Dottash",
+            "victim": "Galio",
+            "victim_name": "Muelsyseee",
+            "assistants": [
+              "Lissandra",
+              "Swain"
+            ],
+            "assistants_count": 2,
+            "shutdown_gold": 370,
+            "position": {
+              "x": 5119,
+              "y": 6072
+            },
+            "player_role": "assistant",
+            "is_player_team": true,
+            "is_player_involved": true
+          },
+          "context": {
+            "gold_difference": 5042,
+            "gold_state": "ahead"
+          },
+          "has_summary": false,
+          "summary": null
+        },
+        {
+          "event_id": "KILL_10.0_499aae77",
+          "timestamp_minutes": 10.003266666666667,
+          "event_type": "KILL",
+          "impact_score": 2050,
+          "game_state": "early",
+          "event_details": {
+            "killer": "DrMundo",
+            "killer_name": "C\u00f5inflip",
+            "victim": "Ambessa",
+            "victim_name": "ShadowLeaf",
+            "assistants": [],
+            "assistants_count": 0,
+            "shutdown_gold": 320,
+            "position": {
+              "x": 1921,
+              "y": 12443
+            },
+            "player_role": "team_kill",
+            "is_player_team": true,
+            "is_player_involved": false
+          },
+          "context": {
+            "gold_difference": 4578,
+            "gold_state": "ahead"
+          },
+          "has_summary": false,
+          "summary": null
+        },
+        {
+          "event_id": "KILL_10.0_574b10f8",
+          "timestamp_minutes": 10.003266666666667,
+          "event_type": "KILL",
+          "impact_score": 2050,
+          "game_state": "early",
+          "event_details": {
+            "killer": null,
+            "killer_name": null,
+            "victim": "DrMundo",
+            "victim_name": "C\u00f5inflip",
+            "assistants": [],
+            "assistants_count": 0,
+            "shutdown_gold": 320,
+            "position": {
+              "x": 825,
+              "y": 10452
+            },
+            "player_role": "observer",
+            "is_player_team": false,
+            "is_player_involved": false
+          },
+          "context": {
+            "gold_difference": 4578,
+            "gold_state": "ahead"
+          },
+          "has_summary": false,
+          "summary": null
+        }
+      ],
+      "total_events": 20
+    },
+    {
+      "match_id": "NA1_5408301390",
+      "puuid": "343DBW7AAURr6TKdf4oaG3C1zEQbW1xYTkKYdjAkn3xVvsQIWe7qljuCLWkPbDDVD02xIuzm1wLRoQ",
+      "events": [
+        {
+          "event_id": "OBJECTIVE_29.0_43e42660",
+          "timestamp_minutes": 29.0086,
+          "event_type": "OBJECTIVE",
+          "impact_score": 5030,
+          "game_state": "late",
+          "event_details": {
+            "objective_type": "BARON_NASHOR",
+            "securing_team": "ENEMY_TEAM",
+            "position": {
+              "x": 5007,
+              "y": 10471
+            },
+            "killer_id": 2
+          },
+          "context": {
+            "gold_difference": -4674,
+            "gold_state": "behind"
+          },
+          "has_summary": false,
+          "summary": null
+        },
+        {
+          "event_id": "TEAMFIGHT_28.0_691a1fde",
+          "timestamp_minutes": 28.008583333333334,
+          "event_type": "TEAMFIGHT",
+          "impact_score": 2500,
+          "game_state": "late",
+          "event_details": {
+            "kills_count": 5,
+            "participants_count": 8,
+            "player_team_kills": 1,
+            "enemy_team_kills": 4,
+            "outcome": "LOST",
+            "duration_seconds": 0
+          },
+          "context": {},
+          "has_summary": false,
+          "summary": null
+        },
+        {
+          "event_id": "TEAMFIGHT_26.0_3039c396",
+          "timestamp_minutes": 26.008266666666668,
+          "event_type": "TEAMFIGHT",
+          "impact_score": 2500,
+          "game_state": "late",
+          "event_details": {
+            "kills_count": 5,
+            "participants_count": 9,
+            "player_team_kills": 2,
+            "enemy_team_kills": 3,
+            "outcome": "LOST",
+            "duration_seconds": 0
+          },
+          "context": {},
+          "has_summary": false,
+          "summary": null
+        },
+        {
+          "event_id": "TEAMFIGHT_31.0_9be47245",
+          "timestamp_minutes": 31.00926666666667,
+          "event_type": "TEAMFIGHT",
+          "impact_score": 2500,
+          "game_state": "late",
+          "event_details": {
+            "kills_count": 5,
+            "participants_count": 9,
+            "player_team_kills": 1,
+            "enemy_team_kills": 4,
+            "outcome": "LOST",
+            "duration_seconds": 22
+          },
+          "context": {},
+          "has_summary": false,
+          "summary": null
+        },
+        {
+          "event_id": "TEAMFIGHT_18.0_98377a50",
+          "timestamp_minutes": 18.006033333333335,
+          "event_type": "TEAMFIGHT",
+          "impact_score": 2400,
+          "game_state": "mid",
+          "event_details": {
+            "kills_count": 4,
+            "participants_count": 8,
+            "player_team_kills": 3,
+            "enemy_team_kills": 1,
+            "outcome": "WON",
+            "duration_seconds": 0
+          },
+          "context": {},
+          "has_summary": false,
+          "summary": null
+        },
+        {
+          "event_id": "TEAMFIGHT_24.0_9fe492d0",
+          "timestamp_minutes": 24.007916666666667,
+          "event_type": "TEAMFIGHT",
+          "impact_score": 2400,
+          "game_state": "mid",
+          "event_details": {
+            "kills_count": 4,
+            "participants_count": 7,
+            "player_team_kills": 1,
+            "enemy_team_kills": 3,
+            "outcome": "LOST",
+            "duration_seconds": 0
+          },
+          "context": {},
+          "has_summary": false,
+          "summary": null
+        },
+        {
+          "event_id": "KILL_31.0_37a03051",
+          "timestamp_minutes": 31.00926666666667,
+          "event_type": "KILL",
+          "impact_score": 2400,
+          "game_state": "late",
+          "event_details": {
+            "killer": "Katarina",
+            "killer_name": "Goop",
+            "victim": "FiddleSticks",
+            "victim_name": "\u4e09\u5343\u4e16\u754c\u9e26\u6740\u5c3d",
+            "assistants": [
+              "Jayce",
+              "Zac",
+              "Soraka"
+            ],
+            "assistants_count": 3,
+            "shutdown_gold": 390,
+            "position": {
+              "x": 9754,
+              "y": 7403
+            },
+            "player_role": "killer",
+            "is_player_team": true,
+            "is_player_involved": true
+          },
+          "context": {
+            "gold_difference": -4505,
+            "gold_state": "behind"
+          },
+          "has_summary": false,
+          "summary": null
+        },
+        {
+          "event_id": "KILL_23.0_7c6b4e6e",
+          "timestamp_minutes": 23.007566666666666,
+          "event_type": "KILL",
+          "impact_score": 2350,
+          "game_state": "mid",
+          "event_details": {
+            "killer": "Soraka",
+            "killer_name": "InsrtUsername",
+            "victim": "FiddleSticks",
+            "victim_name": "\u4e09\u5343\u4e16\u754c\u9e26\u6740\u5c3d",
+            "assistants": [
+              "Jayce",
+              "Zac",
+              "Kaisa"
+            ],
+            "assistants_count": 3,
+            "shutdown_gold": 370,
+            "position": {
+              "x": 7481,
+              "y": 4871
+            },
+            "player_role": "team_kill",
+            "is_player_team": true,
+            "is_player_involved": false
+          },
+          "context": {
+            "gold_difference": -494,
+            "gold_state": "even"
+          },
+          "has_summary": false,
+          "summary": null
+        },
+        {
+          "event_id": "KILL_21.0_02230dff",
+          "timestamp_minutes": 21.006899999999998,
+          "event_type": "KILL",
+          "impact_score": 2350,
+          "game_state": "mid",
+          "event_details": {
+            "killer": "Viego",
+            "killer_name": "Dottash",
+            "victim": "Jayce",
+            "victim_name": "MaginoongBastos",
+            "assistants": [
+              "FiddleSticks",
+              "Aurora",
+              "Jinx",
+              "Nami"
+            ],
+            "assistants_count": 4,
+            "shutdown_gold": 360,
+            "position": {
+              "x": 10042,
+              "y": 6012
+            },
+            "player_role": "observer",
+            "is_player_team": false,
+            "is_player_involved": false
+          },
+          "context": {
+            "gold_difference": -436,
+            "gold_state": "even"
+          },
+          "has_summary": false,
+          "summary": null
+        },
+        {
+          "event_id": "KILL_24.0_299fe777",
+          "timestamp_minutes": 24.007916666666667,
+          "event_type": "KILL",
+          "impact_score": 2350,
+          "game_state": "mid",
+          "event_details": {
+            "killer": "Kaisa",
+            "killer_name": "Sajecufyne",
+            "victim": "Viego",
+            "victim_name": "Dottash",
+            "assistants": [
+              "Jayce",
+              "Zac",
+              "Soraka"
+            ],
+            "assistants_count": 3,
+            "shutdown_gold": 380,
+            "position": {
+              "x": 4815,
+              "y": 5377
+            },
+            "player_role": "team_kill",
+            "is_player_team": true,
+            "is_player_involved": false
+          },
+          "context": {
+            "gold_difference": -1205,
+            "gold_state": "behind"
+          },
+          "has_summary": false,
+          "summary": null
+        },
+        {
+          "event_id": "KILL_21.0_7ad613a8",
+          "timestamp_minutes": 21.006899999999998,
+          "event_type": "KILL",
+          "impact_score": 2350,
+          "game_state": "mid",
+          "event_details": {
+            "killer": "Jinx",
+            "killer_name": "DrunkKaraoke",
+            "victim": "Zac",
+            "victim_name": "Oojiboo",
+            "assistants": [
+              "FiddleSticks",
+              "Viego",
+              "Aurora",
+              "Nami"
+            ],
+            "assistants_count": 4,
+            "shutdown_gold": 350,
+            "position": {
+              "x": 10512,
+              "y": 5037
+            },
+            "player_role": "observer",
+            "is_player_team": false,
+            "is_player_involved": false
+          },
+          "context": {
+            "gold_difference": -436,
+            "gold_state": "even"
+          },
+          "has_summary": false,
+          "summary": null
+        },
+        {
+          "event_id": "KILL_9.0_79703a38",
+          "timestamp_minutes": 9.003283333333334,
+          "event_type": "KILL",
+          "impact_score": 2350,
+          "game_state": "early",
+          "event_details": {
+            "killer": "Aurora",
+            "killer_name": "Soten",
+            "victim": "Jayce",
+            "victim_name": "MaginoongBastos",
+            "assistants": [
+              "FiddleSticks",
+              "Viego",
+              "Nami"
+            ],
+            "assistants_count": 3,
+            "shutdown_gold": 310,
+            "position": {
+              "x": 3620,
+              "y": 10428
+            },
+            "player_role": "observer",
+            "is_player_team": false,
+            "is_player_involved": false
+          },
+          "context": {
+            "gold_difference": -621,
+            "gold_state": "even"
+          },
+          "has_summary": false,
+          "summary": null
+        },
+        {
+          "event_id": "KILL_26.0_e12958b3",
+          "timestamp_minutes": 26.008266666666668,
+          "event_type": "KILL",
+          "impact_score": 2350,
+          "game_state": "late",
+          "event_details": {
+            "killer": "Viego",
+            "killer_name": "Dottash",
+            "victim": "Zac",
+            "victim_name": "Oojiboo",
+            "assistants": [
+              "FiddleSticks",
+              "Aurora",
+              "Nami"
+            ],
+            "assistants_count": 3,
+            "shutdown_gold": 370,
+            "position": {
+              "x": 9960,
+              "y": 7291
+            },
+            "player_role": "observer",
+            "is_player_team": false,
+            "is_player_involved": false
+          },
+          "context": {
+            "gold_difference": -718,
+            "gold_state": "even"
+          },
+          "has_summary": false,
+          "summary": null
+        },
+        {
+          "event_id": "TEAMFIGHT_16.0_4abb4a17",
+          "timestamp_minutes": 16.005383333333334,
+          "event_type": "TEAMFIGHT",
+          "impact_score": 2300,
+          "game_state": "mid",
+          "event_details": {
+            "kills_count": 3,
+            "participants_count": 7,
+            "player_team_kills": 1,
+            "enemy_team_kills": 2,
+            "outcome": "LOST",
+            "duration_seconds": 0
+          },
+          "context": {},
+          "has_summary": false,
+          "summary": null
+        },
+        {
+          "event_id": "TEAMFIGHT_9.0_8cfdf306",
+          "timestamp_minutes": 9.003283333333334,
+          "event_type": "TEAMFIGHT",
+          "impact_score": 2300,
+          "game_state": "early",
+          "event_details": {
+            "kills_count": 3,
+            "participants_count": 7,
+            "player_team_kills": 0,
+            "enemy_team_kills": 3,
+            "outcome": "LOST",
+            "duration_seconds": 0
+          },
+          "context": {},
+          "has_summary": false,
+          "summary": null
+        },
+        {
+          "event_id": "TEAMFIGHT_21.0_3e901e35",
+          "timestamp_minutes": 21.006899999999998,
+          "event_type": "TEAMFIGHT",
+          "impact_score": 2300,
+          "game_state": "mid",
+          "event_details": {
+            "kills_count": 3,
+            "participants_count": 8,
+            "player_team_kills": 0,
+            "enemy_team_kills": 3,
+            "outcome": "LOST",
+            "duration_seconds": 0
+          },
+          "context": {},
+          "has_summary": false,
+          "summary": null
+        },
+        {
+          "event_id": "TEAMFIGHT_13.0_1b1c7b60",
+          "timestamp_minutes": 13.004349999999999,
+          "event_type": "TEAMFIGHT",
+          "impact_score": 2300,
+          "game_state": "early",
+          "event_details": {
+            "kills_count": 3,
+            "participants_count": 7,
+            "player_team_kills": 1,
+            "enemy_team_kills": 2,
+            "outcome": "LOST",
+            "duration_seconds": 0
+          },
+          "context": {},
+          "has_summary": false,
+          "summary": null
+        },
+        {
+          "event_id": "KILL_13.0_dac35ee0",
+          "timestamp_minutes": 13.004349999999999,
+          "event_type": "KILL",
+          "impact_score": 2100,
+          "game_state": "early",
+          "event_details": {
+            "killer": "Katarina",
+            "killer_name": "Goop",
+            "victim": "FiddleSticks",
+            "victim_name": "\u4e09\u5343\u4e16\u754c\u9e26\u6740\u5c3d",
+            "assistants": [
+              "Zac",
+              "Soraka"
+            ],
+            "assistants_count": 2,
+            "shutdown_gold": 330,
+            "position": {
+              "x": 6832,
+              "y": 7051
+            },
+            "player_role": "killer",
+            "is_player_team": true,
+            "is_player_involved": true
+          },
+          "context": {
+            "gold_difference": -1225,
+            "gold_state": "behind"
+          },
+          "has_summary": false,
+          "summary": null
+        },
+        {
+          "event_id": "KILL_13.0_aedcbae0",
+          "timestamp_minutes": 13.004349999999999,
+          "event_type": "KILL",
+          "impact_score": 2100,
+          "game_state": "early",
+          "event_details": {
+            "killer": "Viego",
+            "killer_name": "Dottash",
+            "victim": "Katarina",
+            "victim_name": "Goop",
+            "assistants": [
+              "FiddleSticks"
+            ],
+            "assistants_count": 1,
+            "shutdown_gold": 330,
+            "position": {
+              "x": 6977,
+              "y": 7165
+            },
+            "player_role": "victim",
+            "is_player_team": false,
+            "is_player_involved": true
+          },
+          "context": {
+            "gold_difference": -1225,
+            "gold_state": "behind"
+          },
+          "has_summary": false,
+          "summary": null
+        },
+        {
+          "event_id": "KILL_9.0_36e8d0e8",
+          "timestamp_minutes": 9.003283333333334,
+          "event_type": "KILL",
+          "impact_score": 2100,
+          "game_state": "early",
+          "event_details": {
+            "killer": "Viego",
+            "killer_name": "Dottash",
+            "victim": "Katarina",
+            "victim_name": "Goop",
+            "assistants": [
+              "FiddleSticks",
+              "Aurora"
+            ],
+            "assistants_count": 2,
+            "shutdown_gold": 310,
+            "position": {
+              "x": 3211,
+              "y": 9818
+            },
+            "player_role": "victim",
+            "is_player_team": false,
+            "is_player_involved": true
+          },
+          "context": {
+            "gold_difference": -621,
+            "gold_state": "even"
+          },
+          "has_summary": false,
+          "summary": null
+        }
+      ],
+      "total_events": 20
+    },
+    {
+      "match_id": "NA1_5408288432",
+      "puuid": "343DBW7AAURr6TKdf4oaG3C1zEQbW1xYTkKYdjAkn3xVvsQIWe7qljuCLWkPbDDVD02xIuzm1wLRoQ",
+      "events": [
+        {
+          "event_id": "OBJECTIVE_28.0_076b48af",
+          "timestamp_minutes": 28.009166666666665,
+          "event_type": "OBJECTIVE",
+          "impact_score": 5050,
+          "game_state": "late",
+          "event_details": {
+            "objective_type": "BARON_NASHOR",
+            "securing_team": "PLAYER_TEAM",
+            "position": {
+              "x": 5007,
+              "y": 10471
+            },
+            "killer_id": 2
+          },
+          "context": {
+            "gold_difference": 13880,
+            "gold_state": "ahead"
+          },
+          "has_summary": false,
+          "summary": null
+        },
+        {
+          "event_id": "TEAMFIGHT_24.0_953d77be",
+          "timestamp_minutes": 24.00785,
+          "event_type": "TEAMFIGHT",
+          "impact_score": 2500,
+          "game_state": "mid",
+          "event_details": {
+            "kills_count": 5,
+            "participants_count": 7,
+            "player_team_kills": 3,
+            "enemy_team_kills": 2,
+            "outcome": "WON",
+            "duration_seconds": 0
+          },
+          "context": {},
+          "has_summary": false,
+          "summary": null
+        },
+        {
+          "event_id": "TEAMFIGHT_22.0_e33e9947",
+          "timestamp_minutes": 22.007133333333336,
+          "event_type": "TEAMFIGHT",
+          "impact_score": 2400,
+          "game_state": "mid",
+          "event_details": {
+            "kills_count": 4,
+            "participants_count": 8,
+            "player_team_kills": 2,
+            "enemy_team_kills": 2,
+            "outcome": "EVEN",
+            "duration_seconds": 0
+          },
+          "context": {},
+          "has_summary": false,
+          "summary": null
+        },
+        {
+          "event_id": "KILL_28.7_804e0975",
+          "timestamp_minutes": 28.69108333333333,
+          "event_type": "KILL",
+          "impact_score": 2400,
+          "game_state": "late",
+          "event_details": {
+            "killer": "Kayn",
+            "killer_name": "ITakeYourOrbs",
+            "victim": "Kennen",
+            "victim_name": "WINNING MINDSET",
+            "assistants": [
+              "Katarina",
+              "Twitch",
+              "Nami"
+            ],
+            "assistants_count": 3,
+            "shutdown_gold": 377,
+            "position": {
+              "x": 12362,
+              "y": 11469
+            },
+            "player_role": "assistant",
+            "is_player_team": true,
+            "is_player_involved": true
+          },
+          "context": {
+            "gold_difference": 15057,
+            "gold_state": "ahead"
+          },
+          "has_summary": false,
+          "summary": null
+        },
+        {
+          "event_id": "KILL_26.0_a91f82a3",
+          "timestamp_minutes": 26.00845,
+          "event_type": "KILL",
+          "impact_score": 2400,
+          "game_state": "late",
+          "event_details": {
+            "killer": "Katarina",
+            "killer_name": "Goop",
+            "victim": "Naafiri",
+            "victim_name": "SettlerBart",
+            "assistants": [
+              "Gwen",
+              "Kayn",
+              "Twitch",
+              "Nami"
+            ],
+            "assistants_count": 4,
+            "shutdown_gold": 380,
+            "position": {
+              "x": 9954,
+              "y": 8459
+            },
+            "player_role": "killer",
+            "is_player_team": true,
+            "is_player_involved": true
+          },
+          "context": {
+            "gold_difference": 8588,
+            "gold_state": "ahead"
+          },
+          "has_summary": false,
+          "summary": null
+        },
+        {
+          "event_id": "KILL_26.0_4fc25e33",
+          "timestamp_minutes": 26.00845,
+          "event_type": "KILL",
+          "impact_score": 2400,
+          "game_state": "late",
+          "event_details": {
+            "killer": "Katarina",
+            "killer_name": "Goop",
+            "victim": "Tristana",
+            "victim_name": "Aerrow",
+            "assistants": [
+              "Gwen",
+              "Kayn",
+              "Twitch",
+              "Nami"
+            ],
+            "assistants_count": 4,
+            "shutdown_gold": 360,
+            "position": {
+              "x": 10041,
+              "y": 7598
+            },
+            "player_role": "killer",
+            "is_player_team": true,
+            "is_player_involved": true
+          },
+          "context": {
+            "gold_difference": 8588,
+            "gold_state": "ahead"
+          },
+          "has_summary": false,
+          "summary": null
+        },
+        {
+          "event_id": "TEAMFIGHT_26.0_676dceab",
+          "timestamp_minutes": 26.00845,
+          "event_type": "TEAMFIGHT",
+          "impact_score": 2400,
+          "game_state": "late",
+          "event_details": {
+            "kills_count": 4,
+            "participants_count": 9,
+            "player_team_kills": 4,
+            "enemy_team_kills": 0,
+            "outcome": "WON",
+            "duration_seconds": 0
+          },
+          "context": {},
+          "has_summary": false,
+          "summary": null
+        },
+        {
+          "event_id": "TEAMFIGHT_10.0_a22abb2e",
+          "timestamp_minutes": 10.003883333333333,
+          "event_type": "TEAMFIGHT",
+          "impact_score": 2300,
+          "game_state": "early",
+          "event_details": {
+            "kills_count": 3,
+            "participants_count": 7,
+            "player_team_kills": 3,
+            "enemy_team_kills": 0,
+            "outcome": "WON",
+            "duration_seconds": 0
+          },
+          "context": {},
+          "has_summary": false,
+          "summary": null
+        },
+        {
+          "event_id": "TEAMFIGHT_13.0_50877530",
+          "timestamp_minutes": 13.004683333333332,
+          "event_type": "TEAMFIGHT",
+          "impact_score": 2300,
+          "game_state": "early",
+          "event_details": {
+            "kills_count": 3,
+            "participants_count": 6,
+            "player_team_kills": 3,
+            "enemy_team_kills": 0,
+            "outcome": "WON",
+            "duration_seconds": 0
+          },
+          "context": {},
+          "has_summary": false,
+          "summary": null
+        },
+        {
+          "event_id": "TEAMFIGHT_3.0_6d32cef6",
+          "timestamp_minutes": 3.0018666666666665,
+          "event_type": "TEAMFIGHT",
+          "impact_score": 2300,
+          "game_state": "early",
+          "event_details": {
+            "kills_count": 3,
+            "participants_count": 5,
+            "player_team_kills": 2,
+            "enemy_team_kills": 1,
+            "outcome": "WON",
+            "duration_seconds": 0
+          },
+          "context": {},
+          "has_summary": false,
+          "summary": null
+        },
+        {
+          "event_id": "KILL_24.0_03862c24",
+          "timestamp_minutes": 24.00785,
+          "event_type": "KILL",
+          "impact_score": 2100,
+          "game_state": "mid",
+          "event_details": {
+            "killer": "Katarina",
+            "killer_name": "Goop",
+            "victim": "Pantheon",
+            "victim_name": "Riot Act of 1715",
+            "assistants": [
+              "Nami"
+            ],
+            "assistants_count": 1,
+            "shutdown_gold": 350,
+            "position": {
+              "x": 10147,
+              "y": 5425
+            },
+            "player_role": "killer",
+            "is_player_team": true,
+            "is_player_involved": true
+          },
+          "context": {
+            "gold_difference": 4272,
+            "gold_state": "ahead"
+          },
+          "has_summary": false,
+          "summary": null
+        },
+        {
+          "event_id": "KILL_22.0_61bac7d3",
+          "timestamp_minutes": 22.007133333333336,
+          "event_type": "KILL",
+          "impact_score": 2100,
+          "game_state": "mid",
+          "event_details": {
+            "killer": "Pantheon",
+            "killer_name": "Riot Act of 1715",
+            "victim": "Katarina",
+            "victim_name": "Goop",
+            "assistants": [
+              "Kennen"
+            ],
+            "assistants_count": 1,
+            "shutdown_gold": 380,
+            "position": {
+              "x": 7596,
+              "y": 13838
+            },
+            "player_role": "victim",
+            "is_player_team": false,
+            "is_player_involved": true
+          },
+          "context": {
+            "gold_difference": 3181,
+            "gold_state": "ahead"
+          },
+          "has_summary": false,
+          "summary": null
+        },
+        {
+          "event_id": "KILL_20.0_7ac93488",
+          "timestamp_minutes": 20.006649999999997,
+          "event_type": "KILL",
+          "impact_score": 2100,
+          "game_state": "mid",
+          "event_details": {
+            "killer": "Katarina",
+            "killer_name": "Goop",
+            "victim": "Viego",
+            "victim_name": "Dottash",
+            "assistants": [
+              "Kayn"
+            ],
+            "assistants_count": 1,
+            "shutdown_gold": 350,
+            "position": {
+              "x": 10172,
+              "y": 5958
+            },
+            "player_role": "killer",
+            "is_player_team": true,
+            "is_player_involved": true
+          },
+          "context": {
+            "gold_difference": 5189,
+            "gold_state": "ahead"
+          },
+          "has_summary": false,
+          "summary": null
+        },
+        {
+          "event_id": "KILL_25.0_24c4c6cf",
+          "timestamp_minutes": 25.00815,
+          "event_type": "KILL",
+          "impact_score": 2100,
+          "game_state": "late",
+          "event_details": {
+            "killer": "Katarina",
+            "killer_name": "Goop",
+            "victim": "Kennen",
+            "victim_name": "WINNING MINDSET",
+            "assistants": [
+              "Gwen",
+              "Kayn"
+            ],
+            "assistants_count": 2,
+            "shutdown_gold": 380,
+            "position": {
+              "x": 12686,
+              "y": 5698
+            },
+            "player_role": "killer",
+            "is_player_team": true,
+            "is_player_involved": true
+          },
+          "context": {
+            "gold_difference": 4995,
+            "gold_state": "ahead"
+          },
+          "has_summary": false,
+          "summary": null
+        },
+        {
+          "event_id": "KILL_24.0_b4703124",
+          "timestamp_minutes": 24.00785,
+          "event_type": "KILL",
+          "impact_score": 2100,
+          "game_state": "mid",
+          "event_details": {
+            "killer": "Katarina",
+            "killer_name": "Goop",
+            "victim": "Viego",
+            "victim_name": "Dottash",
+            "assistants": [
+              "Nami"
+            ],
+            "assistants_count": 1,
+            "shutdown_gold": 313,
+            "position": {
+              "x": 9461,
+              "y": 5533
+            },
+            "player_role": "killer",
+            "is_player_team": true,
+            "is_player_involved": true
+          },
+          "context": {
+            "gold_difference": 4272,
+            "gold_state": "ahead"
+          },
+          "has_summary": false,
+          "summary": null
+        },
+        {
+          "event_id": "KILL_9.0_394e6111",
+          "timestamp_minutes": 9.003833333333334,
+          "event_type": "KILL",
+          "impact_score": 2100,
+          "game_state": "early",
+          "event_details": {
+            "killer": "Kayn",
+            "killer_name": "ITakeYourOrbs",
+            "victim": "Kennen",
+            "victim_name": "WINNING MINDSET",
+            "assistants": [
+              "Gwen",
+              "Katarina"
+            ],
+            "assistants_count": 2,
+            "shutdown_gold": 320,
+            "position": {
+              "x": 1112,
+              "y": 13482
+            },
+            "player_role": "assistant",
+            "is_player_team": true,
+            "is_player_involved": true
+          },
+          "context": {
+            "gold_difference": 98,
+            "gold_state": "even"
+          },
+          "has_summary": false,
+          "summary": null
+        },
+        {
+          "event_id": "KILL_26.0_9bdc72b9",
+          "timestamp_minutes": 26.00845,
+          "event_type": "KILL",
+          "impact_score": 2100,
+          "game_state": "late",
+          "event_details": {
+            "killer": "Katarina",
+            "killer_name": "Goop",
+            "victim": "Pantheon",
+            "victim_name": "Riot Act of 1715",
+            "assistants": [],
+            "assistants_count": 0,
+            "shutdown_gold": 323,
+            "position": {
+              "x": 12241,
+              "y": 8504
+            },
+            "player_role": "killer",
+            "is_player_team": true,
+            "is_player_involved": true
+          },
+          "context": {
+            "gold_difference": 8588,
+            "gold_state": "ahead"
+          },
+          "has_summary": false,
+          "summary": null
+        },
+        {
+          "event_id": "KILL_24.0_d82b70f0",
+          "timestamp_minutes": 24.00785,
+          "event_type": "KILL",
+          "impact_score": 2100,
+          "game_state": "mid",
+          "event_details": {
+            "killer": "Katarina",
+            "killer_name": "Goop",
+            "victim": "Tristana",
+            "victim_name": "Aerrow",
+            "assistants": [
+              "Nami"
+            ],
+            "assistants_count": 1,
+            "shutdown_gold": 350,
+            "position": {
+              "x": 10468,
+              "y": 5642
+            },
+            "player_role": "killer",
+            "is_player_team": true,
+            "is_player_involved": true
+          },
+          "context": {
+            "gold_difference": 4272,
+            "gold_state": "ahead"
+          },
+          "has_summary": false,
+          "summary": null
+        },
+        {
+          "event_id": "KILL_13.0_daa25c20",
+          "timestamp_minutes": 13.004683333333332,
+          "event_type": "KILL",
+          "impact_score": 2100,
+          "game_state": "early",
+          "event_details": {
+            "killer": "Katarina",
+            "killer_name": "Goop",
+            "victim": "Viego",
+            "victim_name": "Dottash",
+            "assistants": [
+              "Twitch",
+              "Nami"
+            ],
+            "assistants_count": 2,
+            "shutdown_gold": 310,
+            "position": {
+              "x": 11435,
+              "y": 1713
+            },
+            "player_role": "killer",
+            "is_player_team": true,
+            "is_player_involved": true
+          },
+          "context": {
+            "gold_difference": 2834,
+            "gold_state": "ahead"
+          },
+          "has_summary": false,
+          "summary": null
+        },
+        {
+          "event_id": "KILL_22.0_f61bade8",
+          "timestamp_minutes": 22.007133333333336,
+          "event_type": "KILL",
+          "impact_score": 2100,
+          "game_state": "mid",
+          "event_details": {
+            "killer": "Katarina",
+            "killer_name": "Goop",
+            "victim": "Tristana",
+            "victim_name": "Aerrow",
+            "assistants": [
+              "Twitch"
+            ],
+            "assistants_count": 1,
+            "shutdown_gold": 350,
+            "position": {
+              "x": 9471,
+              "y": 12479
+            },
+            "player_role": "killer",
+            "is_player_team": true,
+            "is_player_involved": true
+          },
+          "context": {
+            "gold_difference": 3181,
+            "gold_state": "ahead"
+          },
+          "has_summary": false,
+          "summary": null
+        }
+      ],
+      "total_events": 20
+    }
+  ],
+  "match_count": 3
+}

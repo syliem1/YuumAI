@@ -1,0 +1,585 @@
+{
+  "puuid": "S7a8R8u8WoETFhyjLADPtCaWb_xzvFZ-lA0KBDMmWJNoy_86du16YcTkmrSMhZ2WObWXRggwU--JhA",
+  "playstyle": {
+    "region": "Demacia",
+    "playstyle_score": 85
+  },
+  "timeline_results": [
+    {
+      "match_id": "NA1_5409010113",
+      "puuid": "S7a8R8u8WoETFhyjLADPtCaWb_xzvFZ-lA0KBDMmWJNoy_86du16YcTkmrSMhZ2WObWXRggwU--JhA",
+      "events": [
+        {
+          "event_id": "OBJECTIVE_18.0_238759ea",
+          "timestamp_minutes": 18.006566666666668,
+          "event_type": "OBJECTIVE",
+          "impact_score": 1550,
+          "game_state": "mid",
+          "event_details": {
+            "objective_type": "RIFTHERALD",
+            "securing_team": "PLAYER_TEAM",
+            "killer_id": 2,
+            "event_position_x": 4786,
+            "event_position_y": 9966,
+            "event_position_lane": "BOT"
+          },
+          "context": {
+            "gold_difference": 9488,
+            "gold_state": "ahead",
+            "player_location": {
+              "position": {
+                "x": 13266,
+                "y": 3751
+              },
+              "lane": "TOP",
+              "distance_to_event": 10513
+            },
+            "summoner_spells": {
+              "flash_cooldown": 0,
+              "other_cooldown": 0,
+              "other_spell": "Ghost",
+              "tp_available": false
+            }
+          },
+          "has_summary": true,
+          "summary": "The Rift Herald was secured by your team in mid lane while you were 10,513 units away in top lane. Given the distance and the fact that the objective was already secured, staying in top lane to maintain pressure and continue farming was the optimal decision. This ensured that the enemy top laner could not freely rotate to assist elsewhere. When objectives are taken without you and you're far away, always look to apply pressure in your current lane to maximize team advantage.",
+          "summary_version": "enhanced_v2"
+        },
+        {
+          "event_id": "OBJECTIVE_16.0_90c8bc63",
+          "timestamp_minutes": 16.005816666666668,
+          "event_type": "OBJECTIVE",
+          "impact_score": 1050,
+          "game_state": "mid",
+          "event_details": {
+            "objective_type": "DRAGON",
+            "securing_team": "PLAYER_TEAM",
+            "killer_id": 2,
+            "event_position_x": 9837,
+            "event_position_y": 4397,
+            "event_position_lane": "TOP"
+          },
+          "context": {
+            "gold_difference": 6721,
+            "gold_state": "ahead",
+            "player_location": {
+              "position": {
+                "x": 5440,
+                "y": 12876
+              },
+              "lane": "TOP",
+              "distance_to_event": 9551
+            },
+            "summoner_spells": {
+              "flash_cooldown": 0,
+              "other_cooldown": 0,
+              "other_spell": "Ghost",
+              "tp_available": false
+            }
+          },
+          "has_summary": true,
+          "summary": "The Dragon was secured by your team in mid lane while Darius was 9551 units away in top lane, pushing the wave. Given the distance and the fact that the objective was already secured, staying top to maintain pressure and continue farming was the optimal decision. This forced the enemy top laner to remain in lane, preventing them from contesting the Dragon or rotating elsewhere. Always prioritize maintaining pressure and securing your own farm when you can't reach an objective in time.",
+          "summary_version": "enhanced_v2"
+        },
+        {
+          "event_id": "OBJECTIVE_10.0_ddba395a",
+          "timestamp_minutes": 10.004199999999999,
+          "event_type": "OBJECTIVE",
+          "impact_score": 1050,
+          "game_state": "early",
+          "event_details": {
+            "objective_type": "DRAGON",
+            "securing_team": "PLAYER_TEAM",
+            "killer_id": 2,
+            "event_position_x": 9862,
+            "event_position_y": 4417,
+            "event_position_lane": "TOP"
+          },
+          "context": {
+            "gold_difference": 3181,
+            "gold_state": "ahead",
+            "player_location": {
+              "position": {
+                "x": 1207,
+                "y": 11315
+              },
+              "lane": "BOT",
+              "distance_to_event": 11067
+            },
+            "summoner_spells": {
+              "flash_cooldown": 0,
+              "other_cooldown": 0,
+              "other_spell": "Ghost",
+              "tp_available": false
+            }
+          },
+          "has_summary": true,
+          "summary": "Darius was in bot lane when the team secured the Dragon at mid lane, 11067 units away. Given the distance and the fact that the objective was already secured, staying in bot lane to maintain pressure and continue farming was the optimal decision. This prevented the enemy bot laner from roaming and ensured Darius continued to scale. When an objective is secured without you and you're far away, always look to apply pressure in your current lane to maximize team advantage. Actionable tip: When far from an objective your team is securing, maintain pressure in your lane to prevent enemy rotations and continue scaling.",
+          "summary_version": "enhanced_v2"
+        },
+        {
+          "event_id": "STRUCTURE_18.0_b6410dd4",
+          "timestamp_minutes": 18.006566666666668,
+          "event_type": "STRUCTURE",
+          "impact_score": 825,
+          "game_state": "mid",
+          "event_details": {
+            "structure_type": "TOWER_BUILDING",
+            "lane": "BOT_LANE",
+            "destroying_team": "ENEMY_TEAM",
+            "event_position_x": 13866,
+            "event_position_y": 4505,
+            "event_position_lane": "TOP"
+          },
+          "context": {
+            "gold_difference": 9488,
+            "gold_state": "ahead",
+            "player_location": {
+              "position": {
+                "x": 13266,
+                "y": 3751
+              },
+              "lane": "TOP",
+              "distance_to_event": 963
+            },
+            "summoner_spells": {
+              "flash_cooldown": 0,
+              "other_cooldown": 0,
+              "other_spell": "Ghost",
+              "tp_available": false
+            }
+          },
+          "has_summary": true,
+          "summary": "The enemy team destroyed the bot lane tower at 18 minutes while Darius, positioned top lane, was 963 units away. Given the immediate distance and his Flash availability, Darius should have rotated to assist in defending the tower. Staying top did not maximize the team's advantage, especially since the team was already significantly ahead. In similar situations, always prioritize rotating to defend critical structures, even if it means sacrificing short-term farming, to maintain overall map control and prevent the enemy from gaining significant advantages.",
+          "summary_version": "enhanced_v2"
+        },
+        {
+          "event_id": "STRUCTURE_12.0_94eed322",
+          "timestamp_minutes": 12.004850000000001,
+          "event_type": "STRUCTURE",
+          "impact_score": 825,
+          "game_state": "early",
+          "event_details": {
+            "structure_type": "TOWER_BUILDING",
+            "lane": "TOP_LANE",
+            "destroying_team": "ENEMY_TEAM",
+            "event_position_x": 4318,
+            "event_position_y": 13875,
+            "event_position_lane": "BOT"
+          },
+          "context": {
+            "gold_difference": 3646,
+            "gold_state": "ahead",
+            "player_location": {
+              "position": {
+                "x": 6158,
+                "y": 8149
+              },
+              "lane": "TOP",
+              "distance_to_event": 6014
+            },
+            "summoner_spells": {
+              "flash_cooldown": 0,
+              "other_cooldown": 0,
+              "other_spell": "Ghost",
+              "tp_available": false
+            }
+          },
+          "has_summary": true,
+          "summary": "The enemy team destroyed the top lane tower while Darius was 6014 units away, indicating he did not rotate to help. Given the distance and the fact that his team was already significantly ahead in gold, staying in top lane to maintain pressure and continue farming was the optimal decision. This move likely forced the enemy to stay committed to the top lane, preventing them from grouping elsewhere. In similar situations, prioritize maintaining pressure and securing your own resources when you can't effectively rotate to distant objectives or fights.",
+          "summary_version": "enhanced_v2"
+        },
+        {
+          "event_id": "STRUCTURE_18.0_8ef7be6f",
+          "timestamp_minutes": 18.006566666666668,
+          "event_type": "STRUCTURE",
+          "impact_score": 825,
+          "game_state": "mid",
+          "event_details": {
+            "structure_type": "TOWER_BUILDING",
+            "lane": "MID_LANE",
+            "destroying_team": "ENEMY_TEAM",
+            "event_position_x": 8955,
+            "event_position_y": 8510,
+            "event_position_lane": "TOP"
+          },
+          "context": {
+            "gold_difference": 9488,
+            "gold_state": "ahead",
+            "player_location": {
+              "position": {
+                "x": 13266,
+                "y": 3751
+              },
+              "lane": "TOP",
+              "distance_to_event": 6421
+            },
+            "summoner_spells": {
+              "flash_cooldown": 0,
+              "other_cooldown": 0,
+              "other_spell": "Ghost",
+              "tp_available": false
+            }
+          },
+          "has_summary": true,
+          "summary": "The enemy team destroyed the mid lane tower at 18 minutes while Darius was in top lane, 6421 units away. Given the distance and the fact that his team was already 9488 gold ahead, staying in top lane to maintain pressure and continue farming was the optimal decision. This choice ensured that the enemy mid laner could not freely roam or take additional objectives. In similar situations, prioritize maintaining pressure in your lane to prevent enemy rotations and secure additional gold and experience, especially when your team holds a significant advantage.",
+          "summary_version": "enhanced_v2"
+        },
+        {
+          "event_id": "OBJECTIVE_9.0_143446d5",
+          "timestamp_minutes": 9.0037,
+          "event_type": "OBJECTIVE",
+          "impact_score": 550,
+          "game_state": "early",
+          "event_details": {
+            "objective_type": "HORDE",
+            "securing_team": "PLAYER_TEAM",
+            "killer_id": 2,
+            "event_position_x": 4892,
+            "event_position_y": 10530,
+            "event_position_lane": "TOP"
+          },
+          "context": {
+            "gold_difference": 3248,
+            "gold_state": "ahead",
+            "player_location": {
+              "position": {
+                "x": 2750,
+                "y": 11721
+              },
+              "lane": "BOT",
+              "distance_to_event": 2450
+            },
+            "summoner_spells": {
+              "flash_cooldown": 0,
+              "other_cooldown": 0,
+              "other_spell": "Ghost",
+              "tp_available": false
+            }
+          },
+          "has_summary": true,
+          "summary": "The objective, a Horde, was secured by the player's team in mid lane while Darius was in bot lane, 2450 units away. Given the close distance and the fact that the objective was already secured, Darius made the correct decision to stay in bot lane. By maintaining pressure in bot lane, he prevented the enemy bot laner from rotating to assist in other areas or contest objectives. When an objective is secured without you and you're close but not in position to contribute, prioritize maintaining pressure in your current lane to maximize team advantage.",
+          "summary_version": "enhanced_v2"
+        },
+        {
+          "event_id": "OBJECTIVE_9.0_75ca13d2",
+          "timestamp_minutes": 9.0037,
+          "event_type": "OBJECTIVE",
+          "impact_score": 550,
+          "game_state": "early",
+          "event_details": {
+            "objective_type": "HORDE",
+            "securing_team": "PLAYER_TEAM",
+            "killer_id": 2,
+            "event_position_x": 4846,
+            "event_position_y": 10149,
+            "event_position_lane": "TOP"
+          },
+          "context": {
+            "gold_difference": 3248,
+            "gold_state": "ahead",
+            "player_location": {
+              "position": {
+                "x": 2750,
+                "y": 11721
+              },
+              "lane": "BOT",
+              "distance_to_event": 2620
+            },
+            "summoner_spells": {
+              "flash_cooldown": 0,
+              "other_cooldown": 0,
+              "other_spell": "Ghost",
+              "tp_available": false
+            }
+          },
+          "has_summary": true,
+          "summary": "The objective, a Horde, was secured by your team in mid lane at 9 minutes while Darius was in bot lane, 2620 units away. Given the close distance and the fact that Flash was available, Darius should have rotated to assist. Staying in bot lane did not maximize the team's advantage, especially since the team was already significantly ahead. In similar situations, always assess the distance and your summoner spells before deciding whether to rotate; if you can reach the objective in time, prioritize joining to secure additional benefits for your team.",
+          "summary_version": "enhanced_v2"
+        },
+        {
+          "event_id": "OBJECTIVE_9.0_99082a4a",
+          "timestamp_minutes": 9.0037,
+          "event_type": "OBJECTIVE",
+          "impact_score": 550,
+          "game_state": "early",
+          "event_details": {
+            "objective_type": "HORDE",
+            "securing_team": "PLAYER_TEAM",
+            "killer_id": 2,
+            "event_position_x": 5147,
+            "event_position_y": 10339,
+            "event_position_lane": "TOP"
+          },
+          "context": {
+            "gold_difference": 3248,
+            "gold_state": "ahead",
+            "player_location": {
+              "position": {
+                "x": 2750,
+                "y": 11721
+              },
+              "lane": "BOT",
+              "distance_to_event": 2766
+            },
+            "summoner_spells": {
+              "flash_cooldown": 0,
+              "other_cooldown": 0,
+              "other_spell": "Ghost",
+              "tp_available": false
+            }
+          },
+          "has_summary": true,
+          "summary": "The objective, a Horde, was secured by the player's team in mid lane while Darius was in bot lane, 2766 units away. Given the close distance and the fact that Flash was available, Darius should have rotated to assist. Staying in bot lane did not maximize the team's advantage, especially since the team was already significantly ahead. Actionable tip: When an objective is secured close to your position and you have Flash available, always rotate to assist, even if it means leaving your current lane, to maximize team advantage and secure additional benefits.",
+          "summary_version": "enhanced_v2"
+        },
+        {
+          "event_id": "TEAMFIGHT_17.0_b972433f",
+          "timestamp_minutes": 17.00603333333333,
+          "event_type": "TEAMFIGHT",
+          "impact_score": 200,
+          "game_state": "mid",
+          "event_details": {
+            "kills_count": 5,
+            "participants_count": 8,
+            "player_team_kills": 4,
+            "enemy_team_kills": 1,
+            "outcome": "WON",
+            "duration_seconds": 0,
+            "event_position_x": 7988,
+            "event_position_y": 9047,
+            "event_position_lane": "TOP"
+          },
+          "context": {
+            "player_location": {
+              "position": {
+                "x": 7652,
+                "y": 8435
+              },
+              "lane": "TOP",
+              "distance_to_event": 698
+            },
+            "summoner_spells": {
+              "flash_cooldown": 0,
+              "other_cooldown": 0,
+              "other_spell": "Ghost",
+              "tp_available": false
+            },
+            "gold_difference": 0,
+            "gold_state": "unknown"
+          },
+          "has_summary": true,
+          "summary": "Darius was not involved in the mid lane teamfight despite being only 698 units away. Given his immediate proximity and the availability of Flash, he should have rotated to assist. The team was already significantly ahead, so the additional gold swing from the fight would have further solidified their lead. Staying in top lane to farm or push the wave was suboptimal when he could have contributed to securing the kill and maximizing the team's advantage. In similar situations, always prioritize joining fights when you're in close range and have summoner spells available, as this maximizes your team's potential gains.",
+          "summary_version": "enhanced_v2"
+        },
+        {
+          "event_id": "TEAMFIGHT_13.0_db64d24c",
+          "timestamp_minutes": 13.004883333333334,
+          "event_type": "TEAMFIGHT",
+          "impact_score": 200,
+          "game_state": "early",
+          "event_details": {
+            "kills_count": 5,
+            "participants_count": 9,
+            "player_team_kills": 4,
+            "enemy_team_kills": 1,
+            "outcome": "WON",
+            "duration_seconds": 0,
+            "event_position_x": 11207,
+            "event_position_y": 6670,
+            "event_position_lane": "TOP"
+          },
+          "context": {
+            "player_location": {
+              "position": {
+                "x": 6693,
+                "y": 12764
+              },
+              "lane": "TOP",
+              "distance_to_event": 7583
+            },
+            "summoner_spells": {
+              "flash_cooldown": 0,
+              "other_cooldown": 0,
+              "other_spell": "Ghost",
+              "tp_available": false
+            },
+            "gold_difference": 0,
+            "gold_state": "unknown"
+          },
+          "has_summary": true,
+          "summary": "Darius was not involved in the top river teamfight, which his team won decisively, netting a 900g gold swing. Given the distance (7583 units) and the fact that the fight concluded quickly, staying in top lane to maintain wave pressure and secure CS was the optimal decision. This ensured the enemy top laner couldn't rotate to assist their team. Always prioritize maintaining pressure in your lane when you can't reach a distant fight in time.",
+          "summary_version": "enhanced_v2"
+        },
+        {
+          "event_id": "TEAMFIGHT_7.0_d4a7d775",
+          "timestamp_minutes": 7.002,
+          "event_type": "TEAMFIGHT",
+          "impact_score": 200,
+          "game_state": "early",
+          "event_details": {
+            "kills_count": 5,
+            "participants_count": 9,
+            "player_team_kills": 4,
+            "enemy_team_kills": 1,
+            "outcome": "WON",
+            "duration_seconds": 0,
+            "event_position_x": 9017,
+            "event_position_y": 6987,
+            "event_position_lane": "BOT"
+          },
+          "context": {
+            "player_location": {
+              "position": {
+                "x": 1698,
+                "y": 9119
+              },
+              "lane": "BOT",
+              "distance_to_event": 7623
+            },
+            "summoner_spells": {
+              "flash_cooldown": 0,
+              "other_cooldown": 0,
+              "other_spell": "Ghost",
+              "tp_available": false
+            },
+            "gold_difference": 0,
+            "gold_state": "unknown"
+          },
+          "has_summary": true,
+          "summary": "Darius was in bot lane during a center teamfight at 7.0 minutes, 7623 units away. Given the distance and the fact that Flash was available, he should have rotated to assist. However, since the fight was very short and already won, staying in bot lane to maintain pressure and secure additional CS might have been the optimal play. In similar situations, always assess the fight's duration and outcome before deciding to rotate; if the fight is quick and decisive, focus on maintaining pressure in your current lane to maximize the team's advantage.",
+          "summary_version": "enhanced_v2"
+        },
+        {
+          "event_id": "TEAMFIGHT_18.0_c1a09484",
+          "timestamp_minutes": 18.006566666666668,
+          "event_type": "TEAMFIGHT",
+          "impact_score": 180,
+          "game_state": "mid",
+          "event_details": {
+            "kills_count": 4,
+            "participants_count": 7,
+            "player_team_kills": 3,
+            "enemy_team_kills": 1,
+            "outcome": "WON",
+            "duration_seconds": 0,
+            "event_position_x": 12951,
+            "event_position_y": 4737,
+            "event_position_lane": "TOP"
+          },
+          "context": {
+            "player_location": {
+              "position": {
+                "x": 13266,
+                "y": 3751
+              },
+              "lane": "TOP",
+              "distance_to_event": 1035
+            },
+            "summoner_spells": {
+              "flash_cooldown": 0,
+              "other_cooldown": 0,
+              "other_spell": "Ghost",
+              "tp_available": false
+            },
+            "gold_difference": 0,
+            "gold_state": "unknown"
+          },
+          "has_summary": true,
+          "summary": "Darius was not involved in the top river teamfight despite being 1035 units away, which is an immediate distance. Given the short distance and the fact that the fight was won decisively with a 3 kills vs 1 deaths outcome, Darius should have used Flash to join the fight. Staying in top lane did not maximize the team's advantage, especially since the team was already significantly ahead in gold. In similar situations, always prioritize joining fights when you are in immediate distance, as your presence can secure additional kills or objectives, further swinging the game in your team's favor.",
+          "summary_version": "enhanced_v2"
+        },
+        {
+          "event_id": "KILL_11.0_95673686",
+          "timestamp_minutes": 11.00475,
+          "event_type": "KILL",
+          "impact_score": 80,
+          "game_state": "early",
+          "event_details": {
+            "killer": "Diana",
+            "killer_name": "DY lubenwei",
+            "victim": "Gnar",
+            "victim_name": "Kev1nMo",
+            "assistants": [
+              "Darius",
+              "Katarina",
+              "Soraka"
+            ],
+            "shutdown_gold": 268,
+            "event_position_x": 6044,
+            "event_position_y": 13874,
+            "event_position_lane": "TOP",
+            "player_role": "assistant"
+          },
+          "context": {
+            "gold_difference": 3360,
+            "gold_state": "ahead",
+            "player_location": {
+              "position": {
+                "x": 4629,
+                "y": 13808
+              },
+              "lane": "BOT",
+              "distance_to_event": 1416
+            },
+            "summoner_spells": {
+              "flash_cooldown": 0,
+              "other_cooldown": 0,
+              "other_spell": "Ghost",
+              "tp_available": false
+            }
+          },
+          "has_summary": true,
+          "summary": "Darius assisted Diana in securing a kill on Gnar in mid lane at 11 minutes, gaining 284 gold. However, by leaving bot lane, Darius sacrificed potential CS and tower plates, which could have further solidified his lead. Given the team's significant gold advantage, the better decision would have been to maintain pressure in bot lane to secure additional plates and CS. After assisting in the kill, Darius should immediately return to bot lane to continue pushing the wave and secure more plates, further extending his and his team's lead.",
+          "summary_version": "enhanced_v2"
+        },
+        {
+          "event_id": "KILL_7.0_e502bb24",
+          "timestamp_minutes": 7.002,
+          "event_type": "KILL",
+          "impact_score": 80,
+          "game_state": "early",
+          "event_details": {
+            "killer": "Katarina",
+            "killer_name": "Goku boy",
+            "victim": "Pantheon",
+            "victim_name": "Baal3",
+            "assistants": [
+              "Diana",
+              "Smolder",
+              "Soraka"
+            ],
+            "shutdown_gold": 300,
+            "event_position_x": 11021,
+            "event_position_y": 4513,
+            "event_position_lane": "TOP",
+            "player_role": "team_involved"
+          },
+          "context": {
+            "gold_difference": 2201,
+            "gold_state": "ahead",
+            "player_location": {
+              "position": {
+                "x": 1698,
+                "y": 9119
+              },
+              "lane": "BOT",
+              "distance_to_event": 10398
+            },
+            "summoner_spells": {
+              "flash_cooldown": 0,
+              "other_cooldown": 0,
+              "other_spell": "Ghost",
+              "tp_available": false
+            }
+          },
+          "has_summary": true,
+          "summary": "At 7.0 minutes, Darius was in bot lane while a kill occurred on Pantheon by Katarina in the top river, 10398 units away. Given the distance and the fact that his team was already involved in the kill, staying in bot lane was the optimal decision. This allowed Darius to maintain pressure and potentially secure additional farm or tower plates, maximizing the team's overall advantage. In similar situations, always assess the distance and your team's involvement before deciding to rotate; if you're too far and the play is already secured, focus on maintaining pressure in your current lane.",
+          "summary_version": "enhanced_v2"
+        }
+      ],
+      "total_events": 15
+    }
+  ],
+  "match_count": 1
+}

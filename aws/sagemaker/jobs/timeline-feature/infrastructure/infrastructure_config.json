@@ -1,0 +1,8 @@
+{
+  "lambda_role_arn": "arn:aws:iam::768394660366:role/lol-timeline-lambda-role",
+  "stepfunctions_role_arn": "arn:aws:iam::768394660366:role/lol-timeline-stepfunctions-role",
+  "sns_topic_arn": "arn:aws:sns:us-west-2:768394660366:lol-timeline-processing-complete",
+  "region": "us-west-2",
+  "account_id": "768394660366",
+  "project_prefix": "lol-timeline"
+}
