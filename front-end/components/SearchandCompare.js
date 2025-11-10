@@ -114,12 +114,20 @@ const SearchAndCompare = ({ player1Stats, onPlayer2Found }) => {
         )}
       </div>
       {/* Stats Display - Identical to Social */}
-      <div className="bg-black bg-opacity-70 rounded-lg p-8 w-full max-w-md">
+      <div className="relative bg-black bg-opacity-70 rounded-lg p-8 w-full max-w-md">
+        <div className="absolute inset-0 bg-black bg-opacity-70 rounded-lg p-8 h-full w-full max-w-md">
+          <div className="text-center">
+            <div className="relative w-16 h-16 mx-auto mb-4">
+              <div className="absolute inset-0 border-4 border-sky-200 border-t-sky-400 rounded-full animate-spin"></div>
+            </div>
+            <h2 className="text-xl font-semibold text-white">Loading...</h2>
+            <p className="text-amber-100">Please wait...</p>
+          </div>
+        </div>
         <h3 className="text-xl font-semibold text-white mb-6 text-center">
           {!friendResult && "Search for a player"}
           {friendResult && `${friendResult.player_id}`}
         </h3>
-        
         <div className="space-y-1">
           {stats.map(stat => (
             <div key={stat} className={`flex justify-between items-center px-3 py-2 bg-gray-800 border border-gray-700 rounded ${getStatColor(player1Stats[stat], player2Stats[stat])}`}>
