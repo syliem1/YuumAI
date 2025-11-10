@@ -13,7 +13,7 @@ const SearchAndCompare = ({ player1Stats, onPlayer2Found }) => {
     "avg_vision_score": 0,
     "avg_cc_time": 0});
   const [hasSearched, setHasSearched] = useState(false); // Track if user has searched
-  const { setFriendResult } = useFriendContext();
+  const { friendResult, setFriendResult } = useFriendContext();
   const stats = ["avg_kda", "avg_cs_per_min", "avg_kill_participation", "avg_dpm", "avg_gpm", "avg_solo_kills", "avg_vision_score", "avg_cc_time"];
   const displayStats = {
     "avg_kda": "KDA",
@@ -113,7 +113,8 @@ const SearchAndCompare = ({ player1Stats, onPlayer2Found }) => {
       {/* Stats Display - Identical to Social */}
       <div className="bg-black bg-opacity-70 rounded-lg p-8 w-full max-w-md">
         <h3 className="text-xl font-semibold text-white mb-6 text-center">
-          Searched Player&apos;s Name
+          {!friendResult && "Search for a player"}
+          {friendResult && `${friendResult.player_id}`}
         </h3>
         
         <div className="space-y-1">
