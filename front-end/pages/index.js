@@ -43,6 +43,7 @@ export default function Home() {
     } catch (err) {
       console.error("Error fetching API data:", err);
       setTimelineResult({ error: "Failed to load timeline." });
+      router.push("/")
     }
   };
 
@@ -53,9 +54,9 @@ export default function Home() {
 
       {/* Content */}
       <div className="detention_card">
-        <input type="text" className="riotID_box" placeholder="Riot ID" value={usernameValue} onChange={setUsernameValue}/>
-        <input type="text" className="tagline_box" placeholder="1234" value={taglineValue} onChange={setTaglineValue}/>
-        <input type="number" className="num_games_analyzed_box" placeholder="10" value={gameCountValue} onChange={setCountValue}/>
+        <input type="text" className="riotID_box" placeholder="Riot ID" onChange={setUsernameValue}/>
+        <input type="text" className="tagline_box" placeholder="1234" onChange={setTaglineValue}/>
+        <input type="number" className="num_games_analyzed_box" placeholder="10" onChange={setCountValue}/>
         <button
             className="magical-button"
             onClick={handleSearch}

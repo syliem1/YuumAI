@@ -28,7 +28,15 @@ const FlipBook = () => {
   const [selectedMatchId, setSelectedMatchId] = useState(null);
   
   // Player stats state
-  const [player1Stats, setPlayer1Stats] = useState({});
+  const [player1Stats, setPlayer1Stats] = useState({
+    "avg_kda": 0,
+    "avg_cs_per_min": 0,
+    "avg_kill_participation": 0,
+    "avg_dpm": 0,
+    "avg_gpm": 0,
+    "avg_solo_kills": 0,
+    "avg_vision_score": 0,
+    "avg_cc_time": 0});
   
   const [player2Stats, setPlayer2Stats] = useState({
     "avg_kda": 0,
