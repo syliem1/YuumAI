@@ -106,22 +106,26 @@ const FlipBook = () => {
   const isInitialized = useRef(false);
 
   useEffect(() => {
-     
+    // Use realTimelineResult (from /player/profile polling) if available, otherwise fall back to timelineResult
+    const dataSource = realTimelineResult || timelineResult;
     
-    if (!timelineResult) return;
-    setPlayer1Stats(timelineResult.stats || {});
-    const mostPlayedList = timelineResult.most_played_champions || {};
-    const championsArray = Object.entries(mostPlayedList).map(([name, games]) => ({ name, games }));
-    setMostPlayed(championsArray);
+    if (!dataSource) return;
+    
+    // Only update stats if we have actual data
+    if (dataSource.stats && Object.keys(dataSource.stats).length > 0) {
+      setPlayer1Stats(dataSource.stats);
+    }
+    
+    // Only update mostPlayed if we have actual data
+    const mostPlayedList = dataSource.most_played_champions;
+    if (mostPlayedList && Object.keys(mostPlayedList).length > 0) {
+      const championsArray = Object.entries(mostPlayedList).map(([name, games]) => ({ name, games }));
+      setMostPlayed(championsArray);
+    }
 
-    if (!realTimelineResult) return;
-
-    if (realTimelineResult.timeline_data) {
-      
+    if (realTimelineResult?.timeline_data) {
       setMatches(realTimelineResult.timeline_data);
       setSelectedMatchId(realTimelineResult.timeline_data[0]?.match_id || null);
-    } else {
-      console.warn("No timeline data found in search result:", realTimelineResult);
     }
   }, [timelineResult, realTimelineResult]);
   
@@ -205,17 +209,22 @@ const FlipBook = () => {
 
   // Check if player stats are ready (have actual data, not empty)
   const isPlayerDataReady = useMemo(() => {
-    if (!timelineResult) return false;
+    // Need either realTimelineResult or timelineResult with stats
+    const dataSource = realTimelineResult || timelineResult;
+    if (!dataSource) return false;
     if (!player1Stats || Object.keys(player1Stats).length === 0) return false;
     if (!mostPlayed || mostPlayed.length === 0) return false;
     // Check if we have actual stats values (not just empty object)
     if (player1Stats.avg_kda === undefined) return false;
     return true;
-  }, [timelineResult, player1Stats, mostPlayed]);
+  }, [timelineResult, realTimelineResult, player1Stats, mostPlayed]);
 
   // Create page structure once and store it in a ref
   const pageStructure = useMemo(() => {
     if (!isPlayerDataReady || !isPercentileReady) return [];
+
+    // Use realTimelineResult for complete data, fall back to timelineResult
+    const dataSource = realTimelineResult || timelineResult;
 
     // Safely access percentile data with fallbacks
     const overallPerformance = percentileResult.overall_performance || { percentile: 0, interpretation: 'Loading...' };
@@ -246,9 +255,9 @@ const FlipBook = () => {
         runeCount={10}            // Number of runes (default 9)
       />, 
       back: <SummaryBack data={{ 
-        username: timelineResult.player_id || 'Unknown',
-        region: timelineResult.playstyle?.archetype || 'Shurima', 
-        profile: timelineResult.playstyle?.profile ? timelineResult.playstyle.profile.split(",").map(s => s.trim()): [],
+        username: dataSource?.player_id || 'Unknown',
+        region: dataSource?.playstyle?.archetype || 'Shurima', 
+        profile: dataSource?.playstyle?.profile ? dataSource.playstyle.profile.split(",").map(s => s.trim()): [],
         statistics: { 
           goldpm: (player1Stats?.avg_gpm ?? 0).toFixed(2), 
           winRate: (player1Stats?.win_rate ?? 0).toFixed(2), 
@@ -369,7 +378,7 @@ const FlipBook = () => {
       id: 11 
     },
     { cover: "green-cover.jpg", id: 12 },
-  ]}, [isPlayerDataReady, isPercentileReady, timelineResult, mostPlayed, player1Stats, percentileResult]);
+  ]}, [isPlayerDataReady, isPercentileReady, timelineResult, realTimelineResult, mostPlayed, player1Stats, percentileResult]);
 
   // Initialize pages only once
   useEffect(() => {
