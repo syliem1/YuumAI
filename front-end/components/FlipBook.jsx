@@ -491,7 +491,17 @@ const FlipBook = () => {
     
     // Replace MatchTimeline component
     if (page.front === "matchTimeline") {
-      newPage.front = <MatchTimeline match={selectedMatch} />;
+      // Extract player info from timelineResult
+      const playerId = timelineResult?.player_id || '';
+      const [gameName, tagline] = playerId.includes('#') ? playerId.split('#') : ['', ''];
+      const puuid = realTimelineResult?.puuid || timelineResult?.puuid || '';
+      
+      newPage.front = <MatchTimeline 
+        match={selectedMatch} 
+        puuid={puuid}
+        gameName={gameName}
+        tagline={tagline}
+      />;
     }
 
     // Replace ChatInput component

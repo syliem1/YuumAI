@@ -7,6 +7,7 @@ import json
 import boto3
 import re
 import math
+import time
 from datetime import datetime, timedelta
 from typing import Dict, List, Tuple, Optional
 
@@ -21,6 +22,12 @@ summaries_table = dynamodb.Table('lol-timeline-timeline-ai-summaries')
 BEDROCK_MODEL_ID = 'amazon.nova-pro-v1:0'
 MAX_TOKENS = 300
 TEMPERATURE = 0.3  # Lowered for less hallucination
+
+# Rate limiting configuration
+BEDROCK_DELAY_SECONDS = 2.0  # Delay between API calls
+MAX_RETRIES = 5
+INITIAL_BACKOFF = 1.0  # Initial backoff in seconds
+MAX_BACKOFF = 30.0  # Maximum backoff in seconds
 
 
 class RobustContextExtractor:
@@ -615,7 +622,10 @@ FORMAT:
         return ""
     
     def _invoke_bedrock(self, user_prompt: str, champion: str) -> str:
-        """Call Bedrock API with macro-focused system prompt and validation"""
+        """Call Bedrock API with macro-focused system prompt, rate limiting, and exponential backoff"""
+        
+        # Add delay between API calls to avoid throttling
+        time.sleep(BEDROCK_DELAY_SECONDS)
         
         system_prompt = [{
             "text": """You are an elite League of Legends macro strategy coach. You analyze rotations, wave management, and objective priority.
@@ -688,37 +698,59 @@ BAD EXAMPLES - NEVER DO THIS:
             }
         }
         
-        try:
-            response = bedrock_runtime.invoke_model(
-                modelId=self.model_id,
-                body=json.dumps(request_body),
-                contentType='application/json',
-                accept='application/json'
-            )
-            
-            response_body = json.loads(response['body'].read())
-            
-            if 'output' in response_body and 'message' in response_body['output']:
-                content = response_body['output']['message'].get('content', [])
-                if content:
-                    summary = content[0].get('text', '').strip()
-                    clean_summary = self._clean_response(summary)
-                    
-                    # Validate response
-                    validated = self._validate_response(clean_summary, champion)
-                    
-                    if not validated:
-                        self.rejected_count += 1
-                        print(f"❌ REJECTED response for {champion} (contained ability references)")
-                        return ""
-                    
-                    return validated
-            
-            return ""
-            
-        except Exception as e:
-            print(f"❌ Bedrock error: {str(e)}")
-            return ""
+        # Retry with exponential backoff
+        backoff = INITIAL_BACKOFF
+        last_error = None
+        
+        for attempt in range(MAX_RETRIES):
+            try:
+                response = bedrock_runtime.invoke_model(
+                    modelId=self.model_id,
+                    body=json.dumps(request_body),
+                    contentType='application/json',
+                    accept='application/json'
+                )
+                
+                response_body = json.loads(response['body'].read())
+                
+                if 'output' in response_body and 'message' in response_body['output']:
+                    content = response_body['output']['message'].get('content', [])
+                    if content:
+                        summary = content[0].get('text', '').strip()
+                        clean_summary = self._clean_response(summary)
+                        
+                        # Validate response
+                        validated = self._validate_response(clean_summary, champion)
+                        
+                        if not validated:
+                            self.rejected_count += 1
+                            print(f"❌ REJECTED response for {champion} (contained ability references)")
+                            return ""
+                        
+                        return validated
+                
+                return ""
+                
+            except bedrock_runtime.exceptions.ThrottlingException as e:
+                last_error = e
+                print(f"⚠️ Throttled (attempt {attempt + 1}/{MAX_RETRIES}), backing off {backoff:.1f}s...")
+                time.sleep(backoff)
+                backoff = min(backoff * 2, MAX_BACKOFF)  # Exponential backoff with cap
+                
+            except Exception as e:
+                # Check if it's a throttling error from botocore
+                error_str = str(e)
+                if 'ThrottlingException' in error_str or 'Too many requests' in error_str:
+                    last_error = e
+                    print(f"⚠️ Throttled (attempt {attempt + 1}/{MAX_RETRIES}), backing off {backoff:.1f}s...")
+                    time.sleep(backoff)
+                    backoff = min(backoff * 2, MAX_BACKOFF)
+                else:
+                    print(f"❌ Bedrock error: {str(e)}")
+                    return ""
+        
+        print(f"❌ Failed after {MAX_RETRIES} retries: {str(last_error)}")
+        return ""
     
     def _validate_response(self, text: str, champion: str) -> str:
         """Validate response doesn't contain ability hallucinations"""

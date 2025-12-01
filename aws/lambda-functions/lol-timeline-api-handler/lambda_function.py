@@ -1215,14 +1215,252 @@ def get_timeline_events(event):
     })
 
 
+# ============================================================================
+# ON-DEMAND SUMMARY GENERATION
+# ============================================================================
+
+def generate_on_demand_summary(event_data: dict, timeline_data: dict, match_data: dict, puuid: str) -> str:
+    """
+    Generate a coaching summary for a single event on-demand.
+    Lightweight version optimized for single-event generation.
+    """
+    import math
+    
+    try:
+        # Extract event info
+        timestamp = float(event_data.get('timestamp_minutes', 0))
+        event_type = event_data.get('event_type', 'UNKNOWN')
+        
+        # Parse JSON fields
+        event_details = {}
+        context = {}
+        player_context = {}
+        
+        if isinstance(event_data.get('event_details'), str):
+            try:
+                event_details = json.loads(event_data.get('event_details', '{}'))
+            except:
+                pass
+        else:
+            event_details = event_data.get('event_details', {})
+            
+        if isinstance(event_data.get('context'), str):
+            try:
+                context = json.loads(event_data.get('context', '{}'))
+            except:
+                pass
+        else:
+            context = event_data.get('context', {})
+            
+        if isinstance(event_data.get('player_context'), str):
+            try:
+                player_context = json.loads(event_data.get('player_context', '{}'))
+            except:
+                pass
+        else:
+            player_context = event_data.get('player_context', {})
+        
+        # Get champion from participant data
+        champion = player_context.get('champion', 'Unknown')
+        position = player_context.get('position', 'UNKNOWN')
+        
+        if champion == 'Unknown':
+            # Try to find from match data
+            for p in match_data.get('info', {}).get('participants', []):
+                if p.get('puuid') == puuid:
+                    champion = p.get('championName', 'Unknown')
+                    position = p.get('teamPosition', 'UNKNOWN')
+                    break
+        
+        # Location context
+        player_location = context.get('player_location', {})
+        player_lane = player_location.get('lane', 'UNKNOWN')
+        distance = player_location.get('distance_to_event', 0)
+        
+        # Classify distance
+        if distance < 1500:
+            proximity = "IMMEDIATE"
+        elif distance < 3000:
+            proximity = "CLOSE"
+        elif distance < 5000:
+            proximity = "MEDIUM"
+        elif distance < 8000:
+            proximity = "FAR"
+        else:
+            proximity = "VERY_FAR"
+        
+        # Summoner spells
+        summoner_spells = context.get('summoner_spells', {})
+        tp_available = summoner_spells.get('tp_available', False)
+        flash_cd = summoner_spells.get('flash_cooldown', 0)
+        
+        spell_status = []
+        if tp_available:
+            spell_status.append("Teleport AVAILABLE")
+        spell_status.append("Flash available" if flash_cd == 0 else f"Flash on CD ({flash_cd}s)")
+        spell_info = " | ".join(spell_status)
+        
+        # Gold difference
+        gold_diff = context.get('gold_difference', 0)
+        if abs(gold_diff) >= 1000:
+            team_state = f"Team is {abs(gold_diff)}g {'AHEAD' if gold_diff > 0 else 'BEHIND'}"
+        else:
+            team_state = "Team gold is EVEN"
+        
+        # Player stats from context
+        player_stats = player_context.get('stats', {})
+        stats_line = ""
+        if player_stats:
+            level = player_stats.get('level', '?')
+            cs = player_stats.get('cs', '?')
+            gold = player_stats.get('gold', 0)
+            stats_line = f"Level {level}, {cs} CS, {gold}g"
+        
+        # Event-specific details
+        event_context_str = ""
+        if event_type == "OBJECTIVE":
+            obj_type = event_details.get('objective_type', 'Unknown')
+            securing_team = event_details.get('securing_team', 'Unknown')
+            event_context_str = f"OBJECTIVE: {obj_type} secured by {securing_team}"
+        elif event_type == "KILL":
+            victim = event_details.get('victim', 'Unknown')
+            killer = event_details.get('killer', 'Unknown')
+            player_role = event_details.get('player_role', 'unknown')
+            event_context_str = f"KILL: {killer} killed {victim}. Player role: {player_role}"
+        elif event_type == "STRUCTURE":
+            structure = event_details.get('structure_type', 'Unknown')
+            lane = event_details.get('lane', 'Unknown')
+            event_context_str = f"STRUCTURE: {structure} destroyed in {lane}"
+        elif event_type == "TEAMFIGHT":
+            outcome = event_details.get('outcome', 'Unknown')
+            player_kills = event_details.get('player_team_kills', 0)
+            enemy_kills = event_details.get('enemy_team_kills', 0)
+            event_context_str = f"TEAMFIGHT: {outcome} ({player_kills} kills vs {enemy_kills} deaths)"
+        
+        # Determine if player was involved
+        player_role = event_details.get('player_role', 'spectator')
+        was_participant = player_role in ['killer', 'victim', 'assistant']
+        
+        # Build the coaching prompt
+        prompt = f"""MATCH SITUATION at {timestamp:.1f} minutes:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PLAYER: {champion} ({position})
+POSITION: {player_lane} lane
+{stats_line}
+{team_state}
+
+EVENT: {event_type}
+{event_context_str}
+{'PLAYER PARTICIPATION: Active (' + player_role + ')' if was_participant else f'DISTANCE: {int(distance)} units ({proximity})'}
+
+SUMMONER SPELLS: {spell_info}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+{'Analyze whether participating was the right macro decision. Consider cost-benefit.' if was_participant else 'Analyze whether the player should have rotated to help. Consider distance and opportunity cost.'}
+
+Provide macro-focused coaching for {champion}.
+
+STRICT RULES:
+- Focus ONLY on: rotations, wave management, objective priority, vision
+- NO champion abilities, combos, or mechanics
+- Maximum 100 words
+
+FORMAT:
+1. What happened and player involvement (1-2 sentences)
+2. Macro analysis: Was this the right decision?
+3. ONE actionable tip"""
+
+        # Call Bedrock
+        summary = invoke_bedrock_for_summary(prompt, champion)
+        return summary
+        
+    except Exception as e:
+        print(f"Error in generate_on_demand_summary: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        return ""
+
+
+def invoke_bedrock_for_summary(prompt: str, champion: str) -> str:
+    """Call Bedrock for on-demand summary generation with validation"""
+    
+    system_prompt = [{
+        "text": """You are an elite League of Legends macro strategy coach. Focus on rotations, wave management, and objective priority.
+
+CRITICAL RULES:
+1. NEVER mention champion abilities (Q, W, E, R, ultimate, passive, combos)
+2. NEVER describe champion mechanics or kits
+3. ONLY discuss: Teleport, Flash, map rotations, wave states, objective timing
+
+RESPONSE (100 words max):
+1. What happened + player involvement
+2. Cost-benefit or rotation analysis
+3. ONE actionable tip"""
+    }]
+    
+    request_body = {
+        "messages": [
+            {
+                "role": "user",
+                "content": [{"text": prompt}]
+            }
+        ],
+        "system": system_prompt,
+        "inferenceConfig": {
+            "max_new_tokens": 300,
+            "temperature": 0.3,
+            "top_p": 0.85
+        }
+    }
+    
+    try:
+        response = bedrock_runtime.invoke_model(
+            modelId='amazon.nova-pro-v1:0',
+            body=json.dumps(request_body),
+            contentType='application/json',
+            accept='application/json'
+        )
+        
+        response_body = json.loads(response['body'].read())
+        
+        if 'output' in response_body and 'message' in response_body['output']:
+            content = response_body['output']['message'].get('content', [])
+            if content:
+                summary = content[0].get('text', '').strip()
+                
+                # Basic validation - reject if contains ability references
+                ability_flags = ['ultimate', 'ult ', ' q ', ' w ', ' e ', ' r ', 
+                               'passive', 'combo', 'cast', 'channel']
+                summary_lower = ' ' + summary.lower() + ' '
+                
+                for flag in ability_flags:
+                    if flag in summary_lower:
+                        print(f"⚠️ Rejected: contains '{flag.strip()}'")
+                        return ""
+                
+                return summary
+        
+        return ""
+        
+    except Exception as e:
+        print(f"❌ Bedrock error: {str(e)}")
+        return ""
+
+
 def get_event_summary(event):
-    """POST /timeline/events/summary - Get cached summary for an event"""
+    """POST /timeline/events/summary - Get or generate summary for an event on-demand"""
     body = json.loads(event.get('body', '{}'))
     event_id = body.get('event_id')
+    match_id = body.get('match_id')
+    puuid = body.get('puuid')
+    game_name = body.get('game_name')
+    tagline = body.get('tagline')
     
     if not event_id:
         return cors_response(400, {'error': 'event_id required'})
     
+    # First, check if summary is already cached
     for summary_type in ['enhanced_v2', 'enhanced', 'basic']:
         cache_response = summaries_table.get_item(
             Key={'event_id': event_id, 'summary_type': summary_type}
@@ -1236,10 +1474,93 @@ def get_event_summary(event):
                 'summary_version': summary_type
             })
     
-    return cors_response(404, {
-        'event_id': event_id,
-        'error': 'Summary not yet generated'
-    })
+    # No cached summary - generate one on-demand
+    if not all([match_id, puuid]):
+        return cors_response(400, {
+            'error': 'match_id and puuid required to generate summary',
+            'event_id': event_id
+        })
+    
+    try:
+        # Get the event from DynamoDB
+        event_response = events_table.get_item(
+            Key={'match_id': match_id, 'event_id': event_id}
+        )
+        
+        if 'Item' not in event_response:
+            return cors_response(404, {'error': 'Event not found'})
+        
+        event_data = event_response['Item']
+        
+        # Build player folder path for S3 access
+        player_folder = None
+        if game_name and tagline:
+            player_folder = f"{game_name}_{tagline}"
+        else:
+            # Try to extract from event's player_context
+            player_context_str = event_data.get('player_context', '{}')
+            if isinstance(player_context_str, str):
+                try:
+                    pc = json.loads(player_context_str)
+                    sn = pc.get('summoner_name', '')
+                    st = pc.get('summoner_tag', '')
+                    if sn and st:
+                        player_folder = f"{sn}_{st}"
+                except:
+                    pass
+        
+        if not player_folder:
+            return cors_response(400, {
+                'error': 'Could not determine player folder. Provide game_name and tagline.',
+                'event_id': event_id
+            })
+        
+        # Load timeline and match data from S3
+        base_path = f'raw-matches/{player_folder}/{match_id}'
+        
+        try:
+            timeline_obj = s3_client.get_object(Bucket=S3_BUCKET_RAW, Key=f'{base_path}/timeline-data.json')
+            timeline_data = json.loads(timeline_obj['Body'].read())
+            
+            match_obj = s3_client.get_object(Bucket=S3_BUCKET_RAW, Key=f'{base_path}/match-data.json')
+            match_data = json.loads(match_obj['Body'].read())
+        except Exception as e:
+            return cors_response(404, {'error': f'S3 data not found: {str(e)}'})
+        
+        # Generate summary using on-demand generator
+        summary = generate_on_demand_summary(event_data, timeline_data, match_data, puuid)
+        
+        if summary and len(summary) > 15:
+            # Cache the generated summary
+            ttl = int((datetime.utcnow() + timedelta(days=7)).timestamp())
+            summaries_table.put_item(Item={
+                'event_id': event_id,
+                'summary_type': 'enhanced_v2',
+                'match_id': match_id,
+                'puuid': puuid,
+                'summary_text': summary,
+                'generated_at': int(datetime.utcnow().timestamp()),
+                'ttl': ttl,
+                'model_version': 'nova-pro-on-demand'
+            })
+            
+            return cors_response(200, {
+                'event_id': event_id,
+                'summary': summary,
+                'cached': False,
+                'summary_version': 'enhanced_v2'
+            })
+        else:
+            return cors_response(500, {
+                'error': 'Failed to generate summary',
+                'event_id': event_id
+            })
+            
+    except Exception as e:
+        print(f"Error generating on-demand summary: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        return cors_response(500, {'error': str(e)})
 
 
 def answer_event_question(event): # UNUSED

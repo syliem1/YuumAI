@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const MatchTimeline = ({ match }) => {
+const MatchTimeline = ({ match, puuid, gameName, tagline }) => {
   const [expandedEventId, setExpandedEventId] = useState(null);
   const [loadingSummary, setLoadingSummary] = useState(null);
   const [eventSummaries, setEventSummaries] = useState({});
@@ -78,7 +78,13 @@ const MatchTimeline = ({ match }) => {
       const response = await fetch('https://v4ft9564pb.execute-api.us-west-2.amazonaws.com/timeline/events/summary', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ event_id: eventId })
+        body: JSON.stringify({ 
+          event_id: eventId,
+          match_id: match?.match_id,
+          puuid: puuid,
+          game_name: gameName,
+          tagline: tagline
+        })
       });
       
       if (response.ok) {
