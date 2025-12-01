@@ -200,6 +200,12 @@ const FlipBook = () => {
 
   // Check if percentile data is ready (not in PROCESSING state with empty data)
   const isPercentileReady = useMemo(() => {
+    console.log('isPercentileReady check:', {
+      percentileResult,
+      hasPercentiles: percentileResult?.percentiles ? Object.keys(percentileResult.percentiles).length : 0,
+      rankedStats: percentileResult?.ranked_stats,
+      overallPerformance: percentileResult?.overall_performance
+    });
     if (!percentileResult) return false;
     if (percentileResult.status === 'PROCESSING' && (!percentileResult.percentiles || Object.keys(percentileResult.percentiles).length === 0)) return false;
     if (!percentileResult.ranked_stats?.top_5 || !percentileResult.ranked_stats?.bottom_5) return false;
@@ -211,6 +217,14 @@ const FlipBook = () => {
   const isPlayerDataReady = useMemo(() => {
     // Need either realTimelineResult or timelineResult with stats
     const dataSource = realTimelineResult || timelineResult;
+    console.log('isPlayerDataReady check:', {
+      hasDataSource: !!dataSource,
+      player1Stats,
+      player1StatsKeys: player1Stats ? Object.keys(player1Stats).length : 0,
+      mostPlayed,
+      mostPlayedLength: mostPlayed?.length,
+      avg_kda: player1Stats?.avg_kda
+    });
     if (!dataSource) return false;
     if (!player1Stats || Object.keys(player1Stats).length === 0) return false;
     if (!mostPlayed || mostPlayed.length === 0) return false;

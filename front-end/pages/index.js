@@ -71,6 +71,8 @@ export default function Home() {
       }
 
       // Set percentile result (even if still processing, we'll handle it in FlipBook)
+      console.log('Setting percentileResult:', percentileData);
+      console.log('Setting timelineResult:', timelineData);
       setPercentileResult(percentileData || { status: 'PROCESSING', percentiles: {}, ranked_stats: { top_5: [], bottom_5: [] } });
       router.push("/FlipBook")
 
