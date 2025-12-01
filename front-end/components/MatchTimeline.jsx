@@ -74,17 +74,25 @@ const MatchTimeline = ({ match, puuid, gameName, tagline }) => {
     
     // Fetch summary from API
     setLoadingSummary(eventId);
+    
+    // Get puuid from multiple sources as fallback
+    const eventPuuid = event.puuid || puuid || match?.puuid || '';
+    const eventMatchId = event.match_id || match?.match_id || '';
+    
+    const requestBody = { 
+      event_id: eventId,
+      match_id: eventMatchId,
+      puuid: eventPuuid,
+      game_name: gameName,
+      tagline: tagline
+    };
+    console.log('Fetching summary with:', requestBody);
+    
     try {
       const response = await fetch('https://v4ft9564pb.execute-api.us-west-2.amazonaws.com/timeline/events/summary', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          event_id: eventId,
-          match_id: match?.match_id,
-          puuid: puuid,
-          game_name: gameName,
-          tagline: tagline
-        })
+        body: JSON.stringify(requestBody)
       });
       
       if (response.ok) {

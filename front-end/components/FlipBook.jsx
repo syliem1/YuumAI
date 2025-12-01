@@ -124,7 +124,12 @@ const FlipBook = () => {
     }
 
     if (realTimelineResult?.timeline_data) {
-      setMatches(realTimelineResult.timeline_data);
+      // Include puuid in each match for easy access
+      const matchesWithPuuid = realTimelineResult.timeline_data.map(m => ({
+        ...m,
+        puuid: realTimelineResult.puuid
+      }));
+      setMatches(matchesWithPuuid);
       setSelectedMatchId(realTimelineResult.timeline_data[0]?.match_id || null);
     }
   }, [timelineResult, realTimelineResult]);
@@ -494,7 +499,20 @@ const FlipBook = () => {
       // Extract player info from timelineResult
       const playerId = timelineResult?.player_id || '';
       const [gameName, tagline] = playerId.includes('#') ? playerId.split('#') : ['', ''];
-      const puuid = realTimelineResult?.puuid || timelineResult?.puuid || '';
+      // Try multiple sources for puuid
+      const puuid = realTimelineResult?.puuid || 
+                    timelineResult?.puuid || 
+                    selectedMatch?.puuid ||
+                    selectedMatch?.events?.[0]?.puuid ||
+                    '';
+      
+      console.log('MatchTimeline props:', { 
+        matchId: selectedMatch?.match_id, 
+        puuid, 
+        gameName, 
+        tagline,
+        hasMatch: !!selectedMatch 
+      });
       
       newPage.front = <MatchTimeline 
         match={selectedMatch} 

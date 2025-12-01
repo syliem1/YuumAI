@@ -1160,6 +1160,8 @@ def get_top_events_for_match(puuid: str, match_id: str, limit: int = 15) -> list
                 # Try to get summary
                 event_obj = {
                     'event_id': event_item['event_id'],
+                    'match_id': match_id,
+                    'puuid': puuid,
                     'timestamp_minutes': float(event_item['timestamp_minutes']),
                     'event_type': event_item['event_type'],
                     'impact_score': int(event_item['impact_score']),
@@ -1416,7 +1418,7 @@ RESPONSE (100 words max):
     
     try:
         response = bedrock_runtime.invoke_model(
-            modelId='amazon.nova-pro-v1:0',
+            modelId=BEDROCK_MODEL_ID,
             body=json.dumps(request_body),
             contentType='application/json',
             accept='application/json'
