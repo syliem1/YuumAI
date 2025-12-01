@@ -94,12 +94,78 @@ class DecimalEncoder(json.JSONEncoder):
             return float(obj)
         return super(DecimalEncoder, self).default(obj)
 
+def run_background_processing(event):
+    """
+    Worker: Downloads matches, calculates stats incrementally, updates DB.
+    """
+    game_name = event['game_name']
+    tagline = event['tagline']
+    puuid = event['puuid']
+    match_ids = event['match_ids']
+    player_id = f"{game_name}#{tagline}"
+
+    print(f"Worker processing {len(match_ids)} matches for {player_id}")
+
+    # Setup for incremental aggregation
+    all_matches_df = pd.DataFrame()
+    
+    # Process in batches to update DB incrementally
+    BATCH_SIZE = 5 
+    
+    for i in range(0, len(match_ids), BATCH_SIZE):
+        batch = match_ids[i : i + BATCH_SIZE]
+        
+        # 1. Download Batch
+        download_matches(game_name, tagline, batch)
+        
+        # 2. Load & Process Batch
+        new_matches_df = load_player_matches_from_s3(game_name, tagline, puuid)
+        
+        if not new_matches_df.empty:
+            # 3. Calculate Stats based on what we have SO FAR
+            current_stats = create_player_aggregate(new_matches_df)
+            most_played = get_most_played_champions(new_matches_df)
+            
+            # 4. Classify Playstyle
+            playstyle = {}
+            if i + BATCH_SIZE >= len(match_ids): # If final batch
+                playstyle = classify_playstyle(current_stats)
+                status = 'COMPLETED'
+            else:
+                status = 'PROCESSING'
+
+            # 5. Update DynamoDB with INTERMEDIATE results
+            player_profiles_table.update_item(
+                Key={'player_id': player_id},
+                UpdateExpression="""set 
+                    stats = :s, 
+                    most_played_champions = :mp, 
+                    processing_status = :ps,
+                    matches_processed_count = :cnt,
+                    playstyle = :style
+                """,
+                ExpressionAttributeValues=convert_floats({
+                    ':s': current_stats,
+                    ':mp': most_played,
+                    ':ps': status,
+                    ':cnt': len(new_matches_df),
+                    ':style': playstyle
+                })
+            )
+            print(f"Updated profile: {len(new_matches_df)}/{len(match_ids)} matches processed.")
+
+    # Trigger timeline processing at the very end
+    trigger_timeline_processing(game_name, tagline, puuid, match_ids)
+    return "Worker Completed"
 
 # ============================================================================
 # MAIN LAMBDA HANDLER
 # ============================================================================
 
 def lambda_handler(event, context):
+    if not event.get('httpMethod') and not event.get('requestContext') and 'async_worker' in event:
+        return run_background_processing(event)
+
     """Main API Gateway entry point"""
     try:
         http_method = event['requestContext']['http']['method']
@@ -120,7 +186,7 @@ def lambda_handler(event, context):
     try:
         # Player onboarding
         if path == '/player/process' and http_method == 'POST':
-            return process_new_player(event)
+            return process_new_player(event, context)
         
         # Get player profile
         elif path == '/player/profile' and http_method == 'GET':
@@ -253,8 +319,32 @@ def get_player_percentiles(event):
         
         profile = response['Item']
         player_stats = profile.get('stats', {})
+        status = profile.get('processing_status', 'UNKNOWN')
+        processed_count = int(profile.get('matches_processed_count', 0))
+        total_count = int(profile.get('total_matches_to_process', 0))
+
+        if status == 'PROCESSING' and not player_stats:
+            progress = int((processed_count / total_count) * 100) if total_count > 0 else 0
+            return cors_response(200, {
+                'status': 'PROCESSING',
+                'progress_percentage': progress,
+                'message': 'Analyzing match data...',
+                'player_id': player_id,
+                'percentiles': {},
+                'most_played_champions': {},
+                'strengths': [],
+                'weaknesses': [],
+                'ranked_stats': {'top_5': [], 'bottom_5': []},
+                'overall_performance': {
+                    'percentile': 0,
+                    'interpretation': 'Calculating...',
+                    'based_on_metrics': []
+                },
+                'comparison_base': {'total_games_analyzed': '0'}
+            })
         
         # Calculate percentiles for each stat
+        print(f"Printing player stats...")
         percentiles = {}
         
         # Map player stat keys to global stat keys with "lower is better" flag
@@ -319,6 +409,9 @@ def get_player_percentiles(event):
         top_weaknesses = [{'stat': k, 'percentile': p} for k, p in weaknesses if p <= 25.0][:3]
         
         return cors_response(200, {
+            'status': status,
+            'progress_percentage': int((processed_count / total_count) * 100) if total_count > 0 else 0,
+            'is_partial_results': status == 'PROCESSING',
             'player_id': player_id,
             'match_count': profile.get('match_count', 0),
             'overall_performance': {
@@ -409,105 +502,71 @@ def validate_and_decode_body(event: dict) -> tuple[str, str]:
         return None, str(e)
 
 
-def process_new_player(event):
+def process_new_player(event, context):
     """
-    POST /player/process
-    Input: { game_name, tagline, num_games }
+    Dispatcher: Validates input, creates DB placeholder, invokes Worker asynchronously.
+    Returns 202 ACCEPTED immediately.
     """
-    try:
-        # Use new validation function
-        body_str, decode_error = validate_and_decode_body(event)
-        
-        if decode_error:
-            print(f"Decode error: {decode_error}")
-            return cors_response(400, {
-                'error': 'Invalid request encoding',
-                'details': decode_error,
-                'hint': 'Ensure request is UTF-8 encoded with Content-Type: application/json; charset=utf-8'
-            })
-        
-        # Parse JSON
-        body = json.loads(body_str)
-        
-        # Extract and normalize strings
-        import unicodedata
-        game_name = unicodedata.normalize('NFC', body.get('game_name', '').strip())
-        tagline = unicodedata.normalize('NFC', body.get('tagline', '').strip())
-        num_games = min(int(body.get('num_games', 10)), 50)
-        
-        # Log with hex representation for debugging Korean chars
-        print(f"Game name hex: {game_name.encode('utf-8').hex()}")
-        print(f"Tagline hex: {tagline.encode('utf-8').hex()}")
-        
-        if not game_name or not tagline:
-            return cors_response(400, {'error': 'game_name and tagline required'})
-        
-        if num_games > 200:
-            return cors_response(400, {'error': 'num_games cannot exceed 200'})
-        if num_games < 1:
-            return cors_response(400, {'error': 'num_games must be at least 1'})
+    # 1. Validation
+    body_str, decode_error = validate_and_decode_body(event)
+    if decode_error: return cors_response(400, {'error': decode_error})
+    body = json.loads(body_str)
+    
+    game_name = body.get('game_name', '').strip()
+    tagline = body.get('tagline', '').strip()
+    num_games = min(int(body.get('num_games', 10)), 100)
+    player_id = f"{game_name}#{tagline}"
 
-        print(f"Processing: {game_name}#{tagline} ({num_games} games)")
-        
-        # Step 1: Fetch Riot data
-        puuid, match_ids = fetch_riot_data(game_name, tagline, num_games)
-        if not puuid or not match_ids:
-            return cors_response(404, {'error': 'Player not found or no ranked matches'})
-        
-        print(f"Found {len(match_ids)} ranked matches")
-        
-        # Step 2: Download matches to S3
-        download_count = download_matches(game_name, tagline, match_ids)
-        print(f"Downloaded {download_count} matches to S3")
-        
-        # Step 3: Extract features and classify playstyle
-        matches_df = load_player_matches_from_s3(game_name, tagline, puuid)
-        if matches_df.empty:
-            return cors_response(500, {'error': 'Failed to load match data from S3'})
-            
-        player_stats = create_player_aggregate(matches_df)
-        most_played = get_most_played_champions(matches_df, top_n=3)
-        
-        # Classify playstyle
-        playstyle_result = classify_playstyle(player_stats)
-        
-        print(f"Playstyle: {playstyle_result.get('archetype', 'Unknown')}")
-        
-        # Step 4: Index to OpenSearch for RAG
-        indexed_count = index_player_to_opensearch(matches_df, puuid, game_name, tagline)
-        print(f"Indexed {indexed_count} matches to OpenSearch")
-        
-        # Step 5: Save INITIAL profile to DynamoDB (timeline_data is empty for now)
-        save_player_profile(
-            game_name, tagline, puuid, match_ids, 
-            playstyle_result, player_stats, most_played, []  # Pass empty list for timeline
-        )
+    # 2. Fetch PUUID/MatchIDs immediately
+    puuid, match_ids = fetch_riot_data(game_name, tagline, num_games)
+    if not puuid or not match_ids:
+        return cors_response(404, {'error': 'Player not found'})
 
-        # Step 6: Trigger timeline processing (ASYNCHRONOUS)
-        execution_arn = trigger_timeline_processing(game_name, tagline, puuid, match_ids)
+    # 3. Save "PROCESSING" Placeholder to DynamoDB
+    timestamp = int(datetime.utcnow().timestamp())
+    ttl = int((datetime.utcnow() + timedelta(days=30)).timestamp())
+    
+    initial_profile = {
+        'player_id': player_id,
+        'puuid': puuid,
+        'game_name': game_name,
+        'tagline': tagline,
+        'match_ids': match_ids,
+        'processing_status': 'PROCESSING', # Flag for the frontend
+        'matches_processed_count': 0,      # Progress bar metric
+        'total_matches_to_process': len(match_ids),
+        'stats': {}, # Empty stats initially
+        'processed_at': timestamp,
+        'ttl': ttl
+    }
+    player_profiles_table.put_item(Item=convert_floats(initial_profile))
 
-        # Step 7: Return 202 Accepted (or 200 OK) to signal the job was started
-        return cors_response(200, {
-            'success': True,
-            'status': 'PROCESSING_STARTED',
-            'player_id': f"{game_name}#{tagline}",
-            'puuid': puuid,
-            'match_ids': match_ids,
-            'matches_processed': len(match_ids),
-            'playstyle': playstyle_result,
-            'stats': player_stats,
-            'most_played_champions': most_played,
-            'message': 'Player processing started. Profile will be available shortly.'
-        })
-        
-    except json.JSONDecodeError as e:
-        print(f"JSON decode error: {e}")
-        return cors_response(400, {'error': f'Invalid JSON: {str(e)}'})
-    except Exception as e:
-        print(f"Error in process_new_player: {str(e)}")
-        import traceback
-        traceback.print_exc()
-        return cors_response(500, {'error': str(e)})
+    # 4. Invoke the Worker (Asynchronously)
+    payload = json.dumps({
+        'async_worker': True,
+        'game_name': game_name,
+        'tagline': tagline,
+        'puuid': puuid,
+        'match_ids': match_ids
+    })
+
+    lambda_client = boto3.client('lambda')
+    lambda_client.invoke(
+        FunctionName=context.function_name, # Invokes itself
+        InvocationType='Event',             # 'Event' = Async (Fire and Forget)
+        Payload=payload
+    )
+
+    print(f"Async worker started for {player_id}")
+
+    # 5. Return Success Immediately
+    return cors_response(202, {
+        'success': True,
+        'status': 'PROCESSING_STARTED',
+        'message': 'Analysis started. Results will populate incrementally.',
+        'player_id': player_id,
+        'matches_found': len(match_ids)
+    })
 
 # ============================================================================
 # SOCIAL COMPARSION
@@ -1851,21 +1910,11 @@ Similar Scenario Summaries (aggregated, do NOT copy blindly):
 {scenarios_block}
 
 Output Requirements:
-1. Do NOT repeat raw stat lists; reference concepts (e.g., "high death volatility") instead.
-2. Identify one PRIMARY macro weakness (not mechanical) with reasoning.
-3. Provide a MACRO IMPROVEMENT PLAN (phased: early → mid → late).
-4. Extract DECISION PATTERNS from scenarios (pressure, over-extension, rotation timing).
-5. Give 3 PRACTICAL DRILLS (each: objective, duration, measurable success metric).
-6. Provide a ONE-WEEK FOCUS checklist (5 concise bullets).
-7. Keep under 380 words. Avoid fluff. No generic motivational lines.
-8. If the user question is unrelated (e.g., math), briefly answer then still deliver coaching.
-
-Return ONLY this structured format:
-Primary Weakness:
-Macro Improvement Plan:
-Decision Patterns:
-Drills:
-One-Week Focus:
+1. Reference stats SPARINGLY and try to reference concepts (e.g., "high death volatility").
+2. Keep under 380 words. Avoid fluff. No generic motivational lines.
+3. If the user question is unrelated (e.g., math), briefly answer then still deliver coaching.
+4. Focus highly on the user question.
+5. Can refer to the player's top champions for advice.
 
 Now generate the coaching response.
 """
@@ -1881,7 +1930,7 @@ def invoke_bedrock_nova(prompt: str, max_tokens: int = 520, temperature: float =
     coaching_preamble = (
         "ROLE: High-level League of Legends macro coach.\n"
         "STYLE: Concise, analytical; focus on rotations, lane management, vision timing, resource sequencing, "
-        "objective trades, risk mitigation. Do NOT repeat raw numeric stat lists; refer to conceptual patterns.\n"
+        "objective trades, risk mitigation. Refer to conceptual patterns and macro gameplay.\n"
         "AVOID: Fluff, motivational filler, verbatim stat dumps."
     )
 
