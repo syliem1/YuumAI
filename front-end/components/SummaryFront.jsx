@@ -13,8 +13,14 @@ const SummaryFront = ({ data }) => {
 
   const strengthRefs = useRef([]);
   const weaknessRefs = useRef([]);
-  const overallPercentile = data.overall.percentile; 
-  const percentileLabel = data.overall.interpretation;
+  
+  // Safely access data with fallbacks
+  const overall = data?.overall || { percentile: 0, interpretation: 'Loading...' };
+  const strengths = data?.strengths || [];
+  const weaknesses = data?.weaknesses || [];
+  
+  const overallPercentile = overall.percentile || 0; 
+  const percentileLabel = overall.interpretation || 'Calculating...';
 
   const pieData = [
     { name: "Percentile", value: overallPercentile },
@@ -112,7 +118,7 @@ const SummaryFront = ({ data }) => {
           <div className="trait-group">
             <h4 style={{ color: "#22c55e" }}>Strengths</h4>
             <ul className="trait-list">
-              {data.strengths?.slice(0, 5).map((trait, index) => {
+              {strengths.length > 0 ? strengths.slice(0, 5).map((trait, index) => {
                 // ✅ Initialize a unique ref for each item (once)
                 if (!strengthRefs.current[index]) {
                   strengthRefs.current[index] = React.createRef();
@@ -138,7 +144,7 @@ const SummaryFront = ({ data }) => {
                     )}
                   </li>
                 );
-              })}
+              }) : <li className="text-gray-500">Loading...</li>}
             </ul>
           </div>
 
@@ -146,7 +152,7 @@ const SummaryFront = ({ data }) => {
           <div className="trait-group">
             <h4 style={{ color: "#ef4444" }}>Weaknesses</h4>
             <ul className="trait-list">
-              {data.weaknesses?.slice(0, 5).map((trait, index) => {
+              {weaknesses.length > 0 ? weaknesses.slice(0, 5).map((trait, index) => {
                 // ✅ Initialize a unique ref for each weakness item
                 if (!weaknessRefs.current[index]) {
                   weaknessRefs.current[index] = React.createRef();
@@ -172,7 +178,7 @@ const SummaryFront = ({ data }) => {
                     )}
                   </li>
                 );
-              })}
+              }) : <li className="text-gray-500">Loading...</li>}
             </ul>
           </div>
         </div>

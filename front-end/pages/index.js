@@ -33,24 +33,45 @@ export default function Home() {
     try {
       console.log("Fetching...");
 
-      const [timelineRes, percentileRes] = await Promise.all([
-        fetch(endpoint, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(body),
-        }),
-        fetch(`https://v4ft9564pb.execute-api.us-west-2.amazonaws.com/player/percentiles?game_name=${usernameValue}&tagline=${taglineValue}`)
-      ])
+      // First, trigger the player processing
+      const timelineRes = await fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
 
-      if (!timelineRes.ok || !percentileRes.ok) {
-        throw new Error(`API request failed: ${timelineRes.status} / ${percentileRes.status}`);
+      if (!timelineRes.ok) {
+        throw new Error(`API request failed: ${timelineRes.status}`);
       }
 
       const timelineData = await timelineRes.json();
-      const percentileData = await percentileRes.json();
-
       setTimelineResult(timelineData);
-      setPercentileResult(percentileData);
+
+      // Poll for percentiles until data is ready (with timeout)
+      let percentileData = null;
+      const maxAttempts = 30; // 30 attempts * 2 seconds = 60 seconds max
+      let attempt = 0;
+
+      while (attempt < maxAttempts) {
+        const percentileRes = await fetch(`https://v4ft9564pb.execute-api.us-west-2.amazonaws.com/player/percentiles?game_name=${usernameValue}&tagline=${taglineValue}`);
+        
+        if (percentileRes.ok) {
+          percentileData = await percentileRes.json();
+          
+          // Check if data is ready (has actual percentile data)
+          if (percentileData.status === 'COMPLETED' || 
+              (percentileData.percentiles && Object.keys(percentileData.percentiles).length > 0)) {
+            break;
+          }
+        }
+
+        // Wait 2 seconds before next attempt
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        attempt++;
+      }
+
+      // Set percentile result (even if still processing, we'll handle it in FlipBook)
+      setPercentileResult(percentileData || { status: 'PROCESSING', percentiles: {}, ranked_stats: { top_5: [], bottom_5: [] } });
       router.push("/FlipBook")
 
     } catch (err) {

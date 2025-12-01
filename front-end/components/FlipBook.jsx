@@ -109,8 +109,8 @@ const FlipBook = () => {
      
     
     if (!timelineResult) return;
-    setPlayer1Stats(timelineResult.stats)
-    const mostPlayedList = timelineResult.most_played_champions
+    setPlayer1Stats(timelineResult.stats || {});
+    const mostPlayedList = timelineResult.most_played_champions || {};
     const championsArray = Object.entries(mostPlayedList).map(([name, games]) => ({ name, games }));
     setMostPlayed(championsArray);
 
@@ -194,9 +194,24 @@ const FlipBook = () => {
     }
   }, []);
 
+  // Check if percentile data is ready (not in PROCESSING state with empty data)
+  const isPercentileReady = useMemo(() => {
+    if (!percentileResult) return false;
+    if (percentileResult.status === 'PROCESSING' && (!percentileResult.percentiles || Object.keys(percentileResult.percentiles).length === 0)) return false;
+    if (!percentileResult.ranked_stats?.top_5 || !percentileResult.ranked_stats?.bottom_5) return false;
+    if (!percentileResult.overall_performance) return false;
+    return true;
+  }, [percentileResult]);
+
   // Create page structure once and store it in a ref
   const pageStructure = useMemo(() => {
-    if (!mostPlayed || !timelineResult || !player1Stats || !percentileResult ) return [];
+    if (!mostPlayed || !timelineResult || !player1Stats || !percentileResult || !isPercentileReady) return [];
+
+    // Safely access percentile data with fallbacks
+    const overallPerformance = percentileResult.overall_performance || { percentile: 0, interpretation: 'Loading...' };
+    const rankedStats = percentileResult.ranked_stats || { top_5: [], bottom_5: [] };
+    const topStats = rankedStats.top_5 || [];
+    const bottomStats = rankedStats.bottom_5 || [];
 
     return [
     { cover: "book_cover.jpg", frontCover: true, id: 0 },
@@ -221,20 +236,25 @@ const FlipBook = () => {
         runeCount={10}            // Number of runes (default 9)
       />, 
       back: <SummaryBack data={{ 
-        username: timelineResult.player_id,
-        region: timelineResult.playstyle.archetype, 
+        username: timelineResult.player_id || 'Unknown',
+        region: timelineResult.playstyle?.archetype || 'Shurima', 
         profile: timelineResult.playstyle?.profile ? timelineResult.playstyle.profile.split(",").map(s => s.trim()): [],
-        statistics: { goldpm: player1Stats.avg_gpm.toFixed(2), winRate: player1Stats.win_rate.toFixed(2), averageKDA: player1Stats.avg_kda.toFixed(2), cspm: player1Stats.avg_cs_per_min.toFixed(2)}, 
-        mostPlayed: mostPlayed,
-        playerStats: player1Stats
+        statistics: { 
+          goldpm: (player1Stats?.avg_gpm ?? 0).toFixed(2), 
+          winRate: (player1Stats?.win_rate ?? 0).toFixed(2), 
+          averageKDA: (player1Stats?.avg_kda ?? 0).toFixed(2), 
+          cspm: (player1Stats?.avg_cs_per_min ?? 0).toFixed(2)
+        }, 
+        mostPlayed: mostPlayed || [],
+        playerStats: player1Stats || {}
       }}/>,
       id: 2
     },
     { 
       front: <SummaryFront data={{ 
-        overall: percentileResult.overall_performance,
-        strengths: percentileResult.ranked_stats.top_5, 
-        weaknesses: percentileResult.ranked_stats.bottom_5
+        overall: overallPerformance,
+        strengths: topStats, 
+        weaknesses: bottomStats
       }}/>, 
       back: <MapFragmentPage 
         region="Ionia"          // Text displayed in center

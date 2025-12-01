@@ -10,6 +10,35 @@ const SummaryBack = ({ data }) => {
   // ✅ Create a ref array for all trait items
   const traitRefs = useRef([]);
 
+  // Safely get region data with fallback
+  const regionKey = data?.region?.toLowerCase() || 'shurima';
+  const regionData = regions[regionKey] || regions['shurima'];
+  
+  // Create safe stats object with default values
+  const safeStats = {
+    avg_gpm: data?.playerStats?.avg_gpm ?? 0,
+    avg_solo_kills: data?.playerStats?.avg_solo_kills ?? 0,
+    avg_kills_near_tower: data?.playerStats?.avg_kills_near_tower ?? 0,
+    avg_dpm: data?.playerStats?.avg_dpm ?? 0,
+    avg_early_gold_adv: data?.playerStats?.avg_early_gold_adv ?? 0,
+    avg_kda: data?.playerStats?.avg_kda ?? 0,
+    avg_vision_score: data?.playerStats?.avg_vision_score ?? 0,
+    avg_outnumbered_kills: data?.playerStats?.avg_outnumbered_kills ?? 0,
+    avg_kill_participation: data?.playerStats?.avg_kill_participation ?? 0,
+    avg_team_damage_pct: data?.playerStats?.avg_team_damage_pct ?? 0,
+    avg_shields_on_teammates: data?.playerStats?.avg_shields_on_teammates ?? 0,
+    avg_cs_per_min: data?.playerStats?.avg_cs_per_min ?? 0,
+    avg_objective_damage: data?.playerStats?.avg_objective_damage ?? 0,
+    avg_dragon_takedowns: data?.playerStats?.avg_dragon_takedowns ?? 0,
+    avg_herald_takedowns: data?.playerStats?.avg_herald_takedowns ?? 0,
+    cs_consistency: data?.playerStats?.cs_consistency ?? 0,
+    avg_longest_alive: data?.playerStats?.avg_longest_alive ?? 0,
+    avg_heals_on_teammates: data?.playerStats?.avg_heals_on_teammates ?? 0,
+    avg_cc_time: data?.playerStats?.avg_cc_time ?? 0,
+    death_consistency: data?.playerStats?.death_consistency ?? 0,
+    avg_pick_kills: data?.playerStats?.avg_pick_kills ?? 0,
+  };
+
   const descriptions = {
     "Late-Game": `Shines in the late stages of ${data.region} battle once resources are built.`,
     "Scaling": "Grows stronger over time with continuous development.",
@@ -88,30 +117,30 @@ const SummaryBack = ({ data }) => {
 
   return (
     <div className="page-content">
-      <h2 className="section-title">{data.username}</h2>
+      <h2 className="section-title">{data?.username || 'Unknown Player'}</h2>
 
       {/* Region info */}
       <div className="info-box">
         <h3 className="region-title">
-          Region: {data.region}
+          Region: {data?.region || 'Unknown'}
           <Image
-            src={`/images/regions/${data.region
+            src={`/images/regions/${(data?.region || 'shurima')
               .toLowerCase()
               .replace(/\s+/g, "_")}_crest_icon.png`}
-            alt={`${data.region} crest`}
+            alt={`${data?.region || 'Unknown'} crest`}
             className="region-icon"
             width={32}
             height={32}
           />
         </h3>
-        <p>{regions[data.region.toLowerCase()].description(data.playerStats)}</p>
+        <p>{regionData?.description ? regionData.description(safeStats) : 'Loading region description...'}</p>
       </div>
 
       {/* Profile traits with popups */}
       <div className="info-box">
         <h3>Profile</h3>
         <ul className="profile-list">
-          {data.profile.map((trait, index) => {
+          {(data?.profile || []).map((trait, index) => {
             if (!traitRefs.current[index]) {
               traitRefs.current[index] = React.createRef();
             }
@@ -140,10 +169,10 @@ const SummaryBack = ({ data }) => {
       <div className="info-box">
         <h3>Key Statistics</h3>
         <ul className="statistics-list">
-          <li>Win Rate: {data.statistics.winRate}</li>
-          <li>Average KDA: {data.statistics.averageKDA}</li>
-          <li>CS/M: {data.statistics.cspm}</li>
-          <li>Gold/M: {data.statistics.goldpm}</li>
+          <li>Win Rate: {data?.statistics?.winRate ?? '0.00'}</li>
+          <li>Average KDA: {data?.statistics?.averageKDA ?? '0.00'}</li>
+          <li>CS/M: {data?.statistics?.cspm ?? '0.00'}</li>
+          <li>Gold/M: {data?.statistics?.goldpm ?? '0.00'}</li>
         </ul>
 
         {/* Most Played Champions */}
