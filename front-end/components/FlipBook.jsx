@@ -203,9 +203,19 @@ const FlipBook = () => {
     return true;
   }, [percentileResult]);
 
+  // Check if player stats are ready (have actual data, not empty)
+  const isPlayerDataReady = useMemo(() => {
+    if (!timelineResult) return false;
+    if (!player1Stats || Object.keys(player1Stats).length === 0) return false;
+    if (!mostPlayed || mostPlayed.length === 0) return false;
+    // Check if we have actual stats values (not just empty object)
+    if (player1Stats.avg_kda === undefined) return false;
+    return true;
+  }, [timelineResult, player1Stats, mostPlayed]);
+
   // Create page structure once and store it in a ref
   const pageStructure = useMemo(() => {
-    if (!mostPlayed || !timelineResult || !player1Stats || !percentileResult || !isPercentileReady) return [];
+    if (!isPlayerDataReady || !isPercentileReady) return [];
 
     // Safely access percentile data with fallbacks
     const overallPerformance = percentileResult.overall_performance || { percentile: 0, interpretation: 'Loading...' };
@@ -359,7 +369,7 @@ const FlipBook = () => {
       id: 11 
     },
     { cover: "green-cover.jpg", id: 12 },
-  ]}, [timelineResult, mostPlayed, player1Stats, percentileResult]);
+  ]}, [isPlayerDataReady, isPercentileReady, timelineResult, mostPlayed, player1Stats, percentileResult]);
 
   // Initialize pages only once
   useEffect(() => {
@@ -476,15 +486,24 @@ const FlipBook = () => {
     
     return newPage;
   }, [player1Stats, player2Stats, matches, selectedMatchId, selectedMatch, handleMatchSelect, handlePlayer2Found, chatMessages, isLoadingChat, handleSendMessage]);
-/*
-  if(!timelineResult){
+
+  // Show loading state while data is being fetched
+  if (!isPlayerDataReady || !isPercentileReady) {
     return (
-      <div className="w-full text-center text-3xl">
-        LOADING...
+      <div className="book-frame">
+        <div className="flex items-center justify-center h-full w-full">
+          <div className="text-center p-8 bg-black bg-opacity-70 rounded-lg">
+            <div className="relative w-16 h-16 mx-auto mb-4">
+              <div className="absolute inset-0 border-4 border-amber-200 border-t-amber-400 rounded-full animate-spin"></div>
+            </div>
+            <h2 className="text-2xl font-semibold text-amber-100 mb-2">Analyzing Your Matches...</h2>
+            <p className="text-amber-200">This may take a moment</p>
+          </div>
+        </div>
       </div>
-    )
+    );
   }
-*/
+
   return (
     <div className="book-frame">
       <div className="page-wrapper slideUp-animation">
