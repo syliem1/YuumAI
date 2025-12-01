@@ -150,12 +150,12 @@ const SearchAndCompare = ({ player1Stats, onPlayer2Found }) => {
         </h3>
         <div className="space-y-1">
           {stats.map(stat => (
-            <div key={stat} className={`flex justify-between items-center px-3 py-2 bg-gray-800 border border-gray-700 rounded ${getStatColor(player1Stats[stat], player2Stats[stat])}`}>
+            <div key={stat} className={`flex justify-between items-center px-3 py-2 bg-gray-800 border border-gray-700 rounded ${getStatColor(player1Stats?.[stat], player2Stats?.[stat])}`}>
               <label className={"text-sm font-medium capitalize"}>
                 {displayStats[stat]}
               </label>
               <div className="font-semibold">
-                {hasSearched ? (player2Stats[stat].toFixed(2) || "0") : (player2Stats[stat] || "0")}
+                {hasSearched ? ((player2Stats?.[stat] ?? 0).toFixed(2)) : (player2Stats?.[stat] ?? "0")}
               </div>
             </div>
           ))}

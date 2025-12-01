@@ -38,7 +38,7 @@ const Social = ({ input1 = {}, input2 = {} }) => {
       {/* Stats Display */}
       <div className="bg-black bg-opacity-70 rounded-lg p-8 w-full max-w-md">
         <h3 className="text-xl font-semibold text-white mb-6 text-center">
-          {timelineResult.player_id}
+          {timelineResult?.player_id || 'Loading...'}
         </h3>
         
         <div className="space-y-1">
@@ -48,7 +48,7 @@ const Social = ({ input1 = {}, input2 = {} }) => {
                 {displayStats[stat]}
               </label>
               <div className="font-semibold">
-                {stats1[stat].toFixed(2) || "0"}
+                {(stats1[stat] ?? 0).toFixed(2)}
               </div>
             </div>
           ))}
